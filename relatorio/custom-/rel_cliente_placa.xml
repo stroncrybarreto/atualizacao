@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-07-30 08:55:09" versao_xml="0.1"><tela titulo="Placa por Cliente">
+  <quadro titulo="Parâmetros">
+    <procura id="grupo" modelo="grupo_pessoa" titulo="Grupo" />
+    <procura id="cliente" modelo="cliente" titulo="Cliente" />
+  </quadro>
+</tela><ajuda /><layout dados="select 
+     p.*, 
+     f.placa, 
+     f.descricao, 
+     f.motorista, 
+     f.frota, 
+     (case when $cliente is null and $grupo is not null 
+               then &apos;GRUPO: &apos;||(select nome from grupo_pessoa where grid = $grupo)
+           when $cliente is not null and $grupo is not null 
+               then &apos;GRUPO: &apos;||(select nome from grupo_pessoa where grid = $grupo)||&apos;\nCLIENTE: &apos;||p.nome
+           when $cliente is not null and $grupo is null 
+               then &apos;CLIENTE: &apos;||p.nome
+           else &apos;&apos; end) as rel_filtro 
+from 
+     pessoa p 
+          join pessoa_frota f on (f.pessoa = p.grid) 
+where 
+     (case when $cliente is null then true else p.grid = $cliente end) 
+     and (case when $grupo is null then true else p.grupo = $grupo end) 
+order by 
+     p.nome, 
+     f.placa " id="d761e9579661c58a295cf530d834068e" ordem="" titulo="Somente com placa"><apelidos>1  rel_posto_nome    tam=40
+2  rel_data_hora     tam=18
+3  codigo	     tam=6	alinha=esquerda fmt=%d
+4  nome		     tam=40	alinha=esquerda
+5  placa	     tam=8
+6  descricao	     tam=34
+7  motorista	     tam=31
+8 frota	             tam=6
+9 endereco           tam=40	alinha=esquerda
+10 bairro            tam=20	alinha=esquerda
+11 cpf               tam=20	alinha=esquerda
+12 fone              tam=15	alinha=esquerda
+13 cep               tam=10	alinha=esquerda
+14 cidade            tam=27	alinha=esquerda
+15 estado            tam=3	alinha=esquerda
+16 contato           tam=25	alinha=esquerda
+17 celular           tam=14	alinha=esquerda
+18 rel_filtro        tam=100	alinha=centro</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                  P L A C A  P O R  C L I E N T E                                                   
+#18                                                                                                                 
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="codigo" quebra_pagina="0">
++-----------------------------------------------------------------------------------------+
+| #3      - #4                                                                            |
+| CPF/CNPJ: #11                                  Pessoa/Contato: #16                      |
+| Endereço: #9                                                                            |
+| Bairro:   #10                                                                           |
+| Fone:     #12                                  Celular: #17                             |
+| CEP:      #13                                                                           |
+| Cidade:   #14                                                                           |
+| Estado:   #15                                                                           |
++----------+-----------------------------------+---------------------------------+--------+
+| Placa    | Descricao                         | Motorista                       | Frota  | 
++----------+-----------------------------------+---------------------------------+--------+
+</cab_grupo>
+<detalhe>
+| #5       | #6                                | #7                              | #8     |
+</detalhe>
+
+<rod_grupo nome="1">
++----------+-----------------------------------+---------------------------------+--------+
+
+</rod_grupo>
+<rod_relat>
+</rod_relat>
+
+<rod_pagina>
++----------+-----------------------------------+---------------------------------+--------+
+</rod_pagina></layout><layout dados="select 
+     p.*, 
+     f.placa, 
+     f.descricao, 
+     f.motorista, 
+     f.frota, 
+     (case when $cliente is null and $grupo is not null 
+               then &apos;GRUPO: &apos;||(select nome from grupo_pessoa where grid = $grupo)
+           when $cliente is not null and $grupo is not null 
+               then &apos;GRUPO: &apos;||(select nome from grupo_pessoa where grid = $grupo)||&apos;\nCLIENTE: &apos;||p.nome
+           when $cliente is not null and $grupo is null 
+               then &apos;CLIENTE: &apos;||p.nome
+           else &apos;&apos; end) as rel_filtro 
+from 
+     pessoa p 
+          join pessoa_frota f on (f.pessoa = p.grid) 
+where 
+     (case when $cliente is null then true else p.grid = $cliente end) 
+     and (case when $grupo is null then true else p.grupo = $grupo end) 
+order by 
+     p.nome, 
+     f.placa " id="2c2b4198398cbe3286cd7b78bcad0404" ordem="" titulo="todos"><apelidos>1  rel_posto_nome    tam=40
+2  rel_data_hora     tam=18
+3  codigo	     tam=6	alinha=esquerda fmt=%d
+4  nome		     tam=40	alinha=esquerda
+5  placa	     tam=8
+6  descricao	     tam=34
+7  motorista	     tam=31
+8 frota	             tam=6
+9 endereco           tam=40	alinha=esquerda
+10 bairro            tam=20	alinha=esquerda
+11 cpf               tam=20	alinha=esquerda
+12 fone              tam=15	alinha=esquerda
+13 cep               tam=10	alinha=esquerda
+14 cidade            tam=27	alinha=esquerda
+15 estado            tam=3	alinha=esquerda
+16 contato           tam=25	alinha=esquerda
+17 celular           tam=14	alinha=esquerda
+18 rel_filtro        tam=100	alinha=centro</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                  P L A C A  P O R  C L I E N T E                                                   
+#18                                                                                                                 
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="codigo" quebra_pagina="0">
++-----------------------------------------------------------------------------------------+
+| #3      - #4                                                                            |
+| CPF/CNPJ: #11                                  Pessoa/Contato: #16                      |
+| Endereço: #9                                                                            |
+| Bairro:   #10                                                                           |
+| Fone:     #12                                  Celular: #17                             |
+| CEP:      #13                                                                           |
+| Cidade:   #14                                                                           |
+| Estado:   #15                                                                           |
++----------+-----------------------------------+---------------------------------+--------+
+| Placa    | Descricao                         | Motorista                       | Frota  | 
++----------+-----------------------------------+---------------------------------+--------+
+</cab_grupo>
+<detalhe>
+| #5       | #6                                | #7                              | #8     |
+</detalhe>
+
+<rod_grupo nome="1">
++----------+-----------------------------------+---------------------------------+--------+
+
+</rod_grupo>
+<rod_relat>
+</rod_relat>
+
+<rod_pagina>
++----------+-----------------------------------+---------------------------------+--------+
+</rod_pagina></layout></relatorio>

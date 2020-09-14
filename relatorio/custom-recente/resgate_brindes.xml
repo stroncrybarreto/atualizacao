@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio saida="" ts="2020-07-16 18:02:28" versao_xml="0.1"><tela titulo="RESGATE DE BRINDES">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" requerido="sim" titulo="Empresa" />
+    <procura id="grupo_produto" modelo="grupo_produto" titulo="Grupo (opcional)" />
+    <procura id="produto" modelo="produto" titulo="Produto (opcional)" />
+    <caixa>
+      <campo id="data" modelo="periodo" requerido="sim" tipo="data" titulo="Período" valor_padrao="select to_char(current_date, 'YYYY-mm-01')::date, to_char(current_date + interval '1 month', 'YYYY-mm-01')::date - 1" />
+    </caixa>
+  </quadro>
+</tela><ajuda /><layout columns="1" dados="SELECT\n\tdistinct\n\tpt.grid,\n\tpt.hora,\n\tpr.nome as produto_nome,\n\tl.turno,\n\tpt.ponto_resgate,\n\tcase pt.operacao\n\t\twhen 'P' then 'PONTUACAO'\n\t\twhen 'R' then 'RESGATE'\n\tend as operacao,\n\tcase\n\t\twhen (pe.nome_reduzido is not null) then pe.nome_reduzido\n\t\twhen (pe.nome_reduzido is null) then pe.nome\n\t end as filial,\t\n\t round(pt.ponto::numeric*(select pc.ponto_resgate::numeric from ponto_config pc limit 1),2)*-1 as valor_utilizado,\n\n\tcase\n\t\twhen (pt.pessoa is null) then ps.cpf\n\t\telse p.cpf\n\tend as cpf,\n\t\n\tcase\n\t\twhen (pt.pessoa is null) then ps.nome\n\t\telse p.nome\n\tend as nome\nfrom\n\tponto pt\t\n\tleft join cartao_fidelidade cf on (cf.grid=pt.cartao_fidelidade)\n\tleft join pessoa p on (pt.pessoa=p.grid)\n\tleft join pessoa_simples ps on (ps.grid=cf.pessoa_simples)\n\tjoin lancto l on (pt.mlid=l.mlid)\n\tleft join pessoa pe on (l.empresa=pe.grid and pe.tipo like '%E%')\n\n\tleft join produto pr on (l.produto=pr.grid)\n\n\twhere date(pt.hora) between $data_ini and $data_fim\n\n\tand pt.operacao='R'\n\tand (CASE WHEN $empresa IS NULL THEN TRUE ELSE l.empresa = $empresa END)\n\tand (CASE WHEN $grupo_produto IS NULL THEN TRUE ELSE pr.grupo = $grupo_produto END)\n\tand (CASE WHEN $produto IS NULL THEN TRUE ELSE l.produto = $produto END)\n\n\n\ngroup by ps.nome,ps.cpf,pe.nome,l.turno,pt.grid,pt.mlid,p.cpf,p.nome,pt.hora,pt.ponto,pt.operacao,pe.nome_reduzido,pr.nome\n\n\n\n" font_size="medium" id="a980b548850c30fecc380b760e756769" ordem="" paper_orientation="1" titulo="RESGATE DE BRINDES"><apelidos>1   rel_posto_nome   tam=60           
+2   rel_data_hora    tam=18           
+3   grid             tam=10  fmt=%d   
+4   hora             tam=19           
+5   produto_nome     tam=20           
+6   turno            tam=1   fmt=%d   
+7   ponto_resgate    tam=11   fmt=%.02f
+8   operacao         tam=7            
+9   filial           tam=18           
+10  valor_utilizado  tam=15            
+11  total_valor_utilizado tam=15 func=soma fmt=float2 campo=valor_utilizado grupo=1
+12  cpf		     tam=14
+13  nome	     tam=20
+14  total_geral	     tam=15 func=soma fmt=float2 campo=valor_utilizado
+15  titulo_p          tam=133    expr='R E S G A T E   D E   B R I N D E S '  alinha=centro</apelidos><cab_pagina>
+#1                                                                                                                                  #2
+---------------------------------------------------------------------------------------------------------------------------------------------------+
+#15
+</cab_pagina>
+<cab_relat>
+</cab_relat>
+
+<cab_grupo nome="1" quebra="produto_nome">
++---------------------+---------------------+--------------+---------------------+-----------------------+-----------------+-----------------------+
+| Hora                | Filial              | Pontos Util. | Valor dos Pontos    | Descrição Produto     | CPF CLIENTE     | Nome do cliente       |
++---------------------+---------------------+--------------+---------------------+-----------------------+-----------------+-----------------------+
+</cab_grupo>
+<detalhe>
+| #4                  | #9                  | #7           | R$ #10              | #5                    | #12             | #13                   |
+</detalhe>
+
+<rod_grupo nome="1">
++---------------------+---------------------+--------------+---------------------+-----------------------+-----------------+-----------------------+
+| Total Produto: #5                                        | R$ #11              |
++---------------------+---------------------+--------------+---------------------+
+</rod_grupo>
+<rod_relat>
++---------------------+---------------------+--------------+---------------------+
+| Total Geral do Periodo                                   | R$ #14              |
++---------------------+---------------------+--------------+---------------------+
+</rod_relat>
+
+
+<rod_pagina>
+</rod_pagina></layout></relatorio>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-27 10:15:59" versao_xml="0.1"><tela titulo="Consulta de Produtos">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <procura id="grupo" modelo="grupo_produto" titulo="Grupo" />
+    <procura condicao="(grupo = $grupo or $grupo is null)" id="subgrupo" modelo="subgrupo_produto" titulo="Subgrupo" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Consulta de Produtos&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver as Consulta de Produtos</ajuda><layout dados="select 
+    gp.nome as grupo_produto_nome,
+    p.nome as produto_nome,
+    p.unid_med as produto_unid_med,
+    p.codigo as produto_codigo,
+    p.tributacao as produto_tributacao,
+    t.tributacao,
+    t.servico,
+    p.preco_custo,
+    p.preco_unit,
+    ((p.preco_custo*100)/p.preco_unit) as lucro,
+    pessoa_nome(pe.empresa) as empresa_nome,
+    produto_estoque_f(pe.empresa, p.grid) as estoque
+from 
+    produto p
+       join tributacao t on (p.tributacao=t.codigo)
+        join grupo_produto gp on (p.grupo = gp.grid) 
+       left join produto_empresa pe on (pe.produto=p.grid)
+where 
+    p.flag=&apos;A&apos; 
+and     (case when $grupo is null then true else p.grupo = $grupo end) 
+and     (case when $subgrupo is null then true else p.subgrupo = $subgrupo end) 
+and     (case when $empresa is null then true else pe.empresa = $empresa end) 
+order by 
+    1, 2" id="b1df05a834bc38ee330fd7113bb63555" ordem=" " titulo="Consulta de Produtos"><apelidos>1  rel_posto_nome       tam=60
+2  rel_data_hora        tam=18
+3  grupo_produto_nome   tam=40
+4  produto_nome         tam=25
+5  produto_unid_med     tam=5
+6  produto_codigo	tam=13
+7  produto_tributacao   tam=4
+8  tributacao         	tam=4  	fmt=%.01f
+9  preco_custo  	tam=9  	fmt=%.02f
+10 preco_unit   	tam=9  	fmt=%.02f
+11 estoque      	tam=5  	fmt=%f
+12 lucro        	tam=6  	fmt=%.02f
+13 empresa_nome		tam=103		alinha=centro</apelidos><cab_pagina>
+#1                                                                                          #2        
+-------------------------------------------------------------------------------------------------------------
+   
+                                  C O N S U L T A   D E   P R O D U T O S
+
+</cab_pagina>
+
+<cab_grupo nome="2" quebra="empresa_nome">
++-----------------------------------------------------------------------------------------------------------+
+| #13                                                                                                       |
++-----------------------------------------------------------------------------------------------------------+
+
+</cab_grupo>
+<cab_grupo nome="1" quebra="empresa_nome,grupo_produto_nome">
++-----------------------------------------------------------------------------------------------------------+
+| GRUPO: #3                                                                                                 |
++---------------------------+------+---------------+------+-------+-------+---------+-----------+-----------+
+| Produto                   | Unid | Codigo        | S.Tb |  ICMS | Est.  |  Lucro  | Pr. Custo | Pr. Venda |
++---------------------------+------+---------------+------+-------+-------+---------+-----------+-----------+
+</cab_grupo>
+<detalhe>
+| #4                        | #5   | #6            | #7   | #8  % | #11   | #12   % | #9        | #10       |
+</detalhe>
+<rod_grupo nome="1">
++---------------------------+------+---------------+------+-------+-------+---------+-----------+-----------+
+
+</rod_grupo>
+<rod_grupo nome="2">
+
+
+</rod_grupo>
+<rod_pagina>
++---------------------------+------+---------------+------+-------+-------+---------+-----------+-----------+
+</rod_pagina>
+</layout></relatorio>

@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-18 17:44:39" versao_xml="0.1"><tela titulo="Extrato Compra Consignada">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <procura id="fornecedor" modelo="fornecedor" titulo="Fornecedor" />
+    <procura condicao="(case when (select codigo from motivo_movto where tipo_movto=7 limit 1) is null then true else codigo in (select codigo from motivo_movto where tipo_movto=7) end)" id="motivo" modelo="motivo_movto" titulo="Motivo" />
+    <campo id="data_periodo" modelo="periodo" titulo="Periodo" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Extrato Compra Consignada&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver o Extrato Compra Consignada</ajuda><layout dados="select 
+    l.empresa, 
+    l.preco_unit, 
+    sum(l.valor) as valor, 
+    pe.nome as fornecedor,
+    sum(l.quantidade) as quantidade_entrada,
+    coalesce((select sum(l.quantidade) from produto p join lancto l on (l.produto=p.grid) join movto m on (m.mlid=l.mlid) join motivo_movto mm on (mm.grid=m.motivo) join pessoa pe on (pe.grid=m.pessoa) where l.operacao=&apos;DF&apos; and mm.tipo_movto=&apos;8&apos; and l.data between $data_periodo_ini and $data_periodo_fim and (case when $fornecedor is null then true else l.pessoa = $fornecedor end) and (case when $motivo is null then true else mm.codigo = $motivo end) and (case when (select grid from empresa_local limit 1) is null then true else l.empresa = $empresa end)),0) as quantidade_devolucao, 
+    p.nome as produto_nome, 
+    p.codigo as produto_codigo,
+    (sum(l.quantidade) - coalesce((select sum(l.quantidade) from produto p join lancto l on (l.produto=p.grid) join movto m on (m.mlid=l.mlid) join motivo_movto mm on (mm.grid=m.motivo) join pessoa pe on (pe.grid=m.pessoa) where l.operacao=&apos;DF&apos; and mm.tipo_movto=&apos;8&apos; and l.data between $data_periodo_ini and $data_periodo_fim and (case when $fornecedor is null then true else l.pessoa = $fornecedor end) and (case when $motivo is null then true else mm.codigo = $motivo end) and (case when (select grid from empresa_local limit 1) is null then true else l.empresa = $empresa end)),0)) as diferenca
+from 
+    produto p
+       join lancto l on (l.produto=p.grid)
+       join movto m on (m.mlid=l.mlid)
+       join motivo_movto mm on (mm.grid=m.motivo)
+       join pessoa pe on (pe.grid=m.pessoa)
+where 
+    l.operacao=&apos;E&apos; 
+and     mm.tipo_movto=&apos;7&apos; 
+and     (case when $data_periodo_ini is NULL then true else (l.data between $data_periodo_ini and $data_periodo_fim) end )
+and     (case when $fornecedor is NULL then true else l.pessoa = $fornecedor end)  
+and     (case when $motivo is NULL then true else mm.grid = $motivo end) 
+and     (case when $empresa is NULL then true else l.empresa = $empresa end)
+group by 
+    l.empresa, 
+    l.preco_unit, 
+    pe.nome, 
+    p.nome, 
+    p.codigo
+order by 
+    pe.nome, 
+    p.nome" id="4926af86b780ec1532e27002f617f068" ordem=" " titulo="Extrato Compra Consignada"><apelidos>1  rel_posto_nome		tam=60
+2  rel_data_hora		tam=18
+3  fornecedor			tam=60
+4  produto_nome			tam=34
+5  quantidade_entrada		tam=9
+6  quantidade_devolucao		tam=9
+7  diferenca			tam=9	
+8  preco_unit			tam=10	fmt=%.02f	alinha=direita
+9  valor			tam=9   fmt=%.02f	alinha=direita
+10 valor_total			tam=9   fmt=%.02f	alinha=direita	func=soma	campo=valor
+11 sub_titulo			tam=108			alinha=centro
+12 produto_codigo		tam=6			alinha=centro</apelidos><cab_pagina>
+#1                                                                                          #2                
+------------------------------------------------------------------------------------------------------------
+ 
+                            E X T R A T O   C O M P R A   C O N S I G N A D A                                          
+#11
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="fornecedor">
++----------------------------------------------------------------------------------------------------------+
+| FORNECEDOR: #3                                                                                           |
++--------+------------------------------------+-----------+-----------+-----------+------------+-----------+
+| Código | Produto                            | Entrada   | Devolução | Diferença | Preço Unit |     Valor |
++--------+------------------------------------+-----------+-----------+-----------+------------+-----------+
+</cab_grupo>
+<detalhe>
+| #12    | #4                                 | #5        | #6        | #7        | #8         | #9        |
+</detalhe>
+<rod_grupo nome="1">
++--------+------------------------------------+-----------+-----------+-----------+------------+-----------+
+| Total                                                                                        | #10       |
++----------------------------------------------------------------------------------------------+-----------+
+
+</rod_grupo>
+<rod_pagina>
++--------+------------------------------------+-----------+-----------+-----------+------------+-----------+
+</rod_pagina>
+</layout></relatorio>

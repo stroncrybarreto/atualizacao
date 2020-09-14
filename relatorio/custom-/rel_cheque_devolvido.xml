@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2009-01-23 17:27:01" versao_xml="0.1">
+  <tela titulo="Cheques Devolvidos">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" valor_padrao="select empresa_codigo from empresa_local limit 1" />
+    <procura condicao="codigo ilike (select conta from conta_config where chave ilike &apos;%CHEQUE%DEVOLVIDO%&apos; order by chave limit 1) || &apos;%&apos;" id="conta" modelo="conta" requerido="sim" titulo="Conta" valor_padrao="select conta from conta_config where chave ilike &apos;%CHEQUE%DEVOLVIDO%&apos; order by chave limit 1" />
+    <procura id="cliente" modelo="cliente" titulo="Cliente" />
+    <campo id="periodo" modelo="periodo" requerido="sim" tipo="data" titulo="Emissão" valor_padrao="SELECT to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <campo id="data_doc" modelo="periodo" tipo="data" titulo="Documento" />
+    <campo id="vencto" modelo="periodo" tipo="data" titulo="Vencimento" />
+  </quadro>
+</tela>
+  <ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Cheques Devolvidos&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver os cheques devolvidos</ajuda>
+  <layout dados="select e.nome as empresa_nome, e.codigo as empresa_codigo, e.grid as empresa, mm.nome as motivo_nome, m.data as data, m.turno as turno, (m.conta_debitar) as conta, m.vencto::date as vencto, m.valor as valor, m.data_doc as data_doc, coalesce(p.nome, &apos;(CLINTE NÃO INFORMADO)&apos;) as cliente, (&apos;PERIODO: &apos; || to_char($periodo_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos; à &apos; || to_char($periodo_fim::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos; || (case when $empresa is null then &apos;TODOS OS POSTOS\n&apos; else (&apos;EMPRESA: &apos; || e.nome::text || &apos;\n&apos;) end) || (case when $cliente is null then &apos;TODOS OS CLIENTES\n&apos; else (&apos;CLIENTE: &apos; || p.nome)::text end) || (case when $conta is null then &apos;TODAS AS CONTAS\n&apos; else (&apos;CONTA: &apos; || $conta::text || &apos;\n&apos;) end) || (case when $data_doc_ini is not null and $data_doc_fim is not null then (&apos;Periodo do documento: &apos; || to_char($data_doc_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos; à &apos; || to_char($data_doc_fim::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos;)::text when $data_doc_ini is null and $data_doc_fim is not null then (&apos;Periodo do documento: até &apos; || to_char($data_doc_fim::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos;) when $data_doc_ini is not null and $data_doc_fim is null then (&apos;Periodo do documento: apartir de &apos; || to_char($data_doc_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos;) else &apos;&apos; end ) || (case when $vencto_ini is not null and $vencto_fim is not null then (&apos;Vencimento: &apos; || to_char($vencto_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos; à &apos; || to_char($vencto_fim::date, &apos;DD/mm/YYYY&apos;)::text)::text when $vencto_ini is null and $vencto_fim is not null then (&apos;Vencimento: até &apos; || to_char($vencto_fim::date, &apos;DD/mm/YYYY&apos;)::text) when $vencto_ini is not null and $vencto_fim is null then (&apos;Vencimento: apartir de &apos; || to_char($vencto_ini::date, &apos;DD/mm/YYYY&apos;)::text) else &apos;&apos; end ) ) as titulo from movto m join conta c on (m.conta_debitar=c.codigo) join empresa e on (m.empresa=e.grid) join motivo_movto mm on (m.motivo=mm.grid) left join pessoa p on (m.pessoa=p.grid) where (m.data between $periodo_ini and $periodo_fim) and (case when ($data_doc_ini is null and $data_doc_fim is null) then true when ($data_doc_ini is not null and $data_doc_fim is null) then (m.data_doc &gt;= $data_doc_ini) when ($data_doc_ini is null and $data_doc_fim is not null) then (m.data_doc &lt;= $data_doc_fim) else (m.data_doc between $data_doc_ini and $data_doc_fim) end) and (case when ($vencto_ini is null and $vencto_fim is null) then true when ($vencto_ini is not null and $vencto_fim is null) then (m.vencto &gt;= $vencto_ini) when ($vencto_ini is null and $vencto_fim is not null) then (m.vencto &lt;= $vencto_fim) else (m.vencto between $vencto_ini and $vencto_fim) end) and (m.conta_debitar ilike $conta || &apos;%&apos;) and (case when $cliente is null then true else m.pessoa=$cliente end) group by e.nome, e.codigo, e.grid, mm.nome, m.data_doc, m.pessoa, m.data, m.turno, m.conta_debitar, m.vencto, m.valor, p.nome " id="4926af86b780ec1532e27002f617f068" ordem=" " paper_orientation="1" titulo="Cheques Devolvidos com agrupamento por data">
+    <apelidos>1  rel_posto_nome		tam=60
+2  rel_data_hora		tam=18 
+3  titulo			tam=108	alinha=centro
+4  empresa_nome			tam=108
+5  data				tam=10	fmt=data
+6  turno			tam=3			alinha=centro
+7  conta			tam=54			alinha=esquerda
+8  vencto			tam=10	fmt=data
+9  valor			tam=16	fmt=%.02f	alinha=direita
+10 valor_subtotal		tam=16	fmt=%.02f	func=soma	campo=valor	grupo=1	alinha=direita
+11 valor_total			tam=16	fmt=%.02f	func=soma	campo=valor		alinha=direita
+
+12 data_valor			tam=16	fmt=%.02f	func=soma	campo=valor	grupo=3
+
+13 conta_valor			tam=16	fmt=%.02f	func=soma	campo=valor	grupo=2
+
+14 motivo_nome                  tam=30
+15 data_doc                     tam=10  fmt=data
+16 cliente                      tam=30</apelidos>
+    <cab_pagina>
+#1                                                                                                          #2                 
+----------------------------------------------------------------------------------------------------------------------------
+  
+                           R E L A T Ó R I O   D E   C H E Q U E S   D E V O L V I D O S
+#3
+</cab_pagina>
+    <cab_grupo nome="1" quebra="empresa_codigo, empresa_nome, empresa">
+
+EMPRESA: #4
+
+</cab_grupo>
+    <cab_grupo nome="2" quebra="conta">
++-------------------------------------------------------------------------------------------------------------+
+| CONTA: #7                                                                                                   |
++-------------------------------------------------------------------------------------------------------------+
+
+</cab_grupo>
+    <cab_grupo nome="3" quebra="data">
++-------------------------------------------------------------------------------------------------------------+
+| DATA: #5                                                                                                    |
++-------------------------------+------------+------------+--------------------------------+------------------+
+|     Forma Pgto                | Vencimento | Dt. Docum. | Cliente                        |            Valor |
++-------------------------------+------------+------------+--------------------------------+------------------+
+</cab_grupo>
+    <detalhe>
+| #14                           | #8         | #15        | #16                            | #9               |
+</detalhe>
+    <rod_grupo nome="3">
++-------------------------------+------------+------------+--------------------------------+------------------+
+|                                                                                          | #12              |
++------------------------------------------------------------------------------------------+------------------+
+
+</rod_grupo>
+    <rod_grupo nome="2">
++------------------------------------------------------------------------------------------+------------------+
+| SUBTOTAL                                                                                 | #13              |
++------------------------------------------------------------------------------------------+------------------+
+
+</rod_grupo>
+    <rod_grupo nome="1">
++------------------------------------------------------------------------------------------+------------------+
+| TOTAL DA EMPRESA                                                                         | #10              |
++------------------------------------------------------------------------------------------+------------------+
+
+</rod_grupo>
+    <rod_relat>
++------------------------------------------------------------------------------------------+------------------+
+| TOTAL GERAL                                                                              | #11              |
++------------------------------------------------------------------------------------------+------------------+
+</rod_relat>
+    <rod_pagina>
++-------------------------------------------------------------------------------------------------------------+
+</rod_pagina>
+    </layout>
+    <layout dados="select e.nome as empresa_nome, e.codigo as empresa_codigo, e.grid as empresa, mm.nome as motivo_nome, m.data as data, m.turno as turno, (m.conta_debitar) as conta, m.vencto::date as vencto, m.valor as valor, m.data_doc as data_doc, coalesce(p.nome, &apos;(CLINTE NÃO INFORMADO)&apos;) as cliente, (&apos;PERIODO: &apos; || to_char($periodo_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos; à &apos; || to_char($periodo_fim::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos; || (case when $empresa is null then &apos;TODOS OS POSTOS\n&apos; else (&apos;EMPRESA: &apos; || e.nome::text || &apos;\n&apos;) end) || (case when $cliente is null then &apos;TODOS OS CLIENTES\n&apos; else (&apos;CLIENTE: &apos; || p.nome)::text end) || (case when $conta is null then &apos;TODAS AS CONTAS\n&apos; else (&apos;CONTA: &apos; || $conta::text || &apos;\n&apos;) end) || (case when $data_doc_ini is not null and $data_doc_fim is not null then (&apos;Periodo do documento: &apos; || to_char($data_doc_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos; à &apos; || to_char($data_doc_fim::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos;)::text when $data_doc_ini is null and $data_doc_fim is not null then (&apos;Periodo do documento: até &apos; || to_char($data_doc_fim::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos;) when $data_doc_ini is not null and $data_doc_fim is null then (&apos;Periodo do documento: apartir de &apos; || to_char($data_doc_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos;\n&apos;) else &apos;&apos; end ) || (case when $vencto_ini is not null and $vencto_fim is not null then (&apos;Vencimento: &apos; || to_char($vencto_ini::date, &apos;DD/mm/YYYY&apos;)::text || &apos; à &apos; || to_char($vencto_fim::date, &apos;DD/mm/YYYY&apos;)::text)::text when $vencto_ini is null and $vencto_fim is not null then (&apos;Vencimento: até &apos; || to_char($vencto_fim::date, &apos;DD/mm/YYYY&apos;)::text) when $vencto_ini is not null and $vencto_fim is null then (&apos;Vencimento: apartir de &apos; || to_char($vencto_ini::date, &apos;DD/mm/YYYY&apos;)::text) else &apos;&apos; end ) ) as titulo from movto m join conta c on (m.conta_debitar=c.codigo) join empresa e on (m.empresa=e.grid) join motivo_movto mm on (m.motivo=mm.grid) left join pessoa p on (m.pessoa=p.grid) where (m.data between $periodo_ini and $periodo_fim) and (case when ($data_doc_ini is null and $data_doc_fim is null) then true when ($data_doc_ini is not null and $data_doc_fim is null) then (m.data_doc &gt;= $data_doc_ini) when ($data_doc_ini is null and $data_doc_fim is not null) then (m.data_doc &lt;= $data_doc_fim) else (m.data_doc between $data_doc_ini and $data_doc_fim) end) and (case when ($vencto_ini is null and $vencto_fim is null) then true when ($vencto_ini is not null and $vencto_fim is null) then (m.vencto &gt;= $vencto_ini) when ($vencto_ini is null and $vencto_fim is not null) then (m.vencto &lt;= $vencto_fim) else (m.vencto between $vencto_ini and $vencto_fim) end) and (m.conta_debitar ilike $conta || &apos;%&apos;) and (case when $cliente is null then true else m.pessoa=$cliente end) group by e.nome, e.codigo, e.grid, mm.nome, m.data_doc, m.pessoa, m.data, m.turno, m.conta_debitar, m.vencto, m.valor, p.nome " id="b1556f3fb3a6485d5b35560837b55609" ordem="empresa_nome, empresa, conta, data, cliente, vencto" paper_orientation="1" titulo="Cheques Devolvidos">
+    <apelidos>1  rel_posto_nome		tam=60
+2  rel_data_hora		tam=18 
+3  titulo			tam=108	alinha=centro
+4  empresa_nome			tam=108
+5  data				tam=10	fmt=data
+6  turno			tam=3			alinha=centro
+7  conta			tam=54			alinha=esquerda
+8  vencto			tam=10	fmt=data
+9  valor			tam=16	fmt=%.02f	alinha=direita
+10 valor_subtotal		tam=16	fmt=%.02f	func=soma	campo=valor	grupo=1	alinha=direita
+11 valor_total			tam=16	fmt=%.02f	func=soma	campo=valor		alinha=direita
+
+13 conta_valor			tam=16	fmt=%.02f	func=soma	campo=valor	grupo=2
+
+14 motivo_nome                  tam=30
+15 data_doc                     tam=10  fmt=data
+16 cliente                      tam=30</apelidos>
+    <cab_pagina>
+#1                                                                                                         #2                 
+----------------------------------------------------------------------------------------------------------------------------
+  
+                           R E L A T Ó R I O   D E   C H E Q U E S   D E V O L V I D O S
+#3                                                                                                                          
+</cab_pagina>
+    <cab_grupo nome="1" quebra="empresa_codigo, empresa_nome, empresa">
+
+EMPRESA: #4
+
+</cab_grupo>
+    <cab_grupo nome="2" quebra="conta">
++--------------------------------------------------------------------------------------------------------------------------+
+| CONTA: #7                                                                                                                |
++-------------------------------+------------+------------+------------+--------------------------------+------------------+
+|     Forma Pgto                | Data       | Vencimento | Dt. Docum. | Cliente                        |            Valor |
++-------------------------------+------------+------------+------------+--------------------------------+------------------+
+</cab_grupo>
+    <detalhe>
+| #14                           | #5         | #8         | #15        | #16                            | #9               |
+</detalhe>
+    <rod_grupo nome="2">
++-------------------------------+------------+------------+------------+--------------------------------+------------------+
+| SUBTOTAL                                                                                              | #13              |
++-------------------------------------------------------------------------------------------------------+------------------+
+
+</rod_grupo>
+    <rod_grupo nome="1">
++-------------------------------------------------------------------------------------------------------+------------------+
+| TOTAL DA EMPRESA                                                                                      | #10              |
++-------------------------------------------------------------------------------------------------------+------------------+
+
+</rod_grupo>
+    <rod_relat>
++-------------------------------------------------------------------------------------------------------+------------------+
+| TOTAL GERAL                                                                                           | #11              |
++-------------------------------------------------------------------------------------------------------+------------------+
+</rod_relat>
+    <rod_pagina>
++--------------------------------------------------------------------------------------------------------------------------+
+</rod_pagina>
+    </layout>
+    </relatorio>

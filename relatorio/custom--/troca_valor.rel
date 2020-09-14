@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio saida="" ts="2019-02-11 10:39:01" versao_xml="0.1"><tela titulo="ARUDI">
+  <quadro titulo="TROCA DE VALORES">
+	
+</quadro>
+</tela><ajuda /><layout columns="1" dados="movto_caixa_troca_valor_completo" font_size="medium" id="a5b737fa483ada2508a24c69a5322956" ordem="pessoa_nome" paper_orientation="1" titulo="TROCA DE VALORES">
+<apelidos>
+1  pessoa_nome   	tam=24
+2  recebimento_nome	tam=23
+3  pagamento_nome	tam=21
+4  total_dinheiro   tam=14  fmt=float2
+5  obs              tam=16
+6  valor            tam=13  fmt=float2
+7  valor_total		tam=13	fmt=float2
+99 titulo           tam=130  expr='TROCAS DE VALORES DO DIA' alinha=centro
+</apelidos>
+<cab_relat>
+
+#99
++--------------------------+-------------------------+-----------------------+----------------+------------------+---------------+
+| Trocas de valores do dia |       Recebimento       |       Pagamento       | Troco dinheiro |    Observação    |     Valor     |
++--------------------------+-------------------------+-----------------------+----------------+------------------+---------------+
+</cab_relat>
+<detalhe>
+| #1                       | #2                      | #3                    | #4             | #5               | #6            |
+</detalhe>
+<rod_relat>
++--------------------------+-------------------------+-----------------------+----------------+------------------+---------------+
+| Total geral de receitas                                                                                        | #7            |
++----------------------------------------------------------------------------------------------------------------+---------------+
+</rod_relat>
+</layout>
+</relatorio>

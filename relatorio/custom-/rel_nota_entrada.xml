@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-19 11:50:57" versao_xml="0.1"><tela titulo="Notas de Entrada">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <campo id="dt_periodo" modelo="periodo" titulo="Período Emissão" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;;)::date, current_date" />
+    <procura id="fornecedor" modelo="fornecedor" titulo="Fornecedor" />
+    <procura id="deposito" modelo="deposito" titulo="Depósito" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Notas de Entrada&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver o Notas de Entrada</ajuda><layout dados="select 
+    distinct n.grid, 
+    n.data_emissao as data_entrada, 
+    n.data_saida as data_emissao, 
+    n.numero_nota, 
+    p.nome as pessoa_nome, 
+    n.valor_nota, 
+    n.mlid, 
+    n.base_iss, 
+    n.aliq_iss, 
+    n.valor_iss, 
+    n.base_icms, 
+    n.valor_icms, 
+    n.base_subst, 
+    n.valor_subst, 
+    n.valor_ipi,
+    m.vencto
+from 
+    nota_fiscal n 
+       left join pessoa p on (n.pessoa = p.grid)
+       left join movto m on (m.mlid = n.mlid)
+where
+    n.tipo in (&apos;C&apos;, &apos;E&apos;)
+and    n.data_emissao between $dt_periodo_ini and $dt_periodo_fim
+and    (case when $empresa is NULL then true else n.empresa = $empresa end)
+and    (case when $fornecedor is NULL then true else n.pessoa = $fornecedor end)
+and    (case when $deposito is NULL then true else 
+            (n.grid in (select distinct np.nota_fiscal from nota_fiscal_produto np join lancto l on (l.grid=np.lancto) 
+            where l.deposito = $deposito and l.data between $dt_periodo_ini and $dt_periodo_fim
+            and (case when $empresa is NULL then true else l.empresa = $empresa end)
+            and (case when $fornecedor is NULL then true else l.pessoa = $fornecedor end)
+            and l.operacao=&apos;E&apos; and l.mlid!=0 and l.mlid is not null)) end)
+order by 
+    n.data_emissao, 
+    p.nome,
+    n.numero_nota,
+    n.valor_nota" id="4926af86b780ec1532e27002f617f068" ordem=" " titulo="Notas de Entrada"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora	tam=18
+3  titulo1		tam=96			alinha=centro
+4  titulo2		tam=96			alinha=centro
+5  data_entrada		tam=10	fmt=data
+6  data_emissao		tam=10	fmt=data
+7  numero_nota		tam=6	fmt=%d
+8  pessoa_nome		tam=30
+9  vencto		tam=10	fmt=data
+10 vencto_mais		tam=3
+11 valor_nota		tam=10	fmt=%.02f
+12 total		tam=10	fmt=%.02f	func=soma	campo=valor_nota
+13 mensagem		tam=96
+14 dt_periodo_ini	tam=10	fmt=data
+15 dt_periodo_fim	tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                             #2        
+------------------------------------------------------------------------------------------------
+   
+                      NOTAS DE ENTRADA - Período: #14        a #15       
+#4
+
++------------+------------+---------+--------------------------------+--------------+------------+
+| Data Entr. | Data Emiss | Nr.Nota | Fornecedor                     |     Vencto   |      Valor |
++------------+------------+---------+--------------------------------+--------------+------------+
+</cab_pagina>
+
+<detalhe>
+| #5         | #6         | #7      | #8                             | #9        #10| #11        |
+</detalhe>
+
+<rod_relat>
++------------+------------+---------+--------------------------------+--------------+------------+
+| TOTAL                                                                             | #12        |
++-----------------------------------------------------------------------------------+------------+
+
+#13
+</rod_relat>
+
+<rod_pagina>
++------------+------------+---------+--------------------------------+--------------+------------+
+</rod_pagina>
+</layout></relatorio>

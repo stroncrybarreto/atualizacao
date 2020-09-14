@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-11-10 16:03:18" versao_xml="0.1"><tela titulo="Remessa Cobrança">
+  <quadro titulo="Parâmetros">
+    <selecao id="portador" origem="select grid, nome from portador order by 2" requerido="sim" titulo="portador" />
+    <campo id="remessa" tipo="inteiro" titulo="Nr. remessa" />
+    <campo id="data" modelo="periodo" titulo="Dt Envio" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+  </quadro>
+</tela><ajuda /><layout dados="select 
+    cr.grid as remessa, 
+    cc.banco, 
+    cc.nr_conta as conta_corrente, 
+    cc.agencia, 
+    bl.nosso_numero, 
+    cri.nome as operacao, 
+    cr.data_geracao as data, 
+    bli.documento, 
+    cr.numero_remessa, 
+    cr.nome_arquivo, 
+    bli.vencto, 
+    bli.valor, 
+    p.nome as cliente, 
+    po.nome as portador 
+from 
+    cobranca_remessa cr 
+       join cobranca_remessa_registro crr on (crr.remessa=cr.grid) 
+       join boleto bl on (bl.grid=crr.boleto) 
+       join boleto_info bli on (bli.grid=crr.boleto_info) 
+       join portador po on (po.grid=cr.portador) 
+       join conta_corrente cc on (cc.grid=po.conta_corrente) 
+       join cobranca_remessa_instrucao cri on (cri.codigo=crr.instrucao) 
+       join pessoa p on (p.grid=bli.sacado) 
+where 
+    po.grid = $portador
+and     cr.data_geracao between $data_ini and $data_fim  
+and     (case when $remessa is null then true else cr.numero_remessa = $remessa end)
+order by 
+    cr.numero_remessa, 
+    cri.nome" id="3d55cb1af44f23053e337e90270d01e4" ordem="" titulo="Remessa Cobrança"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora	tam=18
+3  banco		tam=7	alinha=esquerda
+4  agencia		tam=5	alinha=esquerda
+5  conta_corrente	tam=8	alinha=esquerda
+6  arquivo		tam=10
+7  numero_remessa	tam=9   alinha=esquerda
+8  nosso_numero		tam=8	alinha=esquerda
+9  documento		tam=8	alinha=esquerda
+10 vencto		tam=9	alinha=esquerda
+11 cliente		tam=40	alinha=esquerda
+12 valor		tam=13	alinha=direita	fmt=%.02f
+13 total		tam=5	alinha=esquerda			func=contar	grupo=2
+14 total_valor		tam=13	alinha=direita  fmt=%.02f	func=soma	campo=valor	grupo=2
+15 operacao		tam=80
+16 total_remessa	tam=5	alinha=esquerda			func=contar	grupo=1
+17 total_valor_remessa	tam=13  alinha=direita  fmt=%.02f	func=soma	campo=valor	grupo=1
+18 total_geral		tam=5	alinha=esquerda			func=contar
+19 total_valor_geral    tam=13	alinha=direita	fmt=%.02f	func=soma	campo=valor
+20 portador		tam=40	alinha=esquerda</apelidos><cab_pagina>
+#1                                                                                 #2                
+---------------------------------------------------------------------------------------------------
+
+
+              R E M E S S A   D E   I N F O R M A C O E S   D E   C O B R A N C A
+
+
+Portador.: #20
+Banco....: #3      
+AG.......: #4    
+C/C......: #5
+								 
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="remessa">
++-------------------------------------------------------------------------------------------------+
+| Remessa: #7                                                                                     |
++-------------------------------------------------------------------------------------------------+
+
+</cab_grupo>
+<cab_grupo nome="2" quebra="operacao">
++-------------------------------------------------------------------------------------------------+
+| Instrução: #15                                                                                  |
++-----------+-----------+----------+----------------------------------------------+---------------+
+| Nosso Nr. | Documento |  Vencto  | Cliente                                      |     Valor     |
++-----------+-----------+----------+----------------------------------------------+---------------+
+</cab_grupo>
+<detalhe>
+| #8        | #9        | #10      | #11                                          | #12           |   
+</detalhe>
+
+<rod_grupo nome="2">
++-----------+-----+-----+----------+----------------------------------------------+---------------+
+| TOTAL INSTRUÇÂO | #13  registros                                                | #14           |
++-----------------+---------------------------------------------------------------+---------------+
+
+</rod_grupo>
+
+<rod_grupo nome="1">
++-----------------+---------------------------------------------------------------+---------------+
+| TOTAL REMESSA   | #16  registros                                                | #17           |
++-----------------+---------------------------------------------------------------+---------------+
+
+
+</rod_grupo>
+<rod_relat>
++-----------------+---------------------------------------------------------------+---------------+
+| TOTAL GERAL     | #18  registros                                                | #19           |
++-----------------+---------------------------------------------------------------+---------------+
+</rod_relat>
+</layout></relatorio>

@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-02 10:07:10" versao_xml="0.1"><tela titulo="Relatório de Venda por Troca Oleo">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <procura condicao="codigo like &apos;1.1.%&apos;" id="conta" modelo="conta" titulo="Caixa" />
+    <campo id="data" modelo="periodo" titulo="Periodo" valor_padrao="SELECT to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+  </quadro>
+</tela><ajuda /><layout dados="select       (e.codigo||&apos; - &apos;||e.nome) as empresa_cod_nome,       (ct.codigo||&apos; - &apos;||ct.nome) as conta_cod_nome,       o.data,       o.pessoa_nome as cliente,       op.produto_nome as produto,       op.quantidade as quantidade,       op.valor as valor,       l.turno as turno  from       orcamento o            join orcamento_produto op on (op.orcamento=o.grid)            join empresa e on (e.grid=o.empresa)            join lancto l on (l.orcamento_produto=op.grid)            join conta ct on (ct.codigo=l.conta)  where       o.tipo=&apos;T&apos;        and o.status=&apos;F&apos;        and (case             when $empresa is null then true else o.empresa=$empresa end)        and (case when $conta is null then true else ct.codigo=$conta end)      and (case             when ($data_ini is null and $data_fim is not null) then o.data &gt;= $data_fim             when ($data_ini is not null and $data_fim is null) then o.data &lt;= $data_ini             when ($data_ini is not null and $data_fim is not null) then (o.data between $data_ini and $data_fim) else true end)  order by       o.pessoa_nome " id="fee754260bfe0a4e5d3a3250e636867c" ordem=" empresa_cod_nome, conta_cod_nome, cliente" titulo=""><apelidos>1   rel_posto_nome       tam=60          
+2   rel_data_hora        tam=18          
+3   empresa_cod_nome     tam=60  
+4   cliente              tam=32 
+5   data                 tam=10	fmt=data 
+6   produto              tam=32 
+7   quantidade           tam=7	fmt=%0.2f	alinha=direita
+8   valor                tam=12	fmt=%0.2f	alinha=direita
+9   total_valor          tam=12	fmt=%0.2f	alinha=direita	func=soma	campo=valor		grupo=1
+10  total_quantidade     tam=7	fmt=%0.2f	alinha=direita	func=soma	campo=quantidade	grupo=1
+11  turno                tam=5	alinha=centro
+12  conta_cod_nome       tam=40
+13  total_caixa_qte      tam=7  fmt=%.02f	alinha=direita	func=soma	campo=quantidade	grupo=2
+14  total_caixa_valor    tam=12 fmt=%.02f	alinha=direita	func=soma	campo=valor		grupo=2</apelidos><cab_pagina>
+#1                                                                                                   #2                
+------------------------------------------------------------------------------------------------------------------------
+
+                      R E L A T Ó R I O   D E   V E N D A S   P O R   T R O C A   D E   Ó L E O     
+                          
+</cab_pagina>
+<cab_grupo nome="1" quebra="empresa_cod_nome">
++----------------------------------------------------------------------------------------------------------------------+
+| EMPRESA: #3                                                                                                          |
++----------------------------------------------------------------------------------------------------------------------+
+</cab_grupo>
+<cab_grupo nome="2" quebra="conta_cod_nome">
+
++----------------------------------------------------------------------------------------------------------------------+
+| CAIXA: #12                                                                                                           |
++------------+-------+----------------------------------+----------------------------------+---------+-----------------+
+| Data       | Turno | Cliente                          | Descrição                        | Qtde    | Valor           |
++------------+-------+----------------------------------+----------------------------------+---------+-----------------+
+</cab_grupo>
+<detalhe>
+| #5         | #11   | #4                               | #6                               | #7      | R$ #8           |
+</detalhe>
+
+<rod_grupo nome="2">
++------------+------------------------------------------+----------------------------------+---------+-----------------+
+                                                        | TOTAL POR CAIXA                  | #13     | R$ #14          |
+                                                        +----------------------------------+---------+-----------------+
+</rod_grupo>
+
+<rod_grupo nome="1">
+
++------------+------------------------------------------+----------------------------------+---------+-----------------+
+                                                        | TOTAL POR EMPRESA                | #10     | R$ #9           |
+                                                        +----------------------------------+---------+-----------------+
+</rod_grupo>
+
+<rod_pagina>
++------------+------------------------------------------+----------------------------------+---------+-----------------+
+</rod_pagina></layout></relatorio>

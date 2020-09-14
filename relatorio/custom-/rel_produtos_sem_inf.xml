@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-10 14:14:50" versao_xml="0.1"><tela titulo="Relatório de Produtos - Sem CST, UN e CFOP">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" />
+    <procura id="grupo_produto" modelo="grupo_produto" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatório de Produtos - Sem CST, UN e CFOP&lt;/b&gt;&lt;/big&gt;
+
+Traz todos os produtos que não possuem o CST, unidade de medida ou CFOP.</ajuda><layout dados="select e.nome as empresa_nome, p.codigo, p.grupo, p.nome, p.cfop_dentro, p.cfop_fora, t.cst, p.tributacao, p.unid_med from (select pd.produto, d.empresa from produto_deposito pd join deposito d on (pd.deposito=d.grid) where pd.movimenta&lt;&gt;False) pm join produto p on (pm.produto=p.grid) join empresa e on (e.grid=pm.empresa) left join tributacao t on (p.tributacao=t.codigo) where (case when $empresa is null then true else e.grid=$empresa end) and (case when $grupo_produto is null then true else p.grupo=$grupo_produto end) and (p.cfop_dentro is null or p.cfop_fora is null or p.unid_med is null or t.cst is null) order by p.nome " id="1fc9a08d791c848a96bf904837dbbef9" ordem="codigo, nome" titulo="Relatório de Produtos - Sem CST, UN e CFOP"><apelidos>1   rel_posto_nome  tam=60        
+2   rel_data_hora   tam=18        
+3   codigo          tam=6         
+5   nome            tam=60        
+6   cfop_dentro     tam=5         
+7   cfop_fora       tam=5         
+8   cst             tam=3         
+9   tributacao      tam=3         
+10  unid_med        tam=3
+11  empresa_nome    tam=50</apelidos><cab_pagina>
+Razão Social: COMERCIAL BUFFON COMBUSTIVEIS E TRANSPORTES LTDA.
+Nome Fantasia: #1                                                                                       #2             
+------------------------------------------------------------------------------------------------------------------------
+
+                                 RELATÓRIO  DE  PRODUTOS  SEM  CST ,  UN.  OU  CFOP   
+              
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="empresa_nome">
+
++----------------------------------------------------------------------------------------------------------------------+
+| Empresa: #11                                                                                                         |
++--------+---------------------------------------------------------------------+----------+----------+-----+-----+-----+
+| Código | Descricao                                                           | CFOP Est.| CFOP Int.| CST | Tri | Un. |
++--------+---------------------------------------------------------------------+----------+----------+-----+-----+-----+
+</cab_grupo>
+<detalhe>
+| #3     | #5                                                                  | #6       | #7       | #8  | #9  | #10 |
+</detalhe>
+<rod_grupo nome="1">
++--------+---------------------------------------------------------------------+----------+----------+-----+-----+-----+
+</rod_grupo>
+
+<rod_pagina>
++--------+---------------------------------------------------------------------+----------+----------+-----+-----+-----+
+</rod_pagina></layout></relatorio>

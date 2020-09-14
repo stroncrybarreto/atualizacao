@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio saida="" ts="2020-01-21 14:33:36" versao_xml="0.1"><tela titulo="Venda e Lucro Kit de Produtos">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" requerido="sim" titulo="Empresa" />
+    <caixa>
+      <campo id="data" modelo="periodo" requerido="sim" tipo="data" titulo="Período" valor_padrao="select to_char(current_date, 'YYYY-mm-01')::date, to_char(current_date + interval '1 month', 'YYYY-mm-01')::date - 1" />
+    </caixa>
+    <procura condicao="(tipo='K')" id="produto" modelo="produto" titulo="Kit Prod" />
+  </quadro>
+</tela><ajuda /><layout columns="1" dados="select\n\tdistinct\n\t--l.data,\n\tp.grupo,\n\tp.subgrupo,\n\tp.codigo, \n\tp.nome,\n\ts.grid,\n\ts.nome as produto_subgrupo,\n\tt.codigo as tributacao,\n\tv.produto,\n\tsum(l.quantidade) as quantidade,\n\tsum (custo_medio_empresa_f(l.empresa,p.grid,l.data)*l.quantidade) as preco_custo,\n\tsum (l.valor) as valor,\n\t(sum (l.valor)- sum (custo_medio_empresa_f(l.empresa,p.grid,l.data)*l.quantidade)) as lucro,\n\t((sum (l.valor)- sum (custo_medio_empresa_f(l.empresa,p.grid,l.data)*l.quantidade))/(sum (l.valor)))*100 as margem\nfrom lancto l\n\tjoin produto p on (l.produto=p.grid)\n\tjoin tributacao t on (p.tributacao=t.codigo)\n\tjoin grupo_produto g on (p.grupo=g.grid)\n\tjoin subgrupo_produto s on (p.subgrupo=s.grid)\n\tjoin estoque_valor v on (p.grid=v.produto and l.empresa=v.empresa and l.data=v.data)\nwhere l.empresa=$empresa\nand l.data between $data_ini and $data_fim\nand l.produto_kit is not null\nand (CASE WHEN $produto IS NULL THEN true\n\t  ELSE l.produto_kit=$produto\n     END)\n\nGROUP BY p.codigo,p.nome,t.codigo,l.empresa,p.grid, p.subgrupo, s.grid, v.produto\n;" font_size="medium" id="9c0b5c0d39ac4eebb2977cc9ade4d779" ordem="" paper_orientation="1" titulo="Lucro markup"><apelidos>1   rel_posto_nome  tam=60           
+2   rel_data_hora   tam=18           
+4   codigo          tam=5           
+5   nome            tam=34           
+6   tributacao      tam=9            
+7   quantidade      tam=10  fmt=%.02f
+8   preco_custo     tam=13  fmt=%.02f
+9   valor           tam=13  fmt=%.02f
+10  lucro           tam=12  fmt=%.02f
+11  margem          tam=8  fmt=%.02f
+12  grupo	    tam=12
+13  sub_total_quant_vd  tam=10 fmt=%.02f func=soma campo=quantidade		grupo=1
+14  sub_total_custo     tam=13 fmt=%.02f func=soma campo=preco_custo		grupo=1
+15  sub_total_valor_vd  tam=13 fmt=%.02f func=soma campo=valor			grupo=1
+16  sub_total_lucro     tam=12 fmt=%.02f func=soma campo=lucro			grupo=1
+17  sub_total_margem    tam=9  fmt=%.02f func=soma campo=margem			grupo=1
+18  geral_total_quant_vd tam=10 fmt=%.02f func=soma campo=quantidade
+19  geral_total_custo   tam=13 fmt=%.02f func=soma campo=preco_custo
+20  geral_total_valor_vd tam=13 fmt=%.02f func=soma campo=valor
+21  geral_total_lucro   tam=12 fmt=%.02f func=soma campo=lucro
+22  geral_total_marge  tam=9  fmt=%.02f func=soma campo=margem
+23  produto_subgrupo   tam=50</apelidos><cab_pagina>
+#1                                                                                                                                 #2             
+------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                   VENDA E LUCRO KIT DE PRODUTOS - markup
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="produto_subgrupo">
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Sub Grupo: #23                                                                                                                                     |
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Código |               Produto               | Tributação | Quantidade |  Valor custo  |  Valor venda  |    Lucro     | Margem(*)   |  Lucro líq.  |
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+</cab_grupo>
+<detalhe>
+| #4     | #5                                  | #6       % |#7          |#8             |#9             |#10           |#11        % | #            |
+</detalhe>
+<rod_grupo nome="1">
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Subtotal                                                  |#13         |#14            |#15            |#16           |#17        % | #            |
++-----------------------------------------------------------+------------+---------------+---------------+--------------+-------------+--------------+
+</rod_grupo>
+<rod_relat>
++-----------------------------------------------------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Total geral                                               |#18         |#19            |#20            |#21           |#22        % | #            |
++-----------------------------------------------------------+------------+---------------+---------------+--------------+-------------+--------------+
+</rod_relat>
+
+<rod_pagina>
++--------+--------------------------------------------------+------------+---------------+---------------+--------------+----------+--------------+
+</rod_pagina></layout><layout columns="1" dados="select\n\tdistinct\n\t--l.data,\n\tp.grupo,\n\tp.subgrupo,\n\tp.codigo, \n\tp.nome,\n\ts.grid,\n\ts.nome as produto_subgrupo,\n\tt.codigo as tributacao,\n\tv.produto,\n\tsum(l.quantidade) as quantidade,\n\tsum (v.ult_custo_medio*l.quantidade) as preco_custo,\n\tsum (l.valor) as valor,\n\t(sum (l.valor)- sum (v.ult_custo_medio.quantidade)) as lucro,\n\t((sum (l.valor)- sum (v.ult_custo_medio*l.quantidade))/(sum (l.valor)))*100 as margem\nfrom lancto l\n\tjoin produto p on (l.produto=p.grid)\n\tjoin tributacao t on (p.tributacao=t.codigo)\n\tjoin grupo_produto g on (p.grupo=g.grid)\n\tjoin subgrupo_produto s on (p.subgrupo=s.grid)\n\tjoin estoque_valor v on (p.grid=v.produto and l.empresa=v.empresa and l.data=v.data)\nwhere l.empresa=$empresa\nand l.data between $data_ini and $data_fim\nand l.produto_kit is not null\nand (CASE WHEN $produto IS NULL THEN true\n\t  ELSE l.produto_kit=$produto\n     END)\n\nGROUP BY p.codigo,p.nome,t.codigo,l.empresa,p.grid, p.subgrupo, s.grid, v.produto" font_size="medium" id="9749f4d380bdc7ebb731693dbe78346d" ordem="" paper_orientation="1" titulo="Lucro Real"><apelidos>1   rel_posto_nome  tam=60           
+2   rel_data_hora   tam=18           
+4   codigo          tam=5           
+5   nome            tam=34           
+6   tributacao      tam=9            
+7   quantidade      tam=10  fmt=%.02f
+8   preco_custo     tam=13  fmt=%.02f
+9   valor           tam=13  fmt=%.02f
+10  lucro           tam=12  fmt=%.02f
+11  margem          tam=8  fmt=%.02f
+12  grupo	    tam=12
+13  sub_total_quant_vd  tam=10 fmt=%.02f func=soma campo=quantidade		grupo=1
+14  sub_total_custo     tam=13 fmt=%.02f func=soma campo=preco_custo		grupo=1
+15  sub_total_valor_vd  tam=13 fmt=%.02f func=soma campo=valor			grupo=1
+16  sub_total_lucro     tam=12 fmt=%.02f func=soma campo=lucro			grupo=1
+17  sub_total_margem    tam=9  fmt=%.02f func=soma campo=margem			grupo=1
+18  geral_total_quant_vd tam=10 fmt=%.02f func=soma campo=quantidade
+19  geral_total_custo   tam=13 fmt=%.02f func=soma campo=preco_custo
+20  geral_total_valor_vd tam=13 fmt=%.02f func=soma campo=valor
+21  geral_total_lucro   tam=12 fmt=%.02f func=soma campo=lucro
+22  geral_total_marge  tam=9  fmt=%.02f func=soma campo=margem
+23  produto_subgrupo   tam=50</apelidos><cab_pagina>
+#1                                                                                                                                 #2             
+------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                   VENDA E LUCRO KIT DE PRODUTOS - Real
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="produto_subgrupo">
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Sub Grupo: #23                                                                                                                                     |
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Código |               Produto               | Tributação | Quantidade |  Valor custo  |  Valor venda  |    Lucro     | Margem(*)   |  Lucro líq.  |
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+</cab_grupo>
+<detalhe>
+| #4     | #5                                  | #6       % |#7          |#8             |#9             |#10           |#11        % | #            |
+</detalhe>
+<rod_grupo nome="1">
++--------+-------------------------------------+------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Subtotal                                                  |#13         |#14            |#15            |#16           |#17        % | #            |
++-----------------------------------------------------------+------------+---------------+---------------+--------------+-------------+--------------+
+</rod_grupo>
+<rod_relat>
++-----------------------------------------------------------+------------+---------------+---------------+--------------+-------------+--------------+
+| Total geral                                               |#18         |#19            |#20            |#21           |#22        % | #            |
++-----------------------------------------------------------+------------+---------------+---------------+--------------+-------------+--------------+
+</rod_relat>
+
+<rod_pagina>
++--------+--------------------------------------------------+------------+---------------+---------------+--------------+----------+--------------+
+</rod_pagina></layout></relatorio>

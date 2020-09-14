@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Pedido de Compra Cancelado</title>
+		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+	</head>
+
+	<body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" style="font-family: Verdana;">
+		<div style="margin-left: 10px;">
+			<span style="font-size: 12px;">
+				<br>
+				Prezado(a) <a tal:content="nome"></a>,
+				<br>
+				<br>
+				Segue abaixo informações sobre o pedido de compra cancelado, em anexo o pedido detalhado.
+				<br>
+				<br>
+			</span>
+		</div>
+		<table border="0" cellpadding="3" cellspacing="2" bgcolor="#999999" style="margin-left: 10px;">
+			<tr style="text-align: center; color: #FFFFFF; font-size: 12px;">
+				<td style="width: 880px;" colspan="6"><strong>Motivo de cancelamento</strong></td>
+			</tr>
+			<tr bgcolor="#FFFFFF" style="font-size: 12px;">
+				<td style="text-align: center;" colspan="6"><a tal:content="motivo"></a></td>
+			</tr>
+			<tr style="text-align: center; color: #FFFFFF; font-size: 12px;">
+				<td style="width: 100px;"><strong>Nº pedido</strong></td>
+				<td style="width: 100px;"><strong>Itens pedido</strong></td>
+				<td style="width: 290px;"><strong>Empresa</strong></td>
+				<td style="width: 130px;"><strong>Data do pedido</strong></td>
+				<td style="width: 180px;"><strong>Data prev. de entrega</strong></td>
+				<td style="width: 80px;"><strong>Valor total</strong></td>
+			</tr>
+			<tr bgcolor="#FFFFFF" style="font-size: 12px;">
+				<td style="text-align: center;"><a tal:content="codigo"></a></td>
+				<td style="text-align: center;"><a tal:content="itens"></a></td>
+				<td style="text-align: left;"<a tal:content="empresa_nome"></a></td>
+				<td style="text-align: center;"><a tal:content="data"></a></td>
+				<td style="text-align: center;"><a tal:content="data_prev_recebto"></a></td>
+				<td style="text-align: right;" bgcolor="#FFFFFF"><a tal:content="valor_nota"></a></td>
+			</tr>
+		</table>
+		<p style="margin-left: 10px; font-size: 10px;">Esta mensagem foi gerada automaticamente pelo sistema AutoSystem.</p>
+	</body>
+</html>

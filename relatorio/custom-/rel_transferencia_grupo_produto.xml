@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-03 11:12:43" versao_xml="0.1"><tela titulo="Transferência por Grupo de Produto">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <procura id="deposito" modelo="deposito" titulo="Depósito" />
+    <procura id="grupo" modelo="grupo_produto" titulo="Grupo" />
+    <procura condicao="grupo = $grupo or $grupo is null" id="subgrupo" modelo="subgrupo_produto" titulo="Subgrupo" />
+    <procura condicao="((grupo = $grupo or $grupo is null) and (subgrupo = $subgrupo or $subgrupo is null))" id="produto" modelo="produto" titulo="Produto" />
+    <caixa>
+      <campo id="data_ini" requerido="sim" tipo="data" titulo="Data inicial" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date" />
+      <campo id="turno_ini" tipo="inteiro" titulo="Turno inicial" />
+    </caixa>
+    <caixa>
+      <campo id="data_fim" requerido="sim" tipo="data" titulo="Data final" valor_padrao="select to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+      <campo id="turno_fim" tipo="inteiro" titulo="Turno final" />
+    </caixa>
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Transferência por Grupo de Produto&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver as Transferências por Grupo de Produto</ajuda><layout dados="select 
+    gp.nome as grupo_nome,
+    l.data, 
+    l.turno, 
+    l.quantidade, 
+    d.codigo||&apos; - &apos;||d.nome as deposito_cod_nome, 
+    (case when l.bico &lt;&gt; &apos;&apos; then &apos;Bico &apos;||l.bico else p.codigo end) as produto_codigo, 
+    p.nome as produto_nome, 
+    preco_unit_empresa_f(l.produto,l.empresa) as preco_unit, 
+    preco_custo_empresa_f(l.produto,l.empresa) as preco_custo, 
+    pessoa_nome(l.empresa) as empresa_nome, 
+    l.grid ,
+    d.codigo||&apos; - &apos;||d.nome as deposito_origem,
+    (select distinct a.codigo||&apos; - &apos;||a.nome from lancto b join deposito a on (b.deposito=a.grid) where b.mlid=l.mlid and b.operacao!=l.operacao) as deposito_destino
+from 
+    lancto l 
+       left join deposito d on (d.grid = l.deposito) 
+       join produto p on (p.grid = l.produto) 
+       left join grupo_produto gp on (gp.grid = p.grupo)  
+where 
+    (case when $deposito is null then true else l.deposito = $deposito end)  
+and     (case when $produto is null then true else l.produto = $produto end)  
+and     (case when $grupo is null then true else p.grupo = $grupo end)  
+and     (case when $subgrupo is null then true else p.subgrupo = $subgrupo end)  
+and     (case when $empresa is null then true else l.empresa = $empresa end)  
+and     l.data between $data_ini and $data_fim  
+and     (case when $turno_ini is null then true else l.turno &gt;= $turno_ini end)  
+and     (case when $turno_fim is null then true else l.turno &lt;= $turno_fim end)  
+and     l.operacao = &apos;TS&apos;
+order by 
+    gp.nome,
+    l.data,
+    l.turno,
+    p.nome" id="4926af86b780ec1532e27002f617f068" ordem="" titulo="Transferência por Grupo de Produto"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora        tam=18
+3  titulo1		tam=141 alinha=centro
+4  titulo2		tam=141 alinha=centro
+5  empresa_nome		tam=40
+6  grupo_nome		tam=40
+7  data			tam=10	fmt=data
+8  turno		tam=2	alinha=esquerda 	
+9  produto_codigo	tam=8
+10 produto_nome		tam=25
+11 deposito_origem	tam=30
+12 deposito_destino	tam=30
+13 quantidade		tam=7	fmt=%.01f	alinha=direita
+14 data_ini		tam=10	fmt=data
+15 data_fim		tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                                                                #2        
+-----------------------------------------------------------------------------------------------------------------------------------
+ 
+                              TRANSFERENCIAS POR GRUPO DE PRODUTO - De #14        - a #15        
+#4
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="empresa_nome,grupo_nome">
++---------------------------------------------------------------------------------------------------------------------------------+
+| Empresa: #5                                         | Grupo de Produtos: #6                                                     |
++--------------+----------+---------------------------+--------------------------------+--------------------------------+---------+
+|  Data/Turno  | Cod/Bico | Nome Produto              | Origem                         | Destino                        | Quantid |
++--------------+----------+---------------------------+--------------------------------+--------------------------------+---------+
+</cab_grupo>
+<detalhe>
+| #7        -#8| #9       | #10                       | #11                            | #12                            | #13     |
+</detalhe>
+<rod_grupo nome="1">
++--------------+----------+---------------------------+--------------------------------+--------------------------------+---------+
+
+</rod_grupo>
+<rod_pagina>
++--------------+----------+---------------------------+--------------------------------+--------------------------------+---------+
+</rod_pagina>
+</layout></relatorio>

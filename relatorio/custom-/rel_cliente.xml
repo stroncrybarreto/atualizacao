@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-07-09 11:38:32" versao="0.1"><tela titulo="Clientes">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" requerido="Sim" />
+    <procura id="grupo_pessoa" modelo="grupo_pessoa" requerido="Sim" />
+    <campo id="inicio_nome" tipo="texto" titulo="Inicio nome" />
+    <caixa>
+      <campo id="data" tipo="data" titulo="Data" />
+      <campo id="turno" tipo="inteiro" titulo="Turno" />
+    </caixa>
+    <campo id="data" modelo="periodo" titulo="Periodo" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Clientes&lt;/b&gt;&lt;/big&gt;
+
+Este relatorio permite ver os clientes
+
+&lt;span color="blue"&gt;Teste&lt;/span&gt;</ajuda><layout dados="select codigo, nome, endereco, cidade, bairro, estado, fone, cep  from cliente&#10;where grupo=$grupo_pessoa and empresa=$empresa" id="6457ad88d234590f482b849977ecf197" ordem="cidade, nome" titulo="Clientes"><apelidos>1  rel_posto_nome  tam=60        
+2  rel_data_hora   tam=18        
+3  codigo          tam=6   fmt=%d
+4  nome            tam=40        
+5  endereco        tam=25        
+6  cidade          tam=15        
+7  estado          tam=2         
+8  fone            tam=15
+9  cep             tam=9
+10 bairro          tam=20</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                                  C L I E N T E S                                                   
+
+</cab_pagina>
+
+
+<cab_grupo nome="1" quebra="cidade">
+Cidade: #6
++--------+------------------------------------------+---------------------------+-----------------+----+-----------------+
+| Cod    | Nome                                     | Endereco                  | CEP             | UF | Telefone        |
++--------+------------------------------------------+---------------------------+-----------------+----+-----------------+
+</cab_grupo>
+
+<cab_grupo nome="2" quebra="bairro">
+Bairro: #10
+</cab_grupo>
+
+<detalhe>
+| #3     | #4                                       | #5                        | #9              | #7 | #8              |
+</detalhe>
+
+<rod_grupo nome="2">
+</rod_grupo>
+
+<rod_grupo nome="1">
++--------+------------------------------------------+---------------------------+-----------------+----+-----------------+
+
+</rod_grupo>
+
+<rod_relat>
++--------+------------------------------------------+---------------------------+-----------------+----+-----------------+
+</rod_relat>
+
+<rod_pagina>
++--------+------------------------------------------+---------------------------+-----------------+----+-----------------+
+</rod_pagina></layout><layout dados="select nome, fone from cliente" id="59e9ea93ae8cd28458f400d04222034f" ordem="" titulo="Agenda Telefonica"><apelidos>1  rel_posto_nome  tam=60  
+2  rel_data_hora   tam=18  
+3  nome            tam=32  
+4  fone            tam=13</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                         A G E N D A   T E L E F O N I C A                                          
+
++----------------------------------+---------------+
+| nome                             | fone          |
++----------------------------------+---------------+
+</cab_pagina>
+<detalhe>
+| #3                               | #4            |
+</detalhe>
+<rod_relat>
++----------------------------------+---------------+
+</rod_relat>
+<rod_pagina>
++----------------------------------+---------------+
+</rod_pagina></layout><layout dados="select cliente.codigo, cliente.nome, grupo_pessoa.codigo as grupo_codigo, grupo_pessoa.nome as grupo_nome &#10;from cliente join grupo_pessoa on (cliente.grupo=grupo_pessoa.grid)&#10;" id="30b1ea43734730497e56d16a6f68d1f5" ordem="nome" titulo="Clientes por Grupo"><apelidos>1  rel_posto_nome  tam=60        
+2  rel_data_hora   tam=18        
+3  codigo          tam=4   fmt=%d
+4  nome            tam=32        
+5  grupo_codigo    tam=4   fmt=%d
+6  grupo_nome      tam=10         </apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                        C L I E N T E S   P O R   G R U P O                                         
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="grupo_codigo">
+#5       #6
++------+----------------------------------+
+| codi | nome                             |
++------+----------------------------------+
+</cab_grupo>
+
+<detalhe>
+| #3   | #4                               |
+</detalhe>
+
+<rod_grupo nome="1">
++------+----------------------------------+
+
+</rod_grupo>
+
+<rod_relat>
++------+----------------------------------+
+</rod_relat>
+<rod_pagina>
++------+----------------------------------+
+</rod_pagina></layout></relatorio>

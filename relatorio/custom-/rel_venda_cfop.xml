@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-06 16:46:11" versao_xml="0.1"><tela titulo="Venda por CFOP">
+  <quadro titulo="Parâmetros">
+    <campo id="data_periodo" modelo="periodo" requerido="sim" tipo="data" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <procura id="grupo" modelo="grupo_produto" titulo="Grupo" valor_padrao="select null" />
+    <procura id="subgrupo" modelo="subgrupo_produto" titulo="SubGrupo" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Vendas por CFOP&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver as Vendas por CFOP</ajuda><layout dados="select      
+    c.cfop as cfop_codigo,
+    c.natureza as cfop_nome,
+    p.codigo as produto_codigo,
+    p.nome as produto_nome,
+    p.unid_med,
+    p.cfop_dentro as cfop,
+    sum(l.quantidade) as quantidade,
+    sum(l.valor) as valor,
+    (case when c.natureza is null or c.cfop is null then &apos;NÃO INFORMADO&apos; else c.cfop || &apos;-&apos; || c.natureza end) as cfop_cod_nome
+from      
+    lancto l         
+       left join produto p on (l.produto=p.grid)        
+       left join grupo_produto g on (p.grupo=g.grid)        
+       left join cfop c on (p.cfop_dentro=c.cfop) 
+where      
+    l.data between $data_periodo_ini and $data_periodo_fim
+and     l.operacao = &apos;V&apos;
+and     (case when $grupo is null then true else p.grupo = $grupo end) 
+and     (case when $subgrupo is  null then true else p.subgrupo = $subgrupo end)  
+group by      
+    c.cfop,
+    c.natureza,
+    p.cfop_dentro,
+    p.nome,
+    p.codigo,
+    p.unid_med" id="421ec70582cdd3b05a17ac28d18146b7" ordem="  " titulo="Analítico"><apelidos>1  rel_posto_nome      	tam=60
+2  rel_data_hora       	tam=18  
+3  titulo              	tam=96  alinha=centro
+4  cfop_cod_nome      	tam=60
+7  produto_codigo      	tam=6   
+8  produto_nome        	tam=40
+9  unid_med            	tam=4
+10 quantidade          	tam=10  fmt=%.01f
+11 valor               	tam=10  fmt=%.02f
+12 sub_cfop_qtde      	tam=10  fmt=%.01f	func=soma	campo=quantidade	grupo=1
+13 sub_cfop_valor     	tam=10  fmt=%.02f	func=soma	campo=valor		grupo=1
+14 total_qtde          	tam=10  fmt=%.01f	func=soma	campo=quantidade
+15 total_valor         	tam=10  fmt=%.02f	func=soma	campo=valor</apelidos><cab_pagina>
+#1                                                                              #2                 
+------------------------------------------------------------------------------------------------
+   
+                         RELATORIO DE VENDAS POR CFOP - ANALITICO
+#3
+
++--------+-----------------------------------------------+---------+------------+--------------+
+| Codigo | Descricao                                     | Unidade | Quantidade |       Valor  |
++--------+-----------------------------------------------+---------+------------+--------------+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="cfop">
+| CFOP: #4                                                                                     |
+|                                                                                              |
+</cab_grupo>
+<detalhe>
+| #7       #8                                                #9      #10           #11         |
+</detalhe>
+<rod_grupo nome="1">
+|                                                                   -----------   ------------ |
+| SUBTOTAL #4                                                        #12           #13         |
+|                                                                                              |
+</rod_grupo>
+<rod_relat>
+| TOTAL GERAL                                                        #14           #15         |
++----------------------------------------------------------------------------------------------+
+</rod_relat>
+<rod_pagina>
++----------------------------------------------------------------------------------------------+
+</rod_pagina>
+</layout><layout dados="select      
+    c.cfop as cfop_codigo,
+    c.natureza as cfop_nome,
+    p.codigo as produto_codigo,
+    p.nome as produto_nome,
+    p.unid_med,
+    p.cfop_dentro as cfop,
+    sum(l.quantidade) as quantidade,
+    sum(l.valor) as valor,
+    l.data,
+    (case when c.natureza is null or c.cfop is null then &apos;NÃO INFORMADO&apos; else c.cfop || &apos;-&apos; || c.natureza end) as cfop_cod_nome
+from      
+    lancto l         
+       left join produto p on (l.produto=p.grid)        
+       left join grupo_produto g on (p.grupo=g.grid)        
+       left join cfop c on (p.cfop_dentro=c.cfop) 
+where      
+    l.data between $data_periodo_ini and $data_periodo_fim
+and     l.operacao = &apos;V&apos;
+and     (case when $grupo is null then true else p.grupo = $grupo end) 
+and     (case when $subgrupo is  null then true else p.subgrupo = $subgrupo end)  
+group by      
+    c.cfop,
+    c.natureza,
+    p.cfop_dentro,
+    p.nome,
+    p.codigo,
+    p.unid_med,
+    l.data" id="a59b3f509c3a2c17ed69f28c4a5aafed" ordem=" " titulo="Analítico por Data"><apelidos>1  rel_posto_nome      	tam=60
+2  rel_data_hora       	tam=18  
+3  titulo              	tam=96  alinha=centro
+4  data                	tam=60  fmt=data
+5  cfop_cod_nome      	tam=60
+7  produto_codigo      	tam=6   
+8  produto_nome        	tam=40
+9  unid_med            	tam=4
+10 quantidade          	tam=10  fmt=%.01f
+11 valor               	tam=10  fmt=%.02f
+12 sub_cfop_qtde      	tam=10  fmt=%.01f	func=soma	campo=quantidade	grupo=2
+13 sub_cfop_valor     	tam=10  fmt=%.02f	func=soma	campo=valor		grupo=2
+14 sub_data_qtde       	tam=10  fmt=%.01f	func=soma	campo=quantidade	grupo=1
+15 sub_data_valor      	tam=10  fmt=%.02f	func=soma	campo=valor		grupo=1
+16 total_qtde          	tam=10  fmt=%.01f	func=soma	campo=quantidade
+17 total_valor         	tam=10  fmt=%.02f	func=soma	campo=valor</apelidos><cab_pagina>
+#1                                                                              #2                 
+------------------------------------------------------------------------------------------------
+   
+                       RELATORIO DE VENDAS POR CFOP - ANALITICO POR DATA
+#3
+
++--------+-----------------------------------------------+---------+------------+--------------+
+| Codigo | Descricao                                     | Unidade | Quantidade |       Valor  |
++--------+-----------------------------------------------+---------+------------+--------------+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="data">
+| DATA: #4                                                                                     |
+|                                                                                              |
+</cab_grupo>
+<cab_grupo nome="2" quebra="data,cfop">
+| CFOP: #5                                                                                     |
+|                                                                                              |
+</cab_grupo>
+<detalhe>
+| #7       #8                                                #9      #10           #11         |
+</detalhe>
+<rod_grupo nome="2">
+|                                                                   -----------   ------------ |
+| SUBTOTAL #5                                                        #12           #13         |
+|                                                                                              |
+</rod_grupo>
+<rod_grupo nome="1">
+| SUBTOTAL #4                                                        #14           #15         |
++----------------------------------------------------------------------------------------------+
+|                                                                                              |
+</rod_grupo>
+<rod_relat>
+| TOTAL GERAL                                                        #16           #17         |
++----------------------------------------------------------------------------------------------+
+</rod_relat>
+<rod_pagina>
++----------------------------------------------------------------------------------------------+
+</rod_pagina>
+</layout><layout dados="select      
+    c.cfop as cfop_codigo,
+    c.natureza as cfop_nome,
+    p.cfop_dentro as cfop,
+    sum(l.quantidade) as quantidade,
+    sum(l.valor) as valor,
+    (case when c.natureza is null or c.cfop is null then &apos;NÃO INFORMADO&apos; else c.cfop || &apos;-&apos; || c.natureza end) as cfop_cod_nome
+from      
+    lancto l         
+       left join produto p on (l.produto=p.grid)        
+       left join grupo_produto g on (p.grupo=g.grid)        
+       left join cfop c on (p.cfop_dentro=c.cfop) 
+where      
+    l.data between $data_periodo_ini and $data_periodo_fim
+and     l.operacao = &apos;V&apos;
+and     (case when $grupo is null then true else p.grupo = $grupo end) 
+and     (case when $subgrupo is  null then true else p.subgrupo = $subgrupo end)  
+group by      
+    c.cfop,
+    c.natureza,
+    p.cfop_dentro" id="29fc3dc3859c03bd23303987ad0eee96" ordem=" " titulo="Sintético"><apelidos>1  rel_posto_nome      	tam=60
+2  rel_data_hora       	tam=18  
+3  titulo              	tam=96  alinha=centro
+7  cfop_cod_nome      	tam=40
+8  valor               	tam=10  fmt=%.02f
+9  total               	tam=10  fmt=%.02f	func=soma	campo=valor</apelidos><cab_pagina>
+#1                                                                              #2                 
+------------------------------------------------------------------------------------------------
+   
+                         RELATORIO DE VENDAS POR CFOP - SINTETICO
+#3
+
++--------------------------------------------------------+--------------+
+| CFOP                                                   |       Valor  |
++--------------------------------------------------------+--------------+
+</cab_pagina>
+<detalhe>
+| #7                                                       #8           |
+</detalhe>
+<rod_relat>
+|                                                                       |
+| TOTAL GERAL                                              #9           |
++-----------------------------------------------------------------------+
+</rod_relat>
+<rod_pagina>
++-----------------------------------------------------------------------+
+</rod_pagina>
+</layout><layout dados="select      
+    c.cfop as cfop_codigo,
+    c.natureza as cfop_nome,
+    p.cfop_dentro as cfop,
+    sum(l.quantidade) as quantidade,
+    sum(l.valor) as valor,
+    l.data,
+    (case when c.natureza is null or c.cfop is null then &apos;NÃO INFORMADO&apos; else c.cfop || &apos;-&apos; || c.natureza end) as cfop_cod_nome
+from      
+    lancto l         
+       left join produto p on (l.produto=p.grid)        
+       left join grupo_produto g on (p.grupo=g.grid)        
+       left join cfop c on (p.cfop_dentro=c.cfop) 
+where      
+    l.data between $data_periodo_ini and $data_periodo_fim
+and     l.operacao = &apos;V&apos;
+and     (case when $grupo is null then true else p.grupo = $grupo end) 
+and     (case when $subgrupo is  null then true else p.subgrupo = $subgrupo end)  
+group by      
+    c.cfop,
+    c.natureza,
+    p.cfop_dentro,
+    l.data" id="bb16199f5bedb3684b65428bad7db0e3" ordem=" " titulo="Sintético por Data"><apelidos>1  rel_posto_nome      	tam=60
+2  rel_data_hora       	tam=18  
+3  titulo              	tam=96  alinha=centro
+4  data                	tam=15  fmt=data
+7  cfop_cod_nome      	tam=40
+8  valor               	tam=10  fmt=%.02f
+9  sub_data            	tam=10  fmt=%.02f	func=soma	campo=valor	grupo=1
+10 total               	tam=10  fmt=%.02f	func=soma	campo=valor
+</apelidos><cab_pagina>
+#1                                                                              #2                 
+------------------------------------------------------------------------------------------------
+   
+              RELATORIO DE VENDAS POR CFOP - SINTETICO POR DATA
+#3
+
++--------------------------------------------------------+--------------+
+| CFOP                                                   |       Valor  |
++--------------------------------------------------------+--------------+
+</cab_pagina>
+<cab_grupo nome="1" quebra="data">
+| DATA: #4                                                              |
+|                                                                       |
+</cab_grupo>
+<detalhe>
+| #7                                                       #8           |
+</detalhe>
+<rod_grupo nome="1">
+|                                                          ------------ |
+| SUBTOTAL #4                                              #9           |
+|                                                                       |
+|                                                                       |
+</rod_grupo>
+<rod_relat>
+| TOTAL GERAL                                              #10          |
++-----------------------------------------------------------------------+
+</rod_relat>
+<rod_pagina>
++-----------------------------------------------------------------------+
+</rod_pagina>
+</layout></relatorio>

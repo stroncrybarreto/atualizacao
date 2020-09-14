@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-01 17:54:09" versao_xml="0.1"><tela titulo="Produtos não vendidos">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <campo id="data" modelo="periodo" requerido="sim" tipo="data" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <procura id="grupo" modelo="grupo_produto" titulo="Grupo Produto" />
+    <procura id="subgrupo" modelo="subgrupo_produto" titulo="SubGrupo" />
+    <selecao id="exibir" origem="VALUES (1, &apos;Todos os produtos&apos;), (2, &apos;Somente os produtos com quantidade em estoque&apos;)" requerido="sim" titulo="Exibir" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Produtos não vendidos&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver os Produtos não vendidos</ajuda><layout dados="select 
+    gp.nome as grupo_nome, 
+    p.codigo, 
+    p.nome,
+    coalesce((select preco_unit from lancto where produto=p.grid and operacao=&apos;E&apos; and data&lt;$data_ini and (case when $empresa is null then true else empresa = $empresa end) order by data desc limit 1),0) as custo_unit,
+    (select data from lancto where produto=p.grid and operacao=&apos;E&apos; and data&lt;$data_ini and (case when $empresa is null then true else empresa = $empresa end) order by data desc limit 1) as compra_data,
+    coalesce((select preco_unit from lancto where produto=p.grid and operacao=&apos;V&apos; and data&lt;$data_ini and (case when $empresa is null then true else empresa = $empresa end) order by data desc limit 1),preco_unit_empresa_f(p.grid,$empresa)) as preco_unit,
+    (select data from lancto where produto=p.grid and operacao=&apos;V&apos; and data&lt;$data_ini and (case when $empresa is null then true else empresa = $empresa end) order by data desc limit 1) as venda_data,
+    produto_estoque_f($empresa,p.grid,current_date) as quantidade
+from 
+    produto p     
+       join grupo_produto gp on (p.grupo = gp.grid) 
+where 
+    p.grid in (select grid from produto where (case when $grupo is null then true else grupo = $grupo end)  
+           and (case when $subgrupo is null then true else subgrupo = $subgrupo end) 
+           except select distinct produto from lancto 
+           where operacao = &apos;V&apos;  and data between $data_ini  and $data_fim  
+           and (case when $empresa is null then true else empresa = $empresa end))  
+and     (case when $grupo is null then true else p.grupo = $grupo end)  
+and     (case when $subgrupo is null then true else p.subgrupo = $subgrupo end)
+and     (case when $exibir = 1 then true else produto_estoque_f($empresa,p.grid,current_date) &gt; 0 end)" id="4926af86b780ec1532e27002f617f068" ordem="codigo, nome" titulo="Movimento Acumulado"><apelidos>1  rel_posto_nome       tam=60
+2  rel_data_hora        tam=18
+3  data_ini             tam=10 fmt=data
+4  data_fim             tam=10 fmt=data  
+5  grupo_nome           tam=30
+6  codigo               tam=6
+7  nome                 tam=32
+8  venda_data           tam=10 fmt=data
+9  preco_unit           tam=7 fmt=%.02f
+10 compra_data          tam=10 fmt=data
+11 custo_unit           tam=7 fmt=%.03f
+12 quantidade           tam=5 fmt=%d
+13 valor_custo          tam=8 fmt=%.02f	expr=quantidade*custo_unit
+14 valor_venda          tam=8 fmt=%.02f	expr=quantidade*preco_unit
+15 total_produto_grupo  tam=3 fmt=%d	func=contar 
+16 total_quantidade     tam=6 fmt=%d	func=soma	campo=quantidade
+17 total_valor_custo    tam=9 fmt=%.02f	func=soma	campo=valor_custo
+18 total_valor_venda    tam=9 fmt=%.02f	func=soma	campo=valor_venda</apelidos><cab_pagina>
+#1                                                                                                      #2            
+-------------------------------------------------------------------------------------------------------------------------
+ 
+                                                       PRODUTOS SEM VENDAS                                                    
+                                                Período: #3         a #4               
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="grupo_nome"> 
++-------------------------------------------+----------------------+----------------------+-----------------------------+
+| Grupo: #5                                 |     Última Venda     |     Última Compra    |         Estoque             |
++--------+----------------------------------+------------+---------+------------+---------+-------+----------+----------+
+| Código | Descrição do Produto             |   Data     | Pr unit |    Data    | Pr unit |  Qtde | Vl.Custo | Vl.Venda |
++--------+----------------------------------+------------+---------+------------+---------+-------+----------+----------+
+</cab_grupo>
+
+<detalhe>
+| #6     | #7                               | #8         | #9      | #10        | #11     | #12   | #13      | #14      |
+</detalhe>
+
+<rod_grupo nome="1">
++--------+----------------------------------+------------+---------+------------+---------+-------+----------+----------+
+| #15   produtos sem movimentação neste grupo                                             | #16   | #17      | #18      |
++-----------------------------------------------------------------------------------------+-------+----------+----------+
+
+</rod_grupo>
+
+<rod_pagina>
++-----------------------------------------------------------------------------------------+-------+----------+----------+
+</rod_pagina></layout></relatorio>

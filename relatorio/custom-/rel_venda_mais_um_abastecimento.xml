@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-22 11:24:11" versao_xml="0.1"><tela titulo="Vendas com mais de um abastecimento">
+  <quadro titulo="Parâmetros">
+    <caixa>
+      <campo id="data" modelo="periodo" requerido="sim" tipo="data" valor_padrao="select (to_char(current_date, &apos;YYYY-mm-01&apos;)::date), (to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1)" />
+      <campo id="turno" tipo="inteiro" />
+    </caixa>
+    <procura condicao="((codigo in (select conta from empresa_conta where empresa = (select grid from empresa_local))) or (codigo = (select conta from conta_config where chave = &apos;PONTOS DE VENDA&apos;)))" id="conta" modelo="conta" titulo="Conta" valor_padrao="select &apos;1.1.2.031&apos;" />
+    <campo id="nr_abastecimento" requerido="sim" tipo="inteiro" titulo="Nr. Abastecimento" valor_padrao="select 2::int4" />
+  </quadro>
+  <quadro titulo="Opções">
+    <selecao id="ordenar" origem="VALUES (0, &apos;Data e Turno&apos;), (1, &apos;Maior numero de abastecimento&apos;)" requerido="sim" titulo="Ordenar por" />
+  </quadro>
+</tela><ajuda /><layout dados="select 
+     * 
+from 
+      (select 
+     l.mlid, 
+     l.empresa, 
+     l.data, 
+     l.documento, 
+     l.turno, 
+     count(*), 
+     e.nome as empresa_nome, 
+     to_char(l.hora, &apos;HH24:MI&apos;) as hora, 
+     (case  
+          when (select 
+                    (mm.nome || m.valor::text || m.hora::text) as nome 
+               from 
+                    movto m 
+          join                motivo_movto mm on (m.motivo = mm.grid) 
+               where 
+                    m.mlid = l.mlid  
+                    and mm.forma_pgto 
+               order by 
+                    m.valor desc 
+               limit 
+                    1) is null then (select 
+                    valor 
+               from 
+                    movto m 
+               where 
+                    m.mlid = l.mlid  
+                    and m.motivo = (select 
+                                   motivo 
+                              from 
+                                   motivo_config 
+                              where 
+                                   chave = &apos;VENDA&apos; 
+                              limit 
+                                   1)) else (select 
+                                   m.valor 
+                              from 
+                                   movto m 
+          join                               motivo_movto mm on (m.motivo = mm.grid) 
+                              where 
+                                   m.mlid = l.mlid  
+                                   and mm.forma_pgto 
+                              order by 
+                                   m.valor desc 
+                              limit 
+                                   1) end) as valor_pgto, 
+           (select 
+                    valor 
+               from 
+                    movto m 
+               where 
+                    m.mlid = l.mlid  
+                    and m.motivo = (select 
+                                   motivo 
+                              from 
+                                   motivo_config 
+                              where 
+                                   chave = &apos;VENDA&apos; 
+                              limit 
+                                   1) 
+               limit 
+                    1) as valor, 
+           (select 
+                    count(*) 
+               from 
+                    lancto la 
+          join                produto pa on (la.produto = pa.grid) 
+               where 
+                    la.mlid = l.mlid  
+                    and not la.bico is null  
+                    and la.bico != &apos;&apos;) as abastecimento, 
+          (case when (select (mm.nome || m.valor::text || m.hora::text) 
+                from 
+                     movto m join motivo_movto mm on (m.motivo = mm.grid) 
+                where 
+                     m.mlid = l.mlid  
+                     and mm.forma_pgto 
+                order by m.valor desc limit 1) is null then &apos;DINHEIRO&apos; else (select 
+                     mm.nome::text 
+                from movto m join motivo_movto mm on (m.motivo = mm.grid) 
+                              where m.mlid = l.mlid and mm.forma_pgto order by m.valor desc limit 1) end) as forma_pgto, 
+     (case when $conta is null then &apos;&apos; else (&apos;Conta &apos; || $conta) end) as titulo1, 
+     (&apos;Período &apos; || to_char($data_ini::date, 
+                                   &apos;dd/mm/YYYY&apos;)::text || &apos; a &apos; || to_char($data_fim::date, 
+                                   &apos;dd/mm/YYYY&apos;)::text) as titulo2 
+               from 
+                    lancto l 
+          join                empresa e on (e.grid = l.empresa) 
+               where 
+                    (l.data between $data_ini::date  
+                                   and $data_fim::date)  
+                    and (case  
+          when $turno is null then true else l.turno = $turno end)  
+                    and (bico is not null)  
+                    and (bico != &apos;&apos;)  
+                    and (case  
+          when (select 
+                                                       grid 
+                                                  from 
+                                                       empresa_local 
+                                                  limit 
+                                                       1) is null then true else l.empresa = (select 
+                                                       grid 
+                                                  from 
+                                                       empresa_local 
+                                                  limit 
+                                                       1) end)  
+                    and (case  
+          when $conta is null then true else l.conta = $conta end) 
+     group by 
+          l.mlid, 
+          l.empresa, 
+          e.nome, 
+          l.data, 
+          l.documento, 
+          l.hora, 
+          l.turno 
+     having 
+                    count(*) &gt;= (case  
+          when $nr_abastecimento &gt;= 2 then $nr_abastecimento else 2 end) ) as va 
+order by 
+      va.empresa_nome, 
+      (case when $ordenar = 1 then va.count else null end) desc, 
+      va.data, 
+      va.turno, 
+      (case when $ordenar = 0 then va.count else null end) desc
+" id="485340756c6db7627109b2cf862b6819" ordem=" " titulo="Vendas com mais de um abastecimento"><apelidos>1  rel_posto_nome    tam=60
+2  rel_data_hora     tam=18
+3  titulo1           tam=121	alinha=centro
+4  titulo2           tam=121	alinha=centro
+5  empresa_nome      tam=50
+6  conta_nome        tam=38
+7  data              tam=10	fmt=data
+8  turno             tam=3
+9  valor             tam=9	fmt=%.02f	alinha=direita
+10 documento         tam=8	
+11 hora              tam=10
+12 abastecimento     tam=22
+13 forma_pgto        tam=22
+14 valor_pgto        tam=12	fmt=%.02f
+16 valor_pgto_total  tam=12	fmt=%.02f	func=soma	campo=valor_pgto</apelidos><cab_pagina>
+#1                                                                                                       #2        
+--------------------------------------------------------------------------------------------------------------------------
+ 
+                                             VENDA COM MAIS DE UM ABASTECIMENTO                                          
+
+#3
+#4
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="empresa_nome">
+Empresa: #5                                                                                      
++------------+-------+------------+---------+-----------+------------------------+------------------------+--------------+
+|    Data    | Turno | Hr CP      |  Cupom  |   Valor   |  Abastecimentos        | Forma Pgto             |  Valor Pgto  |
++------------+-------+------------+---------+-----------+------------------------+------------------------+--------------+
+</cab_grupo>
+
+<detalhe>
+| #7         | #8    | #11        | #10     | #9        | #12                    | #13                    | #14          |
+</detalhe>
+
+<rod_grupo nome="1">
++------------+-------+------------+---------+-----------+------------------------+------------------------+--------------+
+| Total      |                                                                                            | #16          |
++------------+--------------------------------------------------------------------------------------------+--------------+
+
+</rod_grupo>
+
+<rod_pagina>
++------------------------------------------------------------------------------------------------------------------------+
+</rod_pagina></layout></relatorio>

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-13 11:26:44" versao_xml="0.1"><tela titulo="Relatório Relação CFOP">
+  <quadro titulo="Parâmetros">
+    <selecao id="agrupamento" origem="VALUES (1, &apos;Entrada e Saida&apos;), (2, &apos;Entrada&apos;), (3, &apos;Saida&apos;)" requerido="sim" titulo="Agrupar por" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Relação de CFOP's&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver a Relação de CFOP's</ajuda><layout dados="select        c.codigo as cfop_codigo,        c.nome,        c.tipo,       (case when c.tipo = &apos;E&apos; then &apos;Entrada&apos;                  else &apos;Saída&apos; end) as tipo_nome,        (case when $agrupamento = 1 then &apos;TIPO: ENTRADAS E SAÍDAS&apos;              when $agrupamento = 2 then &apos;TIPO: ENTRADAS&apos;              when $agrupamento = 3 then &apos;TIPO: SAÍDAS&apos; end) as titulo from        cfop c  where        (case when $agrupamento = 1 then true              when $agrupamento = 2 then c.tipo = &apos;E&apos;              when $agrupamento = 3 then c.tipo = &apos;S&apos; end) order by        c.codigo " id="4926af86b780ec1532e27002f617f068" ordem=" " titulo="com Agrupamentos"><apelidos>1  rel_posto_nome    tam=60
+2  rel_data_hora     tam=18	alinha=direita
+3  cfop_codigo       tam=5	alinha=centro
+4  nome              tam=100	alinha=esquerda
+5  tipo_nome         tam=20	alinha=esquerda
+6  titulo            tam=112	alinha=centro</apelidos><cab_pagina>
+
+#1                                                                                             #2
+-----------------------------------------------------------------------------------------------------------------
+   
+                                         R E L A Ç Ã O  D E  C F O P 'S
+#6                                                                                                                 
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="tipo">
+
++---------------------------------------------------------------------------------------------------------------+
+| Tipo :  #5                                                                                                    |
++--------+------------------------------------------------------------------------------------------------------+
+| Codigo | Nome                                                                                                 |
++--------+------------------------------------------------------------------------------------------------------+
+</cab_grupo>
+
+<detalhe>
+| #3     | #4                                                                                                   |
+</detalhe>
+
+<rod_grupo nome="1">
++--------+------------------------------------------------------------------------------------------------------+
+
+</rod_grupo>
+
+<rod_pagina>
++---------------------------------------------------------------------------------------------------------------+
+</rod_pagina></layout></relatorio>

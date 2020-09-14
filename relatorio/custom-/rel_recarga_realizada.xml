@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-02 17:15:20" versao_xml="0.1"><tela titulo="Recargas Realizadas">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <procura condicao="codigo like &apos;1.1.2.%&apos;" id="conta" modelo="conta" titulo="Conta Caixa" />
+    <procura id="produto" modelo="produto" titulo="Produto" />
+    <caixa>
+      <campo id="data" modelo="periodo" requerido="sim" tipo="data" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+      <campo id="turno" tipo="inteiro" titulo="Turno" />
+    </caixa>
+    <selecao id="operadora" origem="select distinct rco.codigo, rco.nome from recarga_celular_operadora rco join recarga_celular_tabela rct on (rct.nome=rco.codigo) order by nome" titulo="Operadora" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Recargas Realizadas&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver as Recargas Realizadas</ajuda><layout dados="select 
+    rct.hora as data, 
+    c.turno, 
+    p.nome as empresa_nome, 
+    c.conta as conta_caixa,
+    pr.nome as produto, 
+    rco.nome as operadora, 
+    rct.ddd, 
+    rct.fone, 
+    rct.valor 
+from 
+    recarga_celular_transacao rct 
+       join produto pr on (pr.grid=rct.produto)
+       join recarga_celular_operadora rco on (rco.codigo=rct.operadora) 
+       join (caixa c join pessoa p on (c.empresa=p.grid)) on (c.grid=rct.caixa) 
+where 
+    rct.hora between $data_ini and $data_fim
+and     (case when $empresa is null then true else c.empresa = $empresa end)
+and     (case when $turno is null then true else c.turno = $turno end)
+and     (case when $conta is null then true else c.conta = $conta end)
+and     (case when $produto is null then true else rct.produto = $produto end)
+and     (case when $operadora is null then true else rct.operadora = $operadora end)
+order by 
+    rct.hora" id="4926af86b780ec1532e27002f617f068" ordem="" titulo="Geral"><apelidos>1  rel_posto_nome      	tam=60
+2  rel_data_hora       	tam=18  
+3  titulo              	tam=96  alinha=centro
+4  data	               	tam=10  fmt=data
+5  total_empresa       	tam=10  fmt=%.02f	func=soma	campo=valor	grupo=1
+6  valor               	tam=8   fmt=%.02f
+7  valor_total         	tam=10  fmt=%.02f	func=soma	campo=valor
+8  turno               	tam=2
+9  operadora           	tam=14
+10 ddd			tam=3
+11 fone			tam=8
+12 produto		tam=33
+13 conta_caixa		tam=14
+16 empresa_nome		tam=20</apelidos><cab_pagina>
+#1                                                                                                   #2                 
+-------------------------------------------------------------------------------------------------------------------------
+   
+	                               RELATORIO DE RECARGAS REALIZADAS
+#3
+</cab_pagina>
+<cab_grupo nome="1" quebra="empresa_nome">
++-----------------------------------------------------------------------------------------------------------------------+
+| EMPRESA: #16                                                                                                          |
++------------+-------+-----------------------------------+----------------+---------------+----------------+------------+
+| Data       | Turno | Produto                           | Operadora      | Caixa         | DDD | Fone     | Valor      |
++------------+-------+-----------------------------------+----------------+---------------+----------------+------------+
+</cab_grupo>
+<detalhe>
+| #4         | #8    | #12                               | #9             | #13           | #10 | #11      |   #6       |
+</detalhe>
+<rod_grupo nome="1">
++------------+---------------------------------------------------------------------------------------------+------------+
+| TOTAL EMPRESA                                                                                            | #5         |
++----------------------------------------------------------------------------------------------------------+------------+
+
+</rod_grupo>
+<rod_relat>
++----------------------------------------------------------------------------------------------------------+------------+
+| TOTAL GERAL                                                                                              | #7         |
++----------------------------------------------------------------------------------------------------------+------------+
+</rod_relat>
++-----------------------------------------------------------------------------------------------------------------------+
+</layout><layout dados="select 
+    rct.hora as data, 
+    c.turno, 
+    p.nome as empresa_nome, 
+    c.conta as conta_caixa,
+    pr.nome as produto, 
+    rco.nome as operadora, 
+    rct.ddd, 
+    rct.fone, 
+    rct.valor 
+from 
+    recarga_celular_transacao rct 
+       join produto pr on (pr.grid=rct.produto)
+       join recarga_celular_operadora rco on (rco.codigo=rct.operadora) 
+       join (caixa c join pessoa p on (c.empresa=p.grid)) on (c.grid=rct.caixa) 
+where 
+    rct.hora between $data_ini and $data_fim
+and     (case when $empresa is null then true else c.empresa = $empresa end)
+and     (case when $turno is null then true else c.turno = $turno end)
+and     (case when $conta is null then true else c.conta = $conta end)
+and     (case when $produto is null then true else rct.produto = $produto end)
+and     (case when $operadora is null then true else rct.operadora = $operadora end)
+order by 
+    rct.hora,
+    c.conta" id="da2e8620638f9820441b2c34a702e2cd" ordem="" titulo="Caixa"><apelidos>1  rel_posto_nome      	tam=60
+2  rel_data_hora       	tam=18  
+3  titulo              	tam=96  alinha=centro
+4  data	               	tam=10  fmt=data
+5  total_empresa       	tam=10  fmt=%.02f	func=soma	campo=valor	grupo=1
+6  valor               	tam=8   fmt=%.02f
+7  valor_total         	tam=10  fmt=%.02f	func=soma	campo=valor
+8  turno               	tam=2
+9  operadora           	tam=14
+10 ddd			tam=3
+11 fone			tam=8
+12 produto		tam=33
+13 conta_caixa		tam=20
+14 total_conta         	tam=10  fmt=%.02f
+16 empresa_nome		tam=20
+</apelidos><cab_pagina>
+#1                                                                                 #2                 
+---------------------------------------------------------------------------------------------------------
+   
+	                               RELATORIO DE RECARGAS REALIZADAS
+#3
+</cab_pagina>
+<cab_grupo nome="1" quebra="empresa_nome">
++-------------------------------------------------------------------------------------------------------+
+| EMPRESA: #16                                                                                          |
+</cab_grupo>
+<cab_grupo nome="2" quebra="empresa_nome, conta_caixa">
++-------------------------------------------------------------------------------------------------------+
+| CONTA CAIXA: #13                                                                                      |
++------------+-------+-----------------------------------+----------------+----------------+------------+
+| Data       | Turno | Produto                           | Operadora      | DDD | Fone     | Valor      |
++------------+-------+-----------------------------------+----------------+----------------+------------+
+</cab_grupo>
+<detalhe>
+| #4         | #8    | #12                               | #9             | #10 | #11      |   #6       |
+</detalhe>
+<rod_grupo nome="2">
++------------+-------+-----------------------------------+----------------+-----+----------+------------+
+| TOTAL CAIXA                                                                              | #14        |
++------------------------------------------------------------------------------------------+------------+
+
+</rod_grupo>
+<rod_grupo nome="1">
++------------+-----------------------------------------------------------------------------+------------+
+| TOTAL EMPRESA                                                                            | #5         |
++------------------------------------------------------------------------------------------+------------+
+</rod_grupo>
+<rod_relat>
++------------+-----------------------------------------------------------------------------+------------+
+| TOTAL GERAL                                                                              | #7         |
++------------------------------------------------------------------------------------------+------------+
+</rod_relat>
++-------------------------------------------------------------------------------------------------------+
+</layout><layout dados="select 
+    rct.hora as data, 
+    c.turno, 
+    p.nome as empresa_nome, 
+    c.conta as conta_caixa,
+    pr.nome as produto, 
+    rco.nome as operadora, 
+    rct.ddd, 
+    rct.fone, 
+    rct.valor 
+from 
+    recarga_celular_transacao rct 
+       join produto pr on (pr.grid=rct.produto)
+       join recarga_celular_operadora rco on (rco.codigo=rct.operadora) 
+       join (caixa c join pessoa p on (c.empresa=p.grid)) on (c.grid=rct.caixa) 
+where 
+    rct.hora between $data_ini and $data_fim
+and     (case when $empresa is null then true else c.empresa = $empresa end)
+and     (case when $turno is null then true else c.turno = $turno end)
+and     (case when $conta is null then true else c.conta = $conta end)
+and     (case when $produto is null then true else rct.produto = $produto end)
+and     (case when $operadora is null then true else rct.operadora = $operadora end)
+order by 
+    rct.hora,
+    rco.nome" id="5bcc34e26fb6e9cb4d64ffc7d411f7d4" ordem="" titulo="Operadora"><apelidos>1  rel_posto_nome      	tam=60
+2  rel_data_hora       	tam=18  
+3  titulo              	tam=96  alinha=centro
+4  data	               	tam=10  fmt=data
+5  total_empresa       	tam=10  fmt=%.02f	func=soma	campo=valor	grupo=1
+6  valor               	tam=8   fmt=%.02f
+7  valor_total         	tam=10  fmt=%.02f	func=soma	campo=valor
+8  turno               	tam=2
+9  operadora           	tam=14
+10 ddd			tam=3
+11 fone			tam=8
+12 produto		tam=33
+13 conta_caixa		tam=12
+14 total_conta         	tam=10  fmt=%.02f
+15 total_operadora     	tam=10  fmt=%.02f
+16 empresa_nome		tam=20
+</apelidos><cab_pagina>
+#1                                                                                 #2                 
+---------------------------------------------------------------------------------------------------------
+   
+	                               RELATORIO DE RECARGAS REALIZADAS
+#3
+</cab_pagina>
+<cab_grupo nome="1" quebra="empresa_nome">
++-------------------------------------------------------------------------------------------------------+
+| EMPRESA: #16                                                                                          |
+</cab_grupo>
+<cab_grupo nome="2" quebra="empresa_nome, operadora">
++-------------------------------------------------------------------------------------------------------+
+| OPERADORA: #9                                                                                         |
++------------+-------+-----------------------------------+----------------+----------------+------------+
+| Data       | Turno | Produto                           | Caixa          | DDD | Fone     | Valor      |
++------------+-------+-----------------------------------+----------------+----------------+------------+
+</cab_grupo>
+<detalhe>
+| #4         | #8    | #12                               | #13            | #10 | #11      |   #6       |
+</detalhe>
+<rod_grupo nome="2">
++------------+-------+-----------------------------------+----------------+-----+----------+------------+
+| TOTAL OPERADORA                                                                          | #15        |
++------------------------------------------------------------------------------------------+------------+
+
+</rod_grupo>
+<rod_grupo nome="1">
++------------+-----------------------------------------------------------------------------+------------+
+| TOTAL EMPRESA                                                                            | #5         |
++------------------------------------------------------------------------------------------+------------+
+</rod_grupo>
+<rod_relat>
++------------+-----------------------------------------------------------------------------+------------+
+| TOTAL GERAL                                                                              | #7         |
++------------------------------------------------------------------------------------------+------------+
+</rod_relat>
++-------------------------------------------------------------------------------------------------------+
+</layout></relatorio>

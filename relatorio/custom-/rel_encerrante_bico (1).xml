@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-02 13:53:01" versao_xml="0.1"><tela titulo="Encerrantes">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <campo id="data" modelo="periodo" requerido="sim" tipo="data" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <procura condicao="tipo = &apos;C&apos;" id="combustivel" modelo="produto" titulo="Combustível" />
+    <procura id="bico" modelo="deposito" titulo="Bico" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Encerrantes&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver os Encerrantes</ajuda><layout dados="select 
+    b.nome||&apos; - &apos;||p.nome as bico_desc, 
+    p.grid as produto, 
+    p.codigo as produto_codigo, 
+    p.nome as produto_nome,
+    c.data,
+    c.turno,
+    coalesce((select sum(quantidade) from lancto where bico=b.nome and data=c.data and turno=c.turno and empresa=b.empresa and operacao=&apos;V&apos;),0) as venda,
+    coalesce((select sum(valor) from lancto where bico=b.nome and data=c.data and turno=c.turno and empresa=b.empresa and operacao=&apos;V&apos;),0) as valor,
+    coalesce((select sum(quantidade) from lancto where bico=b.nome and data=c.data and turno=c.turno and empresa=b.empresa and operacao=&apos;A&apos;),0) as afericao,
+    (caixa_bico_encerrante_f(b.empresa, NULL, c.data, c.turno, b.nome))[1]::float as enc_ini,    
+    (caixa_bico_encerrante_f(b.empresa, NULL, c.data, c.turno, b.nome))[2]::float as enc_fim,
+    coalesce((select sum(valor) from lancto where bico=b.nome and data=c.data and turno=c.turno and empresa=b.empresa and operacao=&apos;V&apos;)/coalesce((select sum(quantidade) from lancto where bico=b.nome and data=c.data and turno=c.turno and empresa=b.empresa and operacao=&apos;V&apos;),1),0) as preco,
+    (case when abs((caixa_bico_encerrante_f(b.empresa, NULL, c.data, c.turno, b.nome))[2]::float - (caixa_bico_encerrante_f(b.empresa, NULL, c.data, c.turno, b.nome))[1]::float - (select sum(quantidade) from lancto where bico=b.nome and data=c.data and turno=c.turno and empresa=b.empresa and operacao=&apos;V&apos;) - (select sum(quantidade) from lancto where bico=b.nome and data=c.data and turno=c.turno and empresa=b.empresa and operacao=&apos;A&apos;)) &gt; 1 then &apos;**&apos; end) as flag,
+    pessoa_nome(b.empresa) as empresa_nome
+from 
+    bico b 
+       join deposito d on (b.deposito=d.grid) 
+       join produto p on (d.produto=p.grid) 
+       join caixa_enc c on (c.bico=b.nome and c.empresa=b.empresa)
+where
+     (case when $empresa is null then true else b.empresa = $empresa end)
+and     c.data between $data_ini and $data_fim
+and     (case when $bico is null then true else b.grid = $bico end)
+and     (case when $combustivel is null then true else d.produto = $combustivel end)
+order by 
+    b.nome,
+    c.data" id="4926af86b780ec1532e27002f617f068" ordem="" titulo="Encerrantes"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora	tam=16
+3  empresa_nome		tam=103	alinha=centro
+4  titulo2		tam=103	alinha=centro
+5  titulo3		tam=103	alinha=centro
+6  bico_desc		tam=40
+7  data			tam=10	fmt=data
+8  turno		tam=4	alinha=centro
+9  enc_ini		tam=12	fmt=%.02f
+10 enc_fim		tam=12	fmt=%.02f
+11 litros		tam=11	fmt=%.02f	expr=enc_fim-enc_ini
+12 afericao		tam=8	fmt=%.02f
+13 venda		tam=11	fmt=%.02f
+14 preco		tam=6	fmt=%.03f
+15 valor		tam=13	fmt=%.02f
+16 flag			tam=3
+17 total_litros		tam=11	fmt=%.02f	func=soma	campo=litros
+18 total_afericao	tam=8	fmt=%.02f	func=soma	campo=afericao
+19 total_venda		tam=11	fmt=%.02f	func=soma	campo=venda
+20 total_valor		tam=13	fmt=%.02f	func=soma	campo=valor
+21 data_ini		tam=10	fmt=data
+22 data_fim		tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                                                  #2              
+--------------------------------------------------------------------------------------------------------------------
+
+                                          ENCERRANTES POR BICO
+#3
+                                    Período: #21        a #22       
+#5										  
+
+
++------------+-------+--------------+--------------+-------------+----------+-------------+--------+---------------+
+|    Data    | Turno |      Inicial |        Final |      Litros | Aferição |       Venda |  Preco |         Valor |
++------------+-------+--------------+--------------+-------------+----------+-------------+--------+---------------+
+</cab_pagina>
+<cab_grupo nome="1" quebra="bico_desc">
+| BICO #6                                                                                                          |
+</cab_grupo>
+<detalhe>
+| #7         | #8    | #9           | #10          | #11         | #12      | #13         | #14    | #15           | #16
+</detalhe>
+<rod_grupo nome="1">
++------------+-------+--------------+--------------+-------------+----------+-------------+--------+---------------+
+</rod_grupo>
+<rod_pagina>
++------------+-------+--------------+--------------+-------------+----------+-------------+--------+---------------+
+</rod_pagina>
+<rod_relat>
+| Total                                            | #17         | #18      | #19         |        | #20           |
++------------+-------+--------------+--------------+-------------+----------+-------------+--------+---------------+
+</rod_relat>
+</layout></relatorio>

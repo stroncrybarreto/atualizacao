@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-07-30 10:10:36" versao_xml="0.1"><tela titulo="Relatório de Cliente">
+  <quadro titulo="Parâmetros">
+    <procura id="grupo" modelo="grupo_pessoa" titulo="Grupo" />
+    <campo id="nome" tipo="texto" titulo="Nome" />
+    <caixa>
+      <campo id="cidade" tipo="texto" titulo="Cidade" />
+      <campo id="estado" tipo="texto" titulo="Estado" />
+    </caixa>
+    <selecao id="exibir" origem="VALUES (0, &apos;Todos&apos;),                                                                        (1, &apos;Ativos&apos;),                                                                        (2, &apos;Inativos&apos;),                                                                        (3, &apos;Excluidos&apos;)" requerido="sim" titulo="Exibir" />
+    <check id="clientes_empresa" titulo="Apenas Clientes do Posto" valor_padrao="select false" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Clientes&lt;/b&gt;&lt;/big&gt;
+
+Este relatorio permite ver os clientes</ajuda><layout dados="select 
+     c.codigo, 
+     c.nome, 
+     c.cpf, 
+     c.fone, 
+     c.data_nasc, 
+     c.cidade, 
+     c.estado as UF, 
+     (case 
+          when $exibir = 1 then &apos;CLIENTES ATIVOS&apos; 
+          when $exibir = 2 then &apos;CLIENTES INATIVOS&apos; 
+          when $exibir = 3 then &apos;CLIENTES EXCLUIDOS&apos; 
+          else &apos;TODOS OS CLIENTES&apos; end)||(case when $clientes_empresa = 1 then &apos; DO POSTO&apos; else &apos;&apos; end)||(case when $grupo is not null then &apos;\nGRUPO: &apos;||gp.nome else &apos;&apos; end) as filtros_nome
+from 
+     cliente c
+            join grupo_pessoa gp on (c.grupo = gp.grid)
+where 
+     (case  
+          when $grupo is null then true else c.grupo = $grupo end) 
+     and (case  
+          when $nome = &apos;&apos; then true else c.nome like &apos;%&apos;||$nome||&apos;%&apos; end)  
+     and (case  
+          when $estado = &apos;&apos; then true else c.estado like &apos;%&apos;||$estado||&apos;%&apos; end)  
+     and (case  
+          when $cidade = &apos;&apos; then true else c.cidade like &apos;%&apos;||$cidade||&apos;%&apos; end)  
+     and (case  
+          when $exibir = 1 then c.flag = &apos;A&apos;  
+          when $exibir = 2 then c.flag = &apos;I&apos;  
+          when $exibir = 3 then c.flag = &apos;D&apos; else true end)  
+     and (case 
+          when $clientes_empresa = 1 then c.empresa = (select grid from empresa_local limit 1) else true end)" id="4557c62d410e6f13891571b9e01e76c8" ordem="nome" titulo="Relatório de Clientes"><apelidos>1  rel_posto_nome  tam=60          
+2  rel_data_hora   tam=18          
+3  codigo          tam=6	fmt=%d  
+4  nome            tam=30          
+5  cpf             tam=22          
+6  fone            tam=9           
+7  data_nasc       tam=10	fmt=data
+8  cidade          tam=14          
+9  uf              tam=2           
+10 cont_cliente    tam=7	alinha=direita	fmt=%d	func=contar
+11 filtros_nome    tam=117	alinha=centro</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                     R E L A T Ó R I O   D E   C L I E N T E S                                      
+#11                                                                                                                 
+
++--------+--------------------------------+------------------------+-----------+------------+----------------+----+
+| codigo | nome                           | CPF/CNPJ               | fone      | nascimento | cidade         | uf |
++--------+--------------------------------+------------------------+-----------+------------+----------------+----+
+</cab_pagina>
+<detalhe>
+| #3     | #4                             | #5                     | #6        | #7         | #8             | #9 |
+</detalhe>
+<rod_relat>
++--------+--------------------------------+------------------------+-----------+------------+----------------+----+
+| #10     cliente(s)                                                                                              |
++-----------------------------------------------------------------------------------------------------------------+
+</rod_relat>
+<rod_pagina>
++--------+--------------------------------+------------------------+-----------+------------+----------------+----+
+</rod_pagina></layout></relatorio>

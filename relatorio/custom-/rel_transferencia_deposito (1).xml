@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-03 10:22:12" versao_xml="0.1"><tela titulo="Transferência por depósito">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <caixa>
+      <campo id="data_ini" requerido="sim" tipo="data" titulo="Data inicial" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date" />
+      <campo id="turno_ini" tipo="inteiro" titulo="Turno inicial" />
+    </caixa>
+    <caixa>
+      <campo id="data_fim" requerido="sim" tipo="data" titulo="Data final" valor_padrao="select to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+      <campo id="turno_fim" tipo="inteiro" titulo="Turno final" />
+    </caixa>
+    <procura id="deposito_ori" modelo="deposito" titulo="Dep. origem" />
+    <procura id="deposito_des" modelo="deposito" titulo="Dep. destino" />
+    <procura id="grupo" modelo="grupo_produto" titulo="Grupo" />
+    <procura condicao="grupo = $grupo or $grupo is null" id="subgrupo" modelo="subgrupo_produto" titulo="Subgrupo" />
+    <procura condicao="((grupo = $grupo or $grupo is null) and (subgrupo = $subgrupo or $subgrupo is null))" id="produto" modelo="produto" titulo="Produto" />
+    <selecao id="tipo" origem="VALUES (1,&apos;Entradas e Saidas&apos;), (2,&apos;Somente Saidas&apos;), (3,&apos;Somente Entradas&apos;)" requerido="sim" titulo="Tipo de transferência" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Transferência por depósito&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver as Transferência por depósito</ajuda><layout dados="select
+    (empresa_nome||&apos; &apos;||deposito_cod_nome) as quebra,
+    t.sinal,
+    t.data,
+    t.turno,
+    t.deposito_cod_nome,
+    t.produto_codigo,
+    t.produto_nome,
+    t.preco_unit,
+    t.preco_custo,
+    t.empresa_nome,
+    (select codigo||&apos; - &apos;||nome from deposito where grid = t.contra_deposito) as origem_destino,
+    (case when sinal = &apos; - &apos; then &apos;Saída&apos; else &apos;Entrada&apos; end) as total_transf,
+    sum(t.quantidade) as quantidade,
+    sum(t.quantidade)*preco_unit as venda,
+    sum(t.quantidade)*preco_custo as custo
+from
+    (select 
+        &apos; - &apos; as sinal, 
+        l.data,
+        l.turno, 
+        l.quantidade,
+        (select deposito from lancto  where mlid=l.mlid and produto=l.produto and operacao!=l.operacao limit 1)  as contra_deposito, 
+        d.codigo||&apos; - &apos;||d.nome as deposito_cod_nome,
+        (case when l.bico &lt;&gt; &apos;&apos; then &apos;Bico &apos;||l.bico else p.codigo end) as produto_codigo,
+        p.nome as produto_nome, 
+        preco_unit_empresa_f(l.produto,l.empresa) as preco_unit, 
+        preco_custo_empresa_f(l.produto,l.empresa) as preco_custo,
+        pessoa_nome(l.empresa) as empresa_nome,
+        l.grid
+    from 
+        lancto l
+           left join deposito d on (d.grid = l.deposito)
+           join produto p on (p.grid = l.produto) 
+    where 
+        (case when $deposito_ori is null then true else l.deposito = $deposito_ori end) 
+    and     (case when $produto is null then true else l.produto = $produto end)
+    and     (case when $grupo is null then true else (select grupo from produto where grid = l.produto) = $grupo end)
+    and     (case when $subgrupo is null then true else (select subgrupo from produto where grid = l.produto) = $subgrupo end)
+    and     (case when $empresa is null then true else l.empresa = $empresa end) 
+    and     l.data between $data_ini and $data_fim
+    and     (case when $turno_ini is null then true else l.turno &gt;= $turno_ini end)
+    and     (case when $turno_fim is null then true else l.turno &lt;= $turno_fim end)
+    and     l.operacao = &apos;TS&apos;
+    and     $tipo in (1,2)
+    union
+    select 
+        &apos; + &apos; as sinal, 
+        l.data,
+        l.turno,  
+        l.quantidade,
+        (select deposito from lancto  where mlid=l.mlid and produto=l.produto and operacao!=l.operacao limit 1)  as contra_deposito, 
+        d.codigo||&apos; - &apos;||d.nome as deposito_cod_nome,
+        (case when l.bico &lt;&gt; &apos;&apos; then &apos;Bico &apos;||l.bico else p.codigo end) as produto_codigo,
+        p.nome as produto_nome, 
+        preco_unit_empresa_f(l.produto,l.empresa) as preco_unit, 
+        preco_custo_empresa_f(l.produto,l.empresa) as preco_custo,
+        pessoa_nome(l.empresa) as empresa_nome,
+        l.grid
+    from 
+        lancto l 
+           left join deposito d on (d.grid = l.deposito) 
+           join produto p on (p.grid = l.produto)
+    where 
+        (case when $deposito_des is null then true else l.deposito = $deposito_des end) 
+    and     (case when $produto is null then true else l.produto = $produto end)
+    and     (case when $grupo is null then true else (select grupo from produto where grid = l.produto) = $grupo end)
+    and     (case when $subgrupo is null then true else (select subgrupo from produto where grid = l.produto) = $subgrupo end)
+    and     (case when $empresa is null then true else l.empresa = $empresa end) 
+    and     l.data between $data_ini and $data_fim
+    and     (case when $turno_ini is null then true else l.turno &gt;= $turno_ini end)
+    and     (case when $turno_fim is null then true else l.turno &lt;= $turno_fim end)
+    and     l.operacao = &apos;TE&apos;
+    and     $tipo in (1,3)) t 
+group by
+    t.sinal,
+    t.data,
+    t.turno,
+    t.deposito_cod_nome,
+    t.produto_codigo,
+    t.produto_nome,
+    t.preco_unit,
+    t.preco_custo,
+    t.empresa_nome,
+    t.contra_deposito
+order by
+    1, 3, 7" id="4926af86b780ec1532e27002f617f068" ordem="" titulo="Sem Agrupamento"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora        tam=18
+3  titulo1	        tam=123 		alinha=centro
+4  titulo2	        tam=123 		alinha=centro
+5  empresa_nome	    	tam=50
+6  deposito_cod_nome  	tam=40
+7  data			tam=10	fmt=data
+8  turno		tam=2			alinha=esquerda 	
+9  produto_codigo	tam=8
+10 produto_nome		tam=30
+11 origem_destino	tam=30
+12 sinal		tam=3
+13 quantidade		tam=8	fmt=%8.01f	alinha=direita
+14 total_transf		tam=20
+15 total_qtde_transf	tam=10	fmt=%.01f	alinha=direita	func=soma	campo=quantidade	grupo=1
+16 preco_unit       	tam=7	fmt=%.02f	alinha=direita
+17 preco_custo      	tam=7	fmt=%.02f	alinha=direita
+18 total_venda		tam=8	fmt=%.02f	alinha=direita	func=soma	campo=venda	grupo=1
+19 total_custo		tam=8	fmt=%.02f   	alinha=direita	func=soma	campo=custo	grupo=1
+20 data_ini		tam=10	fmt=data
+21 data_fim		tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                                                              #2        
+--------------------------------------------------------------------------------------------------------------------------------
+
+                                    TRANSFERENCIAS POR DEPOSITO - De #20        a #21       
+#4
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="quebra">
++------------------------------------------------------------+-----------------------------------------------------------------+
+| Empresa: #5                                                | Depósito: #6                                                    |
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+|  Data / Turno  | Cod/Bico | Nome Produto                   | Origem / Destino               |Pr Venda |Pr Custo | Quantidade |
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+</cab_grupo>
+<detalhe>
+| #7         - #8| #9       | #10                            | #11                            | #16     | #17     |#12#13      |
+</detalhe>
+<rod_grupo nome="1">
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+| #14                                                        | Total                          |#18      |#19      | #15        |
++------------------------------------------------------------+--------------------------------+---------+---------+------------+
+
+</rod_grupo>
+<rod_pagina>
++------------------------------------------------------------+--------------------------------+---------+---------+------------+
+</rod_pagina>
+</layout><layout dados="select
+    (empresa_nome||&apos; &apos;||deposito_cod_nome) as quebra,
+    t.grupo,
+    t.sinal,
+    t.data,
+    t.turno,
+    t.deposito_cod_nome,
+    t.produto_codigo,
+    t.produto_nome,
+    t.preco_unit,
+    t.preco_custo,
+    t.empresa_nome,
+    (select codigo||&apos; - &apos;||nome from deposito where grid = t.contra_deposito) as origem_destino,
+    (case when sinal = &apos; - &apos; then &apos;Saída&apos; else &apos;Entrada&apos; end) as total_transf,
+    sum(t.quantidade) as quantidade,
+    sum(t.quantidade)*preco_unit as venda,
+    sum(t.quantidade)*preco_custo as custo
+from
+    (select 
+        &apos; - &apos; as sinal, 
+        l.data,
+        l.turno, 
+        l.quantidade,
+        (select deposito from lancto  where mlid=l.mlid and produto=l.produto and operacao!=l.operacao limit 1)  as contra_deposito, 
+        (select g.nome from grupo_produto g join produto p on  (g.grid = p.grupo) where p.grid = l.produto) as grupo,
+        d.codigo||&apos; - &apos;||d.nome as deposito_cod_nome,
+        (case when l.bico &lt;&gt; &apos;&apos; then &apos;Bico &apos;||l.bico else p.codigo end) as produto_codigo,
+        p.nome as produto_nome, 
+        preco_unit_empresa_f(l.produto,l.empresa) as preco_unit, 
+        preco_custo_empresa_f(l.produto,l.empresa) as preco_custo,
+        pessoa_nome(l.empresa) as empresa_nome,
+        l.grid
+    from 
+        lancto l
+           left join deposito d on (d.grid = l.deposito)
+           join produto p on (p.grid = l.produto) 
+    where 
+        (case when $deposito_ori is null then true else l.deposito = $deposito_ori end) 
+    and     (case when $produto is null then true else l.produto = $produto end)
+    and     (case when $grupo is null then true else (select grupo from produto where grid = l.produto) = $grupo end)
+    and     (case when $subgrupo is null then true else (select subgrupo from produto where grid = l.produto) = $subgrupo end)
+    and     (case when $empresa is null then true else l.empresa = $empresa end) 
+    and     l.data between $data_ini and $data_fim
+    and     (case when $turno_ini is null then true else l.turno &gt;= $turno_ini end)
+    and     (case when $turno_fim is null then true else l.turno &lt;= $turno_fim end)
+    and     l.operacao = &apos;TS&apos;
+    and     $tipo in (1,2)
+    union
+    select 
+        &apos; + &apos; as sinal, 
+        l.data,
+        l.turno,  
+        l.quantidade,
+        (select deposito from lancto  where mlid=l.mlid and produto=l.produto and operacao!=l.operacao limit 1)  as contra_deposito, 
+        (select g.nome from grupo_produto g join produto p on  (g.grid = p.grupo) where p.grid = l.produto) as grupo,
+        d.codigo||&apos; - &apos;||d.nome as deposito_cod_nome,
+        (case when l.bico &lt;&gt; &apos;&apos; then &apos;Bico &apos;||l.bico else p.codigo end) as produto_codigo,
+        p.nome as produto_nome, 
+        preco_unit_empresa_f(l.produto,l.empresa) as preco_unit, 
+        preco_custo_empresa_f(l.produto,l.empresa) as preco_custo,
+        pessoa_nome(l.empresa) as empresa_nome,
+        l.grid
+    from 
+        lancto l 
+           left join deposito d on (d.grid = l.deposito) 
+           join produto p on (p.grid = l.produto)
+    where 
+        (case when $deposito_des is null then true else l.deposito = $deposito_des end) 
+    and     (case when $produto is null then true else l.produto = $produto end)
+    and     (case when $grupo is null then true else (select grupo from produto where grid = l.produto) = $grupo end)
+    and     (case when $subgrupo is null then true else (select subgrupo from produto where grid = l.produto) = $subgrupo end)
+    and     (case when $empresa is null then true else l.empresa = $empresa end) 
+    and     l.data between $data_ini and $data_fim
+    and     (case when $turno_ini is null then true else l.turno &gt;= $turno_ini end)
+    and     (case when $turno_fim is null then true else l.turno &lt;= $turno_fim end)
+    and     l.operacao = &apos;TE&apos;
+    and     $tipo in (1,3)) t 
+group by
+    t.sinal,
+    t.data,
+    t.turno,
+    t.deposito_cod_nome,
+    t.produto_codigo,
+    t.produto_nome,
+    t.preco_unit,
+    t.preco_custo,
+    t.empresa_nome,
+    t.contra_deposito,
+    t.grupo
+order by
+    1, 2, 4, 8" id="f711a88a20ac2b033fdf6ca56ab8a842" ordem="" titulo="Agrupar por Grupo de Produto"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora        tam=18
+3  titulo1	        tam=123 		alinha=centro
+4  titulo2	        tam=123 		alinha=centro
+5  empresa_nome	    	tam=50
+6  deposito_cod_nome  	tam=40
+7  data			tam=10	fmt=data
+8  turno		tam=2			alinha=esquerda 	
+9  produto_codigo	tam=8
+10 produto_nome		tam=30
+11 origem_destino	tam=30
+12 sinal		tam=3
+13 quantidade		tam=8	fmt=%8.01f	alinha=direita
+14 total_transf		tam=20
+15 total_qtde_transf	tam=10	fmt=%.01f	alinha=direita	func=soma	campo=quantidade	grupo=1
+16 preco_unit       	tam=7	fmt=%.02f	alinha=direita
+17 preco_custo      	tam=7	fmt=%.02f	alinha=direita
+18 total_venda		tam=8	fmt=%.02f	alinha=direita	func=soma	campo=venda	grupo=1
+19 total_custo		tam=8	fmt=%.02f   	alinha=direita	func=soma	campo=custo	grupo=1
+20 data_ini		tam=10	fmt=data
+21 data_fim		tam=10	fmt=data
+22 grupo		tam=25</apelidos><cab_pagina>
+#1                                                                                                              #2        
+--------------------------------------------------------------------------------------------------------------------------------
+ 
+                                    TRANSFERENCIAS POR DEPOSITO - De #20        a #21  
+#4
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="quebra">
++------------------------------------------------------------+-----------------------------------------------------------------+
+| Empresa: #5                                                | Depósito: #6                                                    |
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+|  Data / Turno  | Cod/Bico | Nome Produto                   | Origem / Destino               |Pr Venda |Pr Custo | Quantidade |
+</cab_grupo>
+<cab_grupo nome="2" quebra="grupo">
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+| Grupo #22                                                                                                                    |
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+</cab_grupo>
+<detalhe>
+| #7         - #8| #9       | #10                            | #11                            | #16     | #17     |#12#13      |
+</detalhe>
+<rod_grupo nome="2">
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+| #14                                                        | Total                          | #18     | #19     | #15        |
+</rod_grupo>
+<rod_grupo nome="1">
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+
+</rod_grupo>
+<rod_pagina>
++----------------+----------+--------------------------------+--------------------------------+---------+---------+------------+
+</rod_pagina>
+</layout></relatorio>

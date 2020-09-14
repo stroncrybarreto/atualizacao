@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-10-22 17:33:25" versao_xml="0.1"><tela titulo="Extrato de Clientes">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" valor_padrao="select empresa from empresa_local" />
+    <procura id="conta" modelo="conta" titulo="Conta" />
+    <procura id="cliente" modelo="cliente" titulo="Cliente" />
+    <campo id="data" modelo="periodo" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <check id="exibir" titulo="Exibir apenas movimentação de contas a receber" />
+  </quadro>
+</tela><ajuda /><layout dados="select 
+    mm.nome as motivo_nome, 
+    mm.tipo_movto, 
+    pessoa_nome,
+    empresa_nome,
+    t.data,
+    t.documento,mm.tipo_movto,
+    (case when (debito &lt;&gt; 0 and credito &lt;&gt; 0) then (case when mm.tipo_movto != 5 then credito else 0 end) else credito end) as credito,
+    (case when (debito &lt;&gt; 0 and credito &lt;&gt; 0) then (case when mm.tipo_movto != 5 then 0 else debito end) else debito end) as debito,
+    coalesce((select sum(x.valor) from movto x where x.data&lt;$data_ini and (case when $empresa is null then true else x.empresa = $empresa end) and (case when $cliente is null then true else x.pessoa = $cliente end) and (case when $conta is null then conta_creditar like t.conta||&apos;%&apos; else conta_creditar = $conta end) and x.pessoa=t.pessoa),0) as saida_saldo,
+    coalesce((select sum(x.valor) from movto x where x.data&lt;$data_ini and (case when $empresa is null then true else x.empresa = $empresa end) and (case when $cliente is null then true else x.pessoa = $cliente end) and (case when $conta is null then conta_debitar like t.conta||&apos;%&apos; else conta_debitar = $conta end) and x.pessoa=t.pessoa),0) as entrada_saldo,
+    ((case when $conta is not null then &apos;Conta: &apos;||conta_nome||&apos; - &apos; else &apos;&apos; end)||(case when $empresa is not null then &apos;Empresa: &apos;||empresa_nome else &apos;TODOS OS POSTOS&apos; end)||(case when $cliente is not null then &apos; - &apos;||&apos;Cliente: &apos;||pessoa_nome else &apos;&apos; end)) as cabecalho
+from 
+    (select 
+        m.pessoa, 
+        m.data, 
+        m.documento, 
+        m.motivo, 
+        m.grid,
+        vr.conta,
+        c.nome as conta_nome,
+        (case when m.conta_debitar like vr.conta||&apos;%&apos; then m.valor else 0 end) as debito,      
+        (case when m.conta_creditar like vr.conta||&apos;%&apos; then m.valor else 0 end) as credito,
+        pessoa_nome(m.pessoa) as pessoa_nome,
+        pessoa_nome($empresa) as empresa_nome
+    from 
+        movto m 
+           join conta c on (m.conta_debitar=c.codigo),
+              (select conta from conta_config where chave=&apos;VALORES A RECEBER&apos;) vr 
+    where 
+             m.data between $data_ini and $data_fim
+    and    (case when $conta is null then true else (m.conta_debitar = $conta or m.conta_creditar = $conta) end)
+    and    (case when $empresa is null then true else m.empresa = $empresa end)
+    and    (case when $cliente is null then true else m.pessoa = $cliente end)
+    and     (case when $exibir = 1 then c.tipo_conta_receber else (m.conta_debitar like vr.conta||&apos;%&apos; or m.conta_creditar like vr.conta||&apos;%&apos;) end)) t 
+       join motivo_movto mm on (t.motivo=mm.grid) 
+       left join movto_map mp on (mp.parent=t.grid) 
+       left join movto fatura on (fatura.grid=mp.child) 
+       left join motivo_movto mmf on (mmf.grid=fatura.motivo) 
+where 
+    (mmf.tipo_movto != 5 or mmf.tipo_movto is null) 
+order by     t.data, t.grid" id="6f42d177f05347f0efdca912dd54c7d6" ordem="" titulo="Extrato de Clientes"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora	tam=18
+4  cabecalho		tam=106 alinha=centro
+5  pessoa_nome		tam=50
+6  saldo_ant		tam=12	fmt=%.02f	expr=entrada_saldo-saida_saldo
+7  data			tam=10	fmt=data
+8  documento		tam=10
+9  motivo_nome		tam=30
+10 debito		tam=12	fmt=%.02f
+11 credito		tam=12	fmt=%.02f
+12 saldo		tam=12	fmt=%.02f	expr=saldo_ant+total_debito-total_credito
+13 total_debito		tam=13	fmt=%.02f	func=soma	campo=debito	grupo=1
+14 total_credito	tam=13	fmt=%.02f	func=soma	campo=credito	grupo=1
+15 data_ini		tam=10	fmt=data
+16 data_fim		tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                                       #2              
+---------------------------------------------------------------------------------------------------------
+
+                            EXTRATO DE CLIENTE - Periodo: #15        a #16
+#4
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="pessoa_nome">
+Cliente: #5                                                                Saldo anterior: #6            
++------------+------------+--------------------------------+--------------+--------------+--------------+
+|    Data    | Documento  | Descricao do lançamento        |       Debito |      Credito |        Saldo |
++------------+------------+--------------------------------+--------------+--------------+--------------+
+</cab_grupo>
+
+<detalhe>
+| #7         | #8         | #9                             | #10          | #11          | #12          |
+</detalhe>
+
+<rod_grupo nome="1">
++------------+------------+--------------------------------+--------------+--------------+--------------+
+| TOTAL                                                    |#13           |#14           | #12          | 
++----------------------------------------------------------+--------------+--------------+--------------+
+
+</rod_grupo>
+
+<rod_pagina>
++------------+------------+--------------------------------+--------------+--------------+--------------+
+</rod_pagina>
+</layout></relatorio>

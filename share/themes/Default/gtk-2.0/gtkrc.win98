@@ -1,0 +1,6 @@
+gtk-font-name = "tahoma 8"
+style "as-default"
+{
+		engine "" {}
+}
+class "*" style "as-default"

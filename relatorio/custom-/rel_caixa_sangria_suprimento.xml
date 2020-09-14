@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-22 16:42:17" versao_xml="0.1"><tela titulo="Relação de Sangria e Suprimento">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" valor_padrao="select empresa from empresa_local" />
+    <campo id="data" modelo="periodo" requerido="sim" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <procura condicao="codigo in (select conta from conta_config where chave=&apos;PONTOS DE VENDA&apos;)" id="conta" modelo="conta" titulo="Conta" />
+  </quadro>
+</tela><ajuda /><layout dados="select 
+    t.*
+from
+(select 
+    m.data, 
+    m.conta_debitar as conta ,
+    m.empresa,
+    (case when turno = 1 then sum(m.valor) else 0 end) as suprimento1,
+    0 as sangria1,
+    (case when turno = 2 then sum(m.valor) else 0 end) as suprimento2,
+    0 as sangria2,
+    (case when turno = 3 then sum(m.valor) else 0 end) as suprimento3,
+    0 as sangria3,
+    (case when turno = 4 then sum(m.valor) else 0 end) as suprimento4,
+    0 as sangria4
+from 
+    movto m 
+where 
+    motivo=(select motivo from motivo_config where chave = &apos;SUPRIMENTO&apos;) 
+group by 
+    m.data, 
+    m.conta_debitar,
+    m.turno,
+    m.empresa 
+UNION
+select 
+    m.data, 
+    m.conta_creditar as conta,
+    m.empresa,
+    0 as suprimento1,
+    (case when turno = 1 then sum(m.valor) else 0 end) as sangria1,
+    0 as suprimento2,
+    (case when turno = 2 then sum(m.valor) else 0 end) as sangria2,
+    0 as suprimento3,
+    (case when turno = 3 then sum(m.valor) else 0 end) as sangria3,
+    0 as suprimento4,
+    (case when turno = 4 then sum(m.valor) else 0 end) as sangria4
+from 
+    movto m 
+where 
+    motivo=(select motivo from motivo_config where chave = &apos;SANGRIA&apos;) 
+group by 
+    m.data, 
+    m.conta_creditar,
+    m.turno,
+    m.empresa) t
+where
+     (case when $conta is null then true else conta = $conta end) 
+and     data between $data_ini and $data_fim
+and     empresa = $empresa
+order by 
+    2,1" id="e35fb03a4f1d6e7ba1fcc49b5122919f" ordem="" titulo="Relação de Sangria e Suprimento"><apelidos>1  rel_posto_nome	tam=40
+2  rel_data_hora	tam=18
+3  titulo		tam=141	alinha=centro
+4  empresa_nome		tam=60
+5  data			tam=10	fmt=data
+6  turno		tam=5	fmt=%d		alinha=centro
+7  conta		tam=16
+8  sangria1		tam=9  	fmt=%.02f
+9  suprimento1	 	tam=9  	fmt=%.02f
+10 sangria2		tam=9  	fmt=%.02f
+11 suprimento2	 	tam=9  	fmt=%.02f
+12 sangria3		tam=9  	fmt=%.02f
+13 suprimento3	 	tam=9  	fmt=%.02f
+14 sangria4		tam=9  	fmt=%.02f
+15 suprimento4		tam=9  	fmt=%.02f
+16 sangria_dia     	tam=9  	fmt=%.02f	expr=sangria1+sangria2+sangria3+sangria4
+17 suprimento_dia     	tam=9  	fmt=%.02f	expr=suprimento1+suprimento2+suprimento3+suprimento4
+18 total_sangria1    	tam=10	fmt=%.02f 	func=soma 	campo=sangria1 		grupo=2
+19 total_suprimento1 	tam=10  fmt=%.02f 	func=soma 	campo=suprimento1 	grupo=2
+20 total_sangria2    	tam=10  fmt=%.02f 	func=soma 	campo=sangria2	 	grupo=2
+21 total_suprimento2 	tam=10  fmt=%.02f 	func=soma 	campo=suprimento2 	grupo=2
+22 total_sangria3    	tam=10  fmt=%.02f 	func=soma 	campo=sangria3	 	grupo=2
+23 total_suprimento3 	tam=10  fmt=%.02f 	func=soma 	campo=suprimento3 	grupo=2
+24 total_sangria4    	tam=10  fmt=%.02f 	func=soma 	campo=sangria4	 	grupo=2
+25 total_suprimento4 	tam=10  fmt=%.02f 	func=soma 	campo=suprimento4 	grupo=2
+26 total_sangria_dia 	tam=10  fmt=%.02f 	func=soma 	campo=sangria_dia 	grupo=2
+27 total_suprimento_dia	tam=10  fmt=%.02f	func=soma 	campo=suprimento_dia 	grupo=2
+28 data_ini		tam=10	fmt=data
+29 data_fim		tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                                                                    #2
+--------------------------------------------------------------------------------------------------------------------------------------
+
+                                     RELAÇÃO DE SANGRIAS E SUPRIMENTOS - Período: #28        a #29       
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="empresa">
+
+Empresa: #4
+</cab_grupo>
+<cab_grupo nome="2" quebra="conta">
+
+Conta caixa: #7
++------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+|            |        Turno 1        |        Turno 2        |        Turno 3        |         Turno 4       |     Total Dia         |
++------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|    Data    |   Sangr.  |   Supri.  |   Sangr.  |   Supri.  |   Sangr.  |   Supri.  |   Sangr.  |   Supri.  |   Sangr.  |   Supri.  |
++------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+</cab_grupo>
+<detalhe>
+| #5         | #8        | #9        | #10       | #11       | #12       | #13       | #14       | #15       | #16       | #17       |
+</detalhe>
+
+<rod_grupo nome="2">
++------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|            |#18        |#19        |#20        |#21        |#22        |#23        |#24        |#25        |#26        |#27        |
++------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+</rod_grupo>
+<rod_grupo nome="1">
+
+</rod_grupo>
+<rod_pagina>
++------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+</rod_pagina>
+</layout></relatorio>

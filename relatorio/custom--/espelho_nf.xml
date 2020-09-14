@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio saida="" ts="2020-01-20 16:57:14" versao_xml="0.1"><tela titulo="Espelho NF">
+  <quadro titulo="Parâmetros">
+	
+</quadro>
+</tela><ajuda /><layout columns="1" dados="select\n\tnf.numero_nota,\n\tnf.serie,\n\tnf.data_emissao,\n\tnf.data_saida,\n\tnf.hora_saida,\n\tnf.cfop,\n\tnf.nome,\n\tnf.cpf,\n\n\tnfp.codigo as produto_codigo,\n\tnfp.descricao as produto_descricao,\n\tnfp.cst as produto_cst,\n\tnfp.unid_med as produto_unid_med,\n\tnfp.preco_unit as produto_preco_unit,\n\tnfp.valor as produto_valor,\n\tnfp.valor_icms as produto_icms,\n\n\tnf.base_icms,\n\tnf.valor_icms,\n\tnf.base_subst,\n\tnf.valor_subst,\n\n\tnf.total_produto,\n\tnf.valor_frete,\n\tnf.valor_seguro,\n\tnf.valor_outr_des,\n\tnf.valor_ipi,\n\tnf.valor_nota,\n\n\tnf.trans_nome,\n\t\n\tnf.trans_placa,\n\tnf.trans_estado,\n\tnf.trans_cnpj,\n\tnf.trans_endereco,\n\tnf.trans_cidade,\n\tnf.quantidade,\n\tnf.especie,\n\tnf.marca,\n\tnf.numero,\n\tnf.peso_bruto,\n\tnf.peso_liquido,\n\n\tnf.obs\n\nfrom nota_fiscal nf\njoin nota_fiscal_produto nfp on (nf.grid=nfp.nota_fiscal)\n\n\nwhere nf.grid=4066961" font_size="medium" id="56c66fd591568a8dc80f6ce4400ed6a6" ordem="" paper_orientation="1" titulo="Espelho"><apelidos>1   rel_posto_nome      tam=60             
+2   rel_data_hora       tam=18             
+3   numero_nota         tam=7     fmt=%d   
+4   serie               tam=1              
+5   data_emissao        tam=10    fmt=data 
+6   data_saida          tam=10    fmt=data 
+7   hora_saida          tam=19             
+8   cfop                tam=5              
+9   nome                tam=32             
+10  cpf                 tam=18             
+11  produto_codigo      tam=8              
+12  produto_descricao   tam=18             
+13  produto_cst         tam=3              
+14  produto_unid_med    tam=1              
+15  produto_preco_unit  tam=6     fmt=%.02f
+16  produto_valor       tam=5     fmt=%.02f
+17  produto_icms        tam=1     fmt=%.02f
+18  base_icms           tam=1     fmt=%.02f
+19  valor_icms          tam=1     fmt=%.02f
+20  base_subst          tam=1     fmt=%.02f
+21  valor_subst         tam=1     fmt=%.02f
+22  total_produto       tam=5     fmt=%.02f
+23  valor_frete         tam=1     fmt=%.02f
+24  valor_seguro        tam=1     fmt=%.02f
+25  valor_outr_des      tam=1     fmt=%.02f
+26  valor_ipi           tam=1     fmt=%.02f
+27  valor_nota          tam=5     fmt=%.02f
+28  trans_nome          tam=33             
+29  trans_placa         tam=7              
+30  trans_estado        tam=2              
+31  trans_cnpj          tam=14             
+32  trans_endereco      tam=31             
+33  trans_cidade        tam=9              
+34  quantidade          tam=5     fmt=%.02f
+35  especie             tam=19             
+36  marca               tam=9              
+37  numero              tam=3              
+38  peso_bruto          tam=5     fmt=%.02f
+39  peso_liquido        tam=5     fmt=%.02f
+40  obs                 tam=1214</apelidos><cab_pagina>
+{INI}{RST}{LPI08}{CPI17}{PGLEN}{68}                                                                                  
+                                    ESPELHO DE NOTA FISCAL DE ENTRADA                                             
+</cab_pagina>
+
+<cab_relat>
++-----------------------------------------------------------------------------------------------------+--------------------------+
+| #                                                                                                   | Data Emissão: #          |
+| #                                                                                   Série: #        | Data Saída:   #          |
+| #                                                                                  Número: #        | Hora Saída:   #          |
++------------------------------------------------------------------------------------+-------------------------------------------+
+| CFOP: #                                                                            | Inscrição Estadual: #                     |
++------------------------------------------------------------------------------------+-------------------------------------------+
+Emitente 
++-------------------------------------------------------------------------------------------------+------------------------------+
+| Nome: #                                                                                         | CPF/CNPJ: #                     |
++-------------------------------------------------------------------------------------------------+------------------------------+
+Dados do Produto
++--------+---------------------------------------------------------------+-----+----+--------+----------+-------------+----------+
+| Código | Descrição dos Produtos                                        | CST | UN | Qtdade | Pr. Unit | Valor Total |   ICMS   |
++--------+---------------------------------------------------------------+-----+----+--------+----------+-------------+----------+
+</cab_relat>
+
+
+
+
+<detalhe>
+| #      | #                                                             | #   |#   | #      | #        | #           | #        |
+</detalhe>
+
+
+
+<rod_relat>
+
+
++-------------------------------------------------------------------+--------+--------------+------------------------------------+
+Cálculo do Imposto
++---------------------+-----------------------+-----------------------+-------------------------+--------------------------------+ 
+| Base ICMS: #        | Valor ICMS: #         | Base ICMS Subst: #    | Vl. ICMS Subst: #       | Total Produtos: #              |
++---------------------+-----------------------+-----------------------+-------------------------+--------------------------------+
+| Valor Frete: #      | Valor Seguro: #       | Outras Desp.: #       | Valor Total IPI: #      | Valor Total Nota: #            |
++---------------------+-----------------------+-----------------------+-------------------------+--------------------------------+
+Transportador / Volumes Transportados
++------------------------------------------------------+-------------------+----------------+--------+---------------------------+
+| Nome/RZ: #                                           | Frete p/ Conta:#  | Placa: #       | UF:#   | CPF/CNPJ: #               |
++------------------------------------------------------+-------------------+----------------+--------+---------------------------+
+| Endereço: #                                          | Múnicipio: #                       | UF:#   | Inscr. Est: #             |
++------------------+--------------------+--------------+-+------------------+---------------+--------+---------------------------+
+| Qtdade: #        | Espécie: #         | Marca: #       | Número: #        | Peso Bruto: #          | Peso Líquido: #           |
++------------------+--------------------+----------------+------------------+------------------------+---------------------------+
+Dados Adicionais
++--------------------------------------------------------------------------------------------------------------------------------+
+| Informações Complementares:                                                                                                    |
+|                                                                                                                                |
+| #                                                                                                                              |
+| #                                                                                                                              |
+| #                                                                                                                              |
++--------------------------------------------------------------------------------------------------------------------------------+
+</rod_relat>
+<rod_pagina>
+
+</rod_pagina></layout></relatorio>

@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-01 16:03:51" versao_xml="0.1"><tela titulo="Relatório de Funcionário">
+  <quadro titulo="Parâmetros">
+    <procura condicao="tipo like &apos;%U%&apos;" id="grupo" modelo="grupo_pessoa" titulo="Grupo Pessoa" valor_padrao="select 105::int8" />
+    <procura id="cargo" modelo="cargo" titulo="Cargo" />
+    <selecao id="ordenar" origem="VALUES (1, &apos;Codigo, Cargo, Empresa, Nome&apos;), (2, &apos;Empresa, Cargo, Codigo, Nome&apos;), (3, &apos;Cargo, Codigo, Empresa, Nome&apos;), (4, &apos;Nome, Codigo, Empresa, Cargo&apos;)" requerido="sim" titulo="Ordenar" />
+    <selecao id="agrupar" origem="VALUES (1, &apos;Empresa&apos;), (2, &apos;Grupo&apos;), (3, &apos;Cargo&apos;)" requerido="sim" titulo="Agrupar" />
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Funcionários&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver os funcionários</ajuda><layout dados="select 
+     f.codigo, 
+     f.nome, 
+     f.fone, 
+     f.cpf, 
+     g.codigo as grupo_codigo, 
+     g.nome as grupo_nome, 
+     e.nome as emp_nome, 
+     e.codigo as emp_codigo, 
+     f.data_cad as data_adm, 
+     c.codigo as cargo_codigo, 
+     c.nome as cargo_nome, 
+     f.empresa 
+from 
+     pessoa f 
+          left join grupo_pessoa g on (f.grupo = g.grid) 
+          left join pessoa e on (f.empresa = e.grid) 
+          left join cargo c on (f.cargo = c.grid) 
+where 
+     f.flag = &apos;A&apos; 
+     and f.tipo like &apos;%U%&apos; 
+     and g.tipo like &apos;%U%&apos; 
+     and (case 
+          when $grupo is null then true else f.grupo = $grupo end) 
+     and (case when (select grid from empresa_local limit 1) is null then true 
+          else f.empresa = (select grid from empresa_local limit 1) end) 
+     and (case 
+          when $cargo is null then true else f.cargo = $cargo end) 
+order by 
+     (case 
+          when $ordenar = 1 then f.codigo 
+          when $ordenar = 2 then e.codigo 
+          when $ordenar = 3 then c.codigo else f.codigo end), 
+     (case 
+          when $ordenar = 1 then c.codigo 
+          when $ordenar = 2 then c.codigo 
+          when $ordenar = 3 then f.codigo else c.codigo end), 
+     (case 
+          when $ordenar = 1 then e.codigo 
+          when $ordenar = 2 then f.codigo 
+          when $ordenar = 3 then e.codigo else e.codigo end), 
+     (case 
+          when $ordenar = 1 then f.nome 
+          when $ordenar = 2 then f.nome 
+          when $ordenar = 3 then f.nome else f.nome end)" id="9f43c74e2f56664166c01e3da452d472" ordem="contar_funcionario" titulo="sem agrupamento"><apelidos>1   rel_posto_nome      tam=40
+2   rel_data_hora       tam=18
+5   codigo              tam=6	alinha=direita
+6   nome                tam=33
+7   cpf                 tam=15
+8   fone                tam=16
+9   data_adm            tam=10	fmt=data
+10  conta_funcionario   tam=6	alinha=direita	func=contar fmt=%d
+12  emp_codigo          tam=4	alinha=direita
+13  cargo_nome          tam=20</apelidos><cab_pagina>
+#1                                                                                                          #2
+------------------------------------------------------------------------------------------------------------------------------
+
+                                        R E L A Ç Ã O   D E   F U N C I O N Á R I O S
+                                                                                                                             
+
++--------+----------------------------------+------------------+------------------+------------+------+----------------------+
+| Codigo | Nome                             | CPF              | Fone             | Dt Admis   | Empr | Cargo                |
++--------+----------------------------------+------------------+------------------+------------+------+----------------------+
+</cab_pagina>
+
+<detalhe>
+| #5     | #6                               | #7               | #8               | #9         | #12  | #13                  |
+</detalhe>
+
+<rod_relat>
++--------+----------------------------------+------------------+------------------+------------+------+----------------------+
+| #10    funcionários                                                                                                        |
++--------+----------------------------------+------------------+------------------+------------+------+----------------------+
+</rod_relat>
+<rod_pagina>
++--------+----------------------------------+------------------+------------------+------------+------+----------------------+
+</rod_pagina></layout><layout dados="select 
+      f.codigo, 
+      f.nome, 
+      f.fone, 
+      f.cpf, 
+      g.codigo as grupo_codigo, 
+      g.nome as grupo_nome, 
+      e.nome as emp_nome, 
+      e.codigo as emp_codigo, 
+      f.data_cad as data_adm, 
+      c.codigo as cargo_codigo, 
+      c.nome as cargo_nome, 
+      f.empresa, 
+      (case 
+           when $agrupar = 3 then &apos;Cargo:&apos; 
+           when $agrupar = 2 then &apos;Grupo:&apos; else &apos;Empresa:&apos; end) as filtro_nome, 
+      (case 
+           when $agrupar = 3 then c.nome 
+           when $agrupar = 2 then g.nome else e.nome end) as filtro_valor, 
+      (case 
+           when $ordenar = 4 then f.nome||f.codigo::text||e.nome||c.nome 
+           when $ordenar = 3 then c.nome||f.codigo::text||e.nome||f.nome 
+           when $ordenar = 2 then e.nome||c.nome||f.codigo||f.nome 
+               else f.codigo::text||c.nome||e.nome||f.nome end) as ordem_func 
+from 
+      pessoa f 
+           left join grupo_pessoa g on (f.grupo = g.grid) 
+           left join pessoa e on (f.empresa = e.grid) 
+           left join cargo c on (f.cargo = c.grid) 
+where 
+      f.flag = &apos;A&apos; 
+      and g.tipo like &apos;%U%&apos; 
+      and f.tipo like &apos;%U%&apos; 
+      and (case when (select grid from empresa_local limit 1) is null then true 
+           else f.empresa = (select grid from empresa_local limit 1) end) 
+      and (case 
+           when $grupo is null then true else f.grupo = $grupo end) 
+      and (case 
+           when $cargo is null then true else f.cargo = $cargo end) 
+group by 
+      (case 
+           when $agrupar = 1 then e.nome 
+           when $agrupar = 2 then g.nome 
+           when $agrupar = 3 then c.nome else e.nome end), 
+      f.codigo, 
+      f.nome, 
+      f.fone, 
+      f.cpf, 
+      e.codigo, 
+      e.nome, 
+      f.data_cad, 
+      f.empresa, 
+      c.codigo, 
+      c.nome, 
+      g.codigo, 
+      g.nome 
+order by 
+      (case 
+           when $agrupar = 1 then e.nome 
+           when $agrupar = 2 then g.nome 
+           when $agrupar = 3 then c.nome else e.nome end), 
+      (case 
+           when $ordenar = 1 then CAST(f.codigo as TEXT) 
+           when $ordenar = 2 then e.nome 
+           when $ordenar = 3 then c.nome 
+           when $ordenar = 4 then f.nome else CAST(f.codigo as TEXT) end), 
+      (case 
+           when $ordenar = 1 then c.nome 
+           when $ordenar = 2 then c.nome 
+           when $ordenar = 3 then CAST(f.codigo as TEXT) 
+           when $ordenar = 4 then CAST(f.codigo as TEXT) else c.nome end), 
+      (case 
+           when $ordenar = 1 then e.nome 
+           when $ordenar = 2 then CAST(f.codigo as TEXT) 
+           when $ordenar = 3 then e.nome 
+           when $ordenar = 4 then e.nome else e.nome end), 
+      (case 
+           when $ordenar = 1 then f.nome 
+           when $ordenar = 2 then f.nome 
+           when $ordenar = 3 then f.nome 
+           when $ordenar = 4 then c.nome else f.nome end)" id="4926af86b780ec1532e27002f617f068" ordem=" " titulo="com Agrupamentos"><apelidos>1   rel_posto_nome      tam=40
+2   rel_data_hora       tam=18
+5   codigo              tam=6	alinha=direita
+6   nome                tam=33
+7   cpf                 tam=15
+8   fone                tam=16
+9   data_adm            tam=10	fmt=data
+10  conta_funcionario   tam=6	func=contar	grupo=1		alinha=direita	fmt=%d
+12  emp_codigo          tam=4	alinha=direita
+13  filtro_nome         tam=9	alinha=esquerda
+14  filtro_valor        tam=60	alinha=esquerda
+15  cargo_nome          tam=20</apelidos><cab_pagina>
+#1                                                                                                          #2
+------------------------------------------------------------------------------------------------------------------------------
+
+                                        R E L A Ç Ã O   D E   F U N C I O N Á R I O S
+                                                                                                                             
+</cab_pagina>
+<cab_grupo nome="1" quebra="filtro_valor">
+
+#13       #14
++--------+----------------------------------+------------------+------------------+------------+----------------------+
+| Codigo | Nome                             | CPF              | Fone             | Dt Admis   | Cargo                |
++--------+----------------------------------+------------------+------------------+------------+----------------------+
+</cab_grupo>
+
+<detalhe>
+| #5     | #6                               | #7               | #8               | #9         | #15                  |
+</detalhe>
+
+<rod_grupo nome="1">
++--------+----------------------------------+------------------+------------------+------------+----------------------+
+| #10    funcionários                                                                                                 |
++---------------------------------------------------------------------------------------------------------------------+
+</rod_grupo>
+
+<rod_pagina>
++--------+----------------------------------+------------------+------------------+------------+----------------------+
+</rod_pagina></layout></relatorio>

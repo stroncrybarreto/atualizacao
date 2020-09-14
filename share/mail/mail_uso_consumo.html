@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>Aviso de Nota de Uso e Consumo no Estabelecimento</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+
+    <table style="text-align: left; font-family: 'tahoma','Arial', 'Verdana'; border-collapse: collapse; border-spacing: 0; width: 100%; max-width: 768px;">
+
+        <thead style="font-weight: normal;">
+            <tr>
+                <th style="font-size: 14px; background: #5B2E90; color:#FFF; font-weight: normal; padding:10px;">Olá <strong tal:content="cliente_nome"></strong>, segue um resumo da nota de uso e consumo realizada no dia <span style="color:#FF9200"><strong tal:content="hora"> </strong></span>.</th>
+            </tr>
+            <tr>
+                <th style="font-size: 18px; color:#181E1F; padding:25px 0 0 0; font-weight: normal;"><strong tal:content="empresa_nome_reduzido"> </strong></th>
+            </tr>
+            <tr>
+                <th style="font-size: 11px; color:#181E1F; font-weight: normal; padding:0px;"><strong tal:content="empresa_cpf"> </strong></th>
+            </tr>
+            <tt>
+                <th style="font-size: 14px; color:#5A6667; font-weight: normal; padding:20px 0 0 0;"><strong tal:content="empresa_cidade"> </strong></th>
+            </tt>
+            <tr>
+                <th style="font-size: 12px; color:#5A6667; font-weight: normal; padding:0px;"><strong tal:content="empresa_endereco"> </strong> - <strong tal:content="empresa_fone"> </strong></th>
+            </tr>
+            <tr>
+                <th style="font-size: 12px; color:#BACBDC; font-weight: normal; border-bottom: solid 1px #E2E9F0; padding:10px 0 4px 0; text-align: right;"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td style="font-size: 15px; color:#5B2E90; padding:25px 0 10px 0"><strong tal:content="cliente_nome"> </strong></td>
+            </tr>
+
+            <tr>
+                <td style="padding:0;">
+                    <table style="text-align: left; font-family: 'tahoma','Arial', 'Verdana'; width: 100%; border-collapse: collapse; border-spacing: 0;">
+                        <tbody>
+                            <tr style="font-size: 14px; color:#5A6667;">
+                                <td style="padding:5px 0">KM: <strong tal:content="venda_km"></strong></td>
+                            </tr>
+                            <tr style="font-size: 14px; color:#5A6667;">
+                                <td style="padding:5px 0">Motorista: <strong tal:content="venda_motorista"></strong></td>
+                                <td style="padding:5px 0">Veículo: <strong tal:content="venda_veiculo"></strong></td>
+                                <td style="padding:5px 0">Placa: <strong tal:content="venda_placa"></strong></td>
+							</tr>
+							<tr style="font-size: 14px; color:#5A6667;">
+                                <td style="padding:5px 0">Nota Fiscal: <strong tal:content="venda_numero_nota"></strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <table style="text-align: left; font-family: 'tahoma','Arial', 'Verdana'; border-collapse: collapse; border-spacing: 0; width: 100%; max-width: 768px; border:solid 1px #E2E9F0; box-shadow: 1px 1px 2px 0px rgba(184,201,218,0.23); margin-top: 50px;">
+        <thead>
+            <tr style="font-size: 14px; color:#5B2E90; border-top:solid 3px #5B2E90;">
+                <th style="font-weight: normal; padding:15px 0 15px 15px; border-bottom: solid 1px #E2E9F0; text-align: left;">Mercadoria / Serviço</th>
+                <th style="font-weight: normal; padding:15px 0; border-bottom: solid 1px #E2E9F0; text-align: left;">Quantidade</th>
+                <th style="font-weight: normal; padding:30px 0; border-bottom: solid 1px #E2E9F0; text-align: right;">Unitário</th>
+                <th style="font-weight: normal; padding:15px 15px 15px 0; border-bottom: solid 1px #E2E9F0; text-align: right;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="font-size: 13px; color:#AFB4B5;" tal:repeat="produto produto_list">
+                <td style="color:#181E1F; padding:20px 0 20px 15px; border-bottom: solid 1px #E2E9F0;"><strong tal:content="produto/nome"> </strong></td>
+                <td style="padding:20px 0; border-bottom: solid 1px #E2E9F0;"><strong tal:content="produto/quantidade"></strong> <strong tal:content="produto/unid_med"></strong></td>
+                <td style="padding:40px 0; border-bottom: solid 1px #E2E9F0; text-align: right;"><strong>R$</strong> <strong tal:content="produto/preco_unit"> </strong></td>
+                <td style="color:#181E1F; padding:20px 15px 20px 0; border-bottom: solid 1px #E2E9F0; text-align: right;"><strong>R$</strong> <strong tal:content="produto/valor"> </strong></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr style="font-size: 14px; color:#181E1F; background: #FCFBFD;">
+                <td align="left" colspan="3" style="padding:12px 0 12px 15px;">Valor Total</td>
+                <td style="padding:12px 15px 12px 0; text-align: right; color:#5B2E90"><strong>R$</strong>
+                  <strong tal:content="valor_total"></strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-22 17:18:48" versao_xml="0.1"><tela titulo="Relação de Caixas">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" valor_padrao="select grid from empresa_local" />
+    <campo id="data" modelo="periodo" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <procura condicao=" codigo in (select conta from conta_config where chave=&apos;PONTOS DE VENDA&apos;)" id="conta" modelo="conta" titulo="Conta" />
+    <procura condicao="grid in (select grid from funcionario where true and flag=&apos;A&apos;)" id="responsavel" modelo="pessoa" titulo="Responsável" />
+    <caixa homogeneo="1">
+      <rotulo titulo="Exibir somente caixas" />
+      <check id="aberto" titulo="Abertos" />
+      <check id="fechado" titulo="Fechados" />
+      <check id="conferencia" titulo="Conferidos" />
+    </caixa>
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Relação de Caixas/b&gt;&lt;/big&gt;
+
+Este relatório permite ver a Relação de Caixas</ajuda><layout dados="select 
+    c.*, 
+    pessoa_nome(c.empresa) as empresa_nome,
+    p.nome as pessoa_nome, 
+    co.nome as conta_nome 
+from 
+    caixa c 
+         join pessoa p on (c.pessoa = p.grid) 
+         join conta co on (c.conta = co.codigo) 
+where 
+    (case when $empresa is null then true else c.empresa = $empresa end)
+and     c.data between $data_ini and $data_fim
+and     (case when $aberto = 0 then true else c.fechamento is null end)
+and     (case when $fechado = 0 then true else c.fechamento is not null end)
+and     (case when $conferencia = 0 then true else c.conferencia is not null end)
+and     (case when $conta is null then true else c.conta = $conta end)
+and     (case when $responsavel is null then true else c.pessoa = $responsavel end)
+order by 
+    c.data, 
+    c.turno, 
+    c.pessoa, 
+    c.abertura" id="4926af86b780ec1532e27002f617f068" ordem=" " titulo="Relação de Caixas"><apelidos>1  rel_posto_nome	tam=40
+2  rel_data_hora	tam=18
+3  titulo		tam=121 alinha=centro
+4  empresa_nome		tam=60
+5  data			tam=10  fmt=data		
+6  turno		tam=5	fmt=%d		alinha=centro
+7  conta_nome		tam=16
+8  pessoa_nome		tam=20
+9  abertura		tam=16
+10 fechamento		tam=16
+11 conferencia		tam=16</apelidos><cab_pagina>
+#1                                                                                                       #2
+-------------------------------------------------------------------------------------------------------------------------
+
+#3
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="empresa_nome">
+
+Empresa: #4
++------------+-------+------------------+----------------------+------------------+------------------+------------------+
+|    Data    | Turno | Conta            | Responsável          | Abertura         | Fechamento       | Conferencia      |
++------------+-------+------------------+----------------------+------------------+------------------+------------------+
+</cab_grupo>
+
+<detalhe>
+| #5         | #6    | #7               | #8                   | #9               | #10              | #11              |
+</detalhe>
+
+<rod_grupo nome="1">
++------------+-------+------------------+----------------------+------------------+------------------+------------------+
+</rod_grupo>
+
+<rod_pagina>
++------------+-------+------------------+----------------------+------------------+------------------+------------------+
+</rod_pagina></layout></relatorio>

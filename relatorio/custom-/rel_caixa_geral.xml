@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-09-04 12:03:25" versao_xml="0.1"><tela titulo="Caixa Geral">
+  <quadro titulo="Parametros">
+    <procura id="emp" modelo="empresa" titulo="Empresa" />
+    <campo id="data" modelo="periodo" requerido="sim" titulo="Periodo" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+  </quadro>
+</tela><ajuda /><layout dados="" id="b1df05a834bc38ee330fd7113bb63555" ordem=" " titulo="Caixa Geral"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora        tam=18</apelidos><cab_pagina>
+#1                                                                 #2                
+-----------------------------------------------------------------------------------
+
+                             MOVIMENTAÇÃO GERAL DE CAIXAS
+</cab_pagina>
+
+<detalhe>
+</detalhe>
+<rod_relat>
+</rod_relat>
+<rod_pagina>
+</rod_pagina><layout dados="select  
+     p.grid as produto, 
+     p.nome as nome, 
+     sum(l.quantidade) as quantidade, 
+     sum(l.valor) as valor, 
+     (case when $data_ini::date = $data_fim::date then &apos;Data: &apos; || to_char($data_ini::date, &apos;DD/MM/YYYY&apos;) else (&apos;Periodo: &apos; || to_char($data_ini::date, &apos;DD/MM/YYYY&apos;) || &apos; a &apos; || to_char($data_fim::date, &apos;DD/MM/YYYY&apos;)) end) as titulo, 
+     (case when $emp is not null then &apos;Empresa: &apos; || (select nome 
+          from 
+               empresa 
+          where 
+               grid = $emp) else &apos;TODOS OS POSTOS&apos; end) as titulo2 
+from 
+     lancto l 
+          join (select grid, 
+          nome 
+     from 
+          empresa 
+     order by 
+          nome) e on (e.grid = l.empresa) 
+          join (select grid, 
+          nome 
+     from 
+          produto 
+     where 
+          tipo = &apos;C&apos; 
+     order by 
+          nome) p on (p.grid = l.produto) 
+where 
+     operacao = &apos;V&apos;  
+     and (case when $emp is null then true else l.empresa = $emp end)  
+     and (case when $data_ini::date = $data_fim::date then (l.data = $data_ini::date) else (l.data between $data_ini::date and $data_fim::date) end) 
+group by 
+     p.grid, 
+     p.nome 
+union all 
+select  
+     NULL as produto, 
+     NULL as nome, 
+     NULL as quantidade, 
+     NULL as valor, 
+     (case when $data_ini::date = $data_fim::date then &apos;Data: &apos; || to_char($data_ini::date, &apos;DD/MM/YYYY&apos;) else (&apos;Periodo: &apos; || to_char($data_ini::date, &apos;DD/MM/YYYY&apos;) || &apos; a &apos; || to_char($data_fim::date, &apos;DD/MM/YYYY&apos;)) end) as titulo, 
+     (case when $emp is not null then &apos;Empresa: &apos; || (select nome 
+          from 
+               empresa 
+          where 
+               grid = $emp) else &apos;TODOS OS POSTOS&apos; end) as titulo2" id="00fc7be81c65b5782578ddaefae26d9b" ordem=" " titulo="combustivel"><apelidos>1  titulo               tam=83  alinha=centro
+99 titulo2              tam=83  alinha=centro
+2  nome                 tam=30  
+3  quantidade           tam=10  fmt=%.03f
+4  valor                tam=12  fmt=%.02f
+5  total_qtde           tam=10  fmt=%.03f	func=soma	campo=quantidade
+6  total_valor          tam=12  fmt=%.02f	func=soma	campo=valor</apelidos><cab_relat>
+#99
+#1
+
++-----------------------------------------------------+------------+--------------+
+| Combustível                                         |     Litros |    Sub-Total |
++-----------------------------------------------------+------------+--------------+
+</cab_relat>
+<detalhe>
+| #2                                                  | #3         | #4           |
+</detalhe>
+<rod_relat>
++-----------------------------------------------------+------------+--------------+
+| Total                                               | #5         | #6           |
++-----------------------------------------------------+------------+--------------+
+
+</rod_relat></layout><layout dados="select  
+     gp.nome as nome, 
+     sum(l.quantidade) as quantidade, 
+     sum(l.valor) as valor 
+from 
+     produto p 
+          join lancto l on (p.grid = l.produto) 
+          join (select * 
+     from 
+          grupo_produto 
+     where 
+          not nome like &apos;COMBUST%&apos; 
+     order by 
+          nome) gp on (p.grupo = gp.grid) 
+where 
+     l.operacao = &apos;V&apos;  
+     and (case when $emp is null then true else l.empresa = $emp end)  
+     and (case when $data_ini::date = $data_fim::date then (l.data = $data_ini::date) else (l.data between $data_ini::date and $data_fim::date) end) 
+group by 
+     gp.nome" id="8deb18053f352df2ae5795123b62f5ca" ordem=" " titulo="venda"><apelidos>1  nome  	tam=40
+2  quantidade	tam=13  fmt=%.01f
+3  valor 	tam=14  fmt=%.02f
+4  total_valor 	tam=14  fmt=%.02f	func=soma	campo=valor</apelidos><cab_relat>
++---------------------------------------------------------------------------------+
+|                         V E N D A   D E   P R O D U T O S                       |
++------------------------------------------------+---------------+----------------+
+| Grupo                                          |    Quantidade |          Total |
++------------------------------------------------+---------------+----------------+
+</cab_relat>
+<detalhe>
+| #1                                             | #2            | #3             |
+</detalhe>
+<rod_relat>
++------------------------------------------------+---------------+----------------+
+| Total de venda                                                 | #4             |
++----------------------------------------------------------------+----------------+
+
+</rod_relat>
+</layout><layout dados="select  
+     e.nome as entrada_nome, 
+     e.total as entrada_valor, 
+     s.nome as saida_nome, 
+     s.total as saida_valor 
+from 
+     (select mme.nome, 
+          te.* 
+     from 
+          (select mo.motivo as motivo, 
+               sum(mo.valor) as total 
+          from 
+               movto mo 
+          where 
+               (case when $emp is null then true else mo.empresa = $emp end) and (case when $data_ini::date = $data_fim::date then (mo.data = $data_ini::date) else (mo.data between $data_ini::date and $data_fim::date) end) and (mo.conta_debitar like (select conta from conta_config where chave=&apos;PONTOS DE VENDA&apos; limit 1)::text || &apos;%&apos; and mo.conta_debitar not in (&apos;1.1.1.001&apos;, &apos;1.1.1.025&apos;)) 
+          group by 
+               mo.motivo) as te 
+               join motivo_movto mme on (te.motivo = mme.grid) 
+     order by 
+          mme.nome) as e 
+          full outer join (select mm.nome, 
+          t.* 
+     from 
+          (select m.motivo as motivo, 
+               sum(m.valor) as total 
+          from 
+               movto m 
+          where 
+               (case when $emp is null then true else empresa = $emp end) and (case when $data_ini::date = $data_fim::date then (m.data = $data_ini::date) else (m.data between $data_ini::date and $data_fim::date) end) and (m.conta_creditar like (select conta from conta_config where chave=&apos;PONTOS DE VENDA&apos; limit 1)::text || &apos;%&apos; and m.conta_creditar not in (&apos;1.1.1.001&apos;, &apos;1.1.1.025&apos;)) 
+          group by 
+               m.motivo) t 
+               join motivo_movto mm on (t.motivo=mm.grid) ) s on (e.motivo = s.motivo) 
+where 
+     (case when (select conta 
+          from 
+               conta_config 
+          where 
+               chave=&apos;PONTOS DE VENDA&apos; 
+          limit 1) is null then false else true end) 
+group by 
+     e.nome, 
+     e.total, 
+     s.nome, 
+     s.total 
+order by 
+     e.nome" id="f864b1e648c096efa6e31728d3442571" ordem=" " titulo="movimento"><apelidos>1  entrada_nome  	tam=24
+2  entrada_valor	tam=10  fmt=%.02f nulo
+3  saida_nome  		tam=24
+4  saida_valor		tam=10  fmt=%.02f nulo
+5  entrada_total 	tam=10  fmt=%.02f	func=soma	campo=entrada_valor
+6  saida_total	 	tam=10  fmt=%.02f	func=soma	campo=saida_valor
+7  sobra	 	tam=10  fmt=%.02f	expr=saida_total-entrada_total</apelidos><cab_relat>
++---------------------------------------++----------------------------------------+
+| Entradas                              || Saidas                                 |
++--------------------------+------------++---------------------------+------------+
+</cab_relat>
+<detalhe>
+| #1                       | #2         || #3                        | #4         |
+</detalhe>
+<rod_relat>
++--------------------------+------------++---------------------------+------------+
+| Sub-Total                | #5         || Sub-Total                 | #6         |
++--------------------------+------------++---------------------------+------------+
+                                         | Diferença                 | #7         |
+                                         +---------------------------+------------+
+</rod_relat></layout></layout></relatorio>

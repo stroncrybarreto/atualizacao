@@ -1,0 +1,154 @@
+<html>
+<head>
+<title>Abastecimento Cancelado</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr> 
+    <td><p><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Prezado 
+        Cliente,</font></p>
+      <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Informações do cancelamento da venda.</font></p>
+      <table border="0" cellpadding="1" cellspacing="0" bgcolor="#999999">
+        <tr> 
+          <td><table width="483" border="0" cellpadding="3" cellspacing="2">
+              <tr align="center"> 
+                <td colspan="2"><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Informa&ccedil;&otilde;es 
+                  da Venda</font></strong></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Posto:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="empresa_nome"> </strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Cidade:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="empresa_cidade"> </strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Data 
+                  / Hora:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_hora"> </strong></font></td>
+              </tr>
+              <tr> 
+                <td width="29%" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Empresa:</font></td>
+                <td width="71%" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="cliente_nome"> </strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Placa 
+                  do ve&iacute;culo:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_placa"></strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">KM:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_km"></strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Média KM:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="media_km"></strong></font></td>
+              </tr>
+              <tr>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">HM:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_hm"></strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Motorista:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_motorista"></strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Cupom 
+                  Fiscal:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_documento"></strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Nota 
+                  Fiscal:</font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_numero_nota"></strong></font></td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Observação:
+                  </font></td>
+                <td bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="venda_obs"></strong></font></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr> 
+    <td><table border="0" cellpadding="1" cellspacing="0" bgcolor="#999999">
+        <tr> 
+          <td><table border="0" cellpadding="3" cellspacing="2">
+              <tr align="center"> 
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Mercadoria 
+                  / Servi&ccedil;o</font></strong></td>
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Quantidade</font></strong></td>
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Pre&ccedil;o 
+                  Unit. </font></strong></td>
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Valor</font></strong></td>
+              </tr>
+              <tr tal:repeat="produto cupom_produto_list">
+                <td width="300" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="produto/nome"> </strong> </font></td>
+                <td width="100" align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="produto/quantidade"> </strong> <strong tal:content="produto/unid_med"> </strong></font></td>
+                <td width="100" align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>R$</strong> <strong tal:content="produto/preco_unit"> </strong></font></td>
+                <td width="100" align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>R$</strong> <strong tal:content="produto/valor"> </strong></font></td>
+              </tr>
+              <tr>
+                <td colspan="3" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Desconto:</strong></font></td>
+                <td align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>R$</strong>
+                  <strong tal:content="venda_valor_desconto"> </strong></font></td>
+              </tr>
+              <tr>
+                <td colspan="3" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Valor
+                  total:</strong></font></td>
+                <td align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>R$</strong>
+                  <strong tal:content="venda_valor"> </strong></font></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr> 
+    <td><table border="0" cellpadding="1" cellspacing="0" bgcolor="#999999">
+        <tr> 
+          <td><table border="0" cellpadding="3" cellspacing="2">
+              <tr align="center"> 
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Mercadoria 
+                  / Servi&ccedil;o</font></strong></td>
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Quantidade</font></strong></td>
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Pre&ccedil;o 
+                  Unit. </font></strong></td>
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Valor</font></strong></td>
+              </tr>
+              <tr tal:repeat="produto produto_list">
+                <td width="300" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="produto/nome"> </strong> </font></td>
+                <td width="100" align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="produto/quantidade"> </strong> <strong tal:content="produto/unid_med"> </strong></font></td>
+                <td width="100" align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>R$</strong> <strong tal:content="produto/preco_unit"> </strong></font></td>
+                <td width="100" align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>R$</strong> <strong tal:content="produto/valor"> </strong></font></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr> 
+    <td><table border="0" cellpadding="1" cellspacing="0" bgcolor="#999999">
+        <tr> 
+          <td><table border="0" cellpadding="3" cellspacing="2">
+              <tr align="center"> 
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Nome</font></strong></td>
+                <td><strong><font color="#FFFFFF" size="1" face="Verdana, Arial, Helvetica, sans-serif">Valor</font></strong></td>
+              </tr>
+              <tr tal:repeat="pgto pgto_list">
+                <td width="300" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong tal:content="pgto/nome"> </strong> </font></td>
+                <td width="100" align="right" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>R$</strong> <strong tal:content="pgto/valor"> </strong></font></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr> 
+    <td>
+      <p>
+	<font size="2" face="Verdana, Arial, Helvetica, sans-serif">Esta mensagem foi gerada automaticamente pelo sistema.</font></p></td>
+  </tr>
+</table>
+</body>
+</html>

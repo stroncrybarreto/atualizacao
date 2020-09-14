@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-07-22 17:12:44" versao="0.1"><tela titulo="Análise de descontos concedidos">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" />
+    <campo id="emissao" modelo="periodo" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+  </quadro>
+</tela><ajuda /><layout dados="select     e.codigo as empresa_codigo,     (p.codigo || &apos;-&apos; || p.nome) as cliente,     count(c.*) as qtd_cupom,     sum(ct.valor_cupom) as valor_cupom,     sum(ct.valor_desconto) as desconto_cupom  from     cupom c     join cupom_total ct on (c.grid=ct.cupom)     join lancto l on (l.operacao=&apos;V&apos; and ct.mlid=l.mlid)     join pessoa p on (p.grid=l.pessoa)     join empresa e on (e.grid=c.empresa)  where     c.situacao = &apos;E&apos; and     c.empresa = (case when $empresa is null then c.empresa else $empresa end) and     c.data_emissao between $emissao_ini and $emissao_fim and     ct.valor_desconto != 0  group by     e.codigo,     p.codigo,     p.nome  order by     e.codigo,     p.nome,     p.codigo " id="29be21ac497279798f3f961b4a053dba" ordem="empresa_codigo" titulo="Analítico - Valores agrupados por cliente"><apelidos>1  rel_posto_nome            tam=60           
+2  rel_data_hora             tam=18           
+3  empresa_codigo            tam=7   fmt=%3.0d  alinha=centro
+
+4  cliente                   tam=30    
+5  qtd_cupom                 tam=9   fmt=%d
+
+6  valor_cupom               tam=13  fmt=%.02f
+7  desconto_cupom            tam=9   fmt=%.02f
+
+8  cupom_medio               tam=9   fmt=%.02f  expr=(valor_cupom/qtd_cupom)
+9  desc_medio                tam=10  fmt=%.02f  expr=(desconto_cupom/qtd_cupom)
+
+10 perc_desc_med             tam=6   fmt=%.02f  expr=((desconto_cupom/valor_cupom)*100)
+
+11 tot_qtd_cupom_emp         tam=9   fmt=%d     func=soma  campo=qtd_cupom       grupo=1
+12 tot_valor_cupom_emp       tam=13  fmt=%.02f  func=soma  campo=valor_cupom     grupo=1
+13 tot_desconto_cupom_emp    tam=9   fmt=%.02f  func=soma  campo=desconto_cupom  grupo=1
+
+14 med_emp_cupom_medio       tam=9  fmt=%.02f  expr=(tot_valor_cupom_emp/tot_qtd_cupom_emp)
+15 med_emp_desc_medio        tam=10  fmt=%.02f  expr=(tot_desconto_cupom_emp/tot_qtd_cupom_emp)
+16 med_emp_perc_desc_med     tam=6   fmt=%.02f  expr=((tot_desconto_cupom_emp/tot_valor_cupom_emp)*100)
+
+17 tot_qtd_cupom             tam=9   fmt=%d     func=soma  campo=qtd_cupom
+18 tot_valor_cupom           tam=13  fmt=%.02f  func=soma  campo=valor_cupom
+19 tot_desconto_cupom        tam=9   fmt=%.02f  func=soma  campo=desconto_cupom
+
+20 med_cupom_medio           tam=9  fmt=%.02f  expr=(tot_valor_cupom/tot_qtd_cupom)
+21 med_desc_medio            tam=10  fmt=%.02f  expr=(tot_desconto_cupom/tot_qtd_cupom)
+22 med_perc_desc_med         tam=6   fmt=%.02f  expr=((tot_desconto_cupom/tot_valor_cupom)*100)</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                          D E S C O N T O S   C O N C E D I D O S   P O R   E M P R E S A                           
+
+                                                                                 +---------------------------------+
+                                                                                 |    Valores médios calculados    |
++-------+--------------------------------+-----------+---------------+-----------+-----------+-----------+---------+
+|Empresa| Cliente                        | N. Cupons |  Vlr. Cupons  | Vlr. Desc | Vl. Cupom | Vl. Desc. | % Desc. |
++-------+--------------------------------+-----------+---------------+-----------+-----------+-----------+---------+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="empresa_codigo">
+
+</cab_grupo>
+
+<detalhe>
+|#3     | #4                             | #5        | #6            | #7        | #8        | #9        | #10   % |
+</detalhe>
+
+<rod_grupo nome="1">
++-------+--------------------------------+-----------+---------------+-----------+-----------+-----------+---------+
+|Total empresa #3                        | #11       | #12           | #13       | #14       | #15       | #16   % | 
++----------------------------------------+-----------+---------------+-----------+-----------+-----------+---------+
+</rod_grupo>
+
+<rod_relat>
++----------------------------------------+-----------+---------------+-----------+-----------+-----------+---------+
+| Total geral                            | #17       | #18           | #19       | #20       | #21       | #22   % |
++----------------------------------------+-----------+---------------+-----------+-----------+-----------+---------+
+</rod_relat>
+<rod_pagina>
++-------+--------------------------------+-----------+---------------+-----------+-----------+-----------+---------+
+</rod_pagina></layout><layout dados="select     e.codigo as empresa_codigo,     e.nome_reduzido as empresa_nome,     count(c.*) as qtd_cupom,     sum(ct.valor_cupom) as total_cupom,     sum(ct.valor_desconto) as desconto_cupom  from     cupom c     join cupom_total ct on (c.grid=ct.cupom)     join lancto l on (l.operacao=&apos;V&apos; and ct.mlid=l.mlid)     join pessoa p on (p.grid=l.pessoa)     join empresa e on (e.grid=c.empresa)  where     c.situacao = &apos;E&apos; and     c.empresa = (case when $empresa is null then c.empresa else $empresa end) and     c.data_emissao between $emissao_ini and $emissao_fim and     ct.valor_desconto != 0  group by     e.codigo,     empresa_nome  order by     e.codigo,     e.nome_reduzido" id="5e6d6e0eb45cde14b8e786cfb1586c6a" ordem="empresa_codigo" titulo="Resumido - Valores agrupados por empresa"><apelidos>1  rel_posto_nome         tam=60           
+2  rel_data_hora          tam=18           
+3  empresa_codigo         tam=4   fmt=%4.0d
+4  empresa_nome           tam=14           
+
+5  qtd_cupom              tam=11  fmt=%d   
+6  total_cupom            tam=17  fmt=%.02f
+7  desconto_cupom         tam=17  fmt=%.02f
+
+8  med_valor_cupom        tam=11  fmt=%.02f expr=(total_cupom/qtd_cupom)
+9  med_desconto_cupom     tam=11  fmt=%.02f expr=(desconto_cupom/qtd_cupom)
+10 perc_med_desc          tam=6   fmt=%.02f expr=(desconto_cupom/total_cupom)*100
+
+11 tot_qtd_cupom          tam=11  fmt=%.02f func=soma campo=qtd_cupom
+12 tot_valor_cupom        tam=17  fmt=%.02f func=soma campo=total_cupom
+13 tot_desconto_cupom     tam=17  fmt=%.02f func=soma campo=desconto_cupom
+
+14 med_ger_valor_cupom    tam=11  fmt=%.02f expr=(tot_valor_cupom/tot_qtd_cupom)
+15 med_ger_desconto_cupom tam=11  fmt=%.02f expr=(tot_desconto_cupom/tot_qtd_cupom)
+16 perc_ger_med_desc      tam=6   fmt=%.02f expr=(tot_desconto_cupom/tot_valor_cupom)*100</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                          R E S U M I D O   -   T O T A L I Z A D O   P O R   E M P R E S A                        
+
+                                                                             +-------------------------------------+
+                                                                             |      Valores médios calculados      |
++----------------------+-------------+-------------------+-------------------+-------------+-------------+---------+
+|Empresa               |  N. Cupons  | Vlr. Total Cupons | Vlr Desc Cupons   | Cupom Médio | Desc. Medio | % Médio |   
++----------------------+-------------+-------------------+-------------------+-------------+-------------+---------+
+</cab_pagina>
+<detalhe>
+|#3   - #4             | #5          | #6                | #7                | #8          | #9          | #10   % | 
+</detalhe>
+<rod_relat>
++------+---------------+-------------+-------------------+-------------------+-------------+-------------+---------+
+| Totais               | #11         | #12               | #13               | #14         | #15         | #16   % | 
++----------------------+-------------+-------------------+-------------------+-------------+-------------+---------+
+</rod_relat>
+<rod_pagina>
++----------------------+-------------+-------------------+-------------------+-------------+-------------+---------+
+</rod_pagina></layout><layout dados="select      e.nome_reduzido as empresa_nome,      (sum(ct.valor_desconto)/sum(ct.valor_cupom))*100 as perc_desconto   from      cupom c      join cupom_total ct on (c.grid=ct.cupom)      join lancto l on (l.operacao=&apos;V&apos; and ct.mlid=l.mlid)      join pessoa p on (p.grid=l.pessoa)      join empresa e on (e.grid=c.empresa)   where      c.situacao = &apos;E&apos; and      c.empresa = (case when $empresa is null then c.empresa else $empresa end) and      c.data_emissao between $emissao_ini and $emissao_fim and      ct.valor_desconto != 0   group by      e.nome_reduzido  order by      e.nome_reduzido" id="40a3e08b4ebb52a5bda7615b81590b53" ordem="" titulo="Grafico - Percentual de desconto por empresa"><grafico agrupar="0" agrupar_numero="1" agrupar_rotulo="" formato_valor="None" tipo_barra="1" tipo_linha="0" tipo_padrao="0" tipo_pizza="1" titulo_x="Empresa" titulo_y="Percentual de desconto" /></layout></relatorio>

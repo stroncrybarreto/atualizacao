@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Aviso de Pendencia Financeira</title>
+		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+	</head>
+
+	<body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" style="font-family: Verdana;">
+		<div style="margin-left: 10px;">
+			<span style="font-size: 12px;">
+				<br>
+				Prezado cliente,
+				<br>
+				<br>
+				Voce possui títulos em aberto com nossa empresa, solicitamos que entre em contato urgente para regularização da situação. Por favor, desconsidere esta mensagem caso já tenha efetuado a quitação.
+				<br>
+				<br>
+			</span>
+		</div>
+		<table border="0" cellpadding="3" cellspacing="2" bgcolor="#999999" style="margin-left: 10px;">
+			<tr style="text-align: center; color: #FFFFFF; font-size: 12px;">
+				<td style="width: 150px;"><strong>Documento</strong></td>
+				<td style="width: 150px;"><strong>Data de Emissão</strong></td>
+				<td style="width: 150px;"><strong>Data de Vencimento</strong></td>
+				<td style="width: 180px;"><strong>Valor</strong></td>
+			</tr>
+			<tr tal:repeat="fatura fatura_list" bgcolor="#FFFFFF" style="font-size: 12px;">
+				<td style="text-align: center;"><a tal:content="fatura/documento"></a></td>
+				<td style="text-align: center;"><a tal:content="fatura/emissao"></a></td>
+				<td style="text-align: center;"><a tal:content="fatura/vencto"></a></td>
+				<td style="text-align: right;" bgcolor="#FFFFFF">R$ <a tal:content="fatura/valor"></a></td>
+			</tr>
+		</table>
+		<p style="margin-left: 10px; font-size: 12px;">
+			Sobre o(s) valor(es) acima está(ão) sujeito(s) multa e juros.
+		</p>
+		<p style="margin-left: 10px; font-size: 10px;">Esta mensagem foi gerada automaticamente pelo sistema AutoSystem.</p>
+	</body>
+</html>

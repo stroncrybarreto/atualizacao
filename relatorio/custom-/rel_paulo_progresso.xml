@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-07-09 14:55:58" versao="0.1"><tela titulo="Relatorio do Paulo">
+  <quadro titulo="Parâmetros">
+    <campo id="data" tipo="data" titulo="Data" />
+  </quadro>
+</tela><ajuda /><layout dados="" id="3fe84d8b9cd4129ebd43063284c480db" ordem="" titulo="Relatorio do Paulo"><apelidos>1  rel_posto_nome  tam=60           
+2  rel_data_hora   tam=18           
+</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                         R E L A T O R I O   D O   P A U L O 
+
+</cab_pagina>
+<detalhe>
+</detalhe>
+<rod_relat>
+</rod_relat>
+<rod_pagina>
+</rod_pagina><layout dados="select c.*, p.preco_custo,&#10;	(select quantidade from lancto where produto=c.produto and operacao='M'&#10;		and data&lt;=$data order by data desc limit 1) as estoque&#10;from (&#10;select l.produto, p.nome, sum(l.quantidade) as quantidade, sum(l.valor) as valor&#10;from lancto l join produto p on (l.produto=p.grid)&#10;where p.tipo='C' and l.data=$data&#10;group by l.produto, p.nome&#10;) c join produto p on (c.produto=p.grid)" id="7a041632f95024067e6c1ab9b43a03f4" ordem="" titulo="Venda de Combustivel"><apelidos>1  rel_posto_nome   tam=60           
+2  rel_data_hora    tam=18           
+3  nome             tam=25           
+4  quantidade       tam=14  fmt=%.02f
+5  valor            tam=14  fmt=%.02f
+6  total_quantidade tam=14  fmt=%.02f   func=soma    campo=quantidade
+7  total_valor      tam=14  fmt=%.02f   func=soma    campo=valor
+8  estoque          tam=14  fmt=%d 
+9  total_estoque    tam=14  fmt=%.02f   func=soma    campo=estoque
+10 preco_custo      tam=10  fmt=%.04f
+11 custo_estoque    tam=14  fmt=%.02f   expr=estoque*preco_custo
+12 media_preco_cust tam=10  fmt=%.04f   func=media   campo=preco_custo
+13 total_custo_est  tam=14  fmt=%.02f   func=soma    campo=custo_estoque</apelidos><cab_pagina>
+
+                                      V E N D A   D E   C O M B U S T I V E L                                       
+
++---------------------------+----------------+----------------+----------------+------------+-----------------+
+| Combustivel               | Litros         |    Valor Venda |        Estoque |  Pr. Custo | Custo X Estoque |
++---------------------------+----------------+----------------+----------------+------------+-----------------+
+</cab_pagina>
+<detalhe>
+| #3                        | #4             | #5             | #8             | #10        | #11             |
+</detalhe>
+<rod_relat>
++---------------------------+----------------+----------------+----------------+------------+-----------------+
+| Total                     | #6             | #7             | #9             | #12        | #13             |
++---------------------------+----------------+----------------+----------------+------------+-----------------+
+</rod_relat>
+<rod_pagina>
++---------------------------+----------------+----------------+
+</rod_pagina></layout><layout dados="select &#10;coalesce((select sum(valor) from movto where conta_creditar='2.1.1' and vencto=$data::date+1), 0) as cpag1,&#10;coalesce((select sum(valor) from movto where conta_creditar='2.1.1' and vencto=$data::date+2),0) as cpag2,&#10;coalesce((select sum(valor) from movto where conta_creditar='2.1.1' and vencto=$data::date+3),0) as cpag3,&#10;coalesce((select sum(valor) from movto where conta_creditar='2.1.1' and vencto=$data::date+4),0) as cpag4,&#10;coalesce((select sum(valor) from movto where conta_creditar='2.1.1' and vencto=$data::date+5),0) as cpag5&#10;" id="f64ae0edfe7c4906da023a50abe458d0" ordem="" titulo="Previsão de Contas a Pagar"><apelidos>1  rel_posto_nome  tam=60           
+2  rel_data_hora   tam=18           
+3  cpag1           tam=10  fmt=%.02f
+4  cpag2           tam=10  fmt=%.02f
+5  cpag3           tam=10  fmt=%.02f
+6  cpag4           tam=10  fmt=%.02f
+7  cpag5           tam=10  fmt=%.02f
+8  total           tam=12  fmt=%.02f   expr=cpag1+cpag2+cpag3+cpag4+cpag5</apelidos><cab_pagina>
+
+                                P R E V I S Ã O   D E   C O N T A S   A   P A G A R                                 
+
++------------+------------+------------+------------+------------+--------------+
+| Dia +1     | Dia +2     | Dia +3     | Dia +4     | Dia +5     |        Total | 
++------------+------------+------------+------------+------------+--------------+
+</cab_pagina>
+<detalhe>
+| #3         | #4         | #5         | #6         | #7         | #8           |
+</detalhe>
+<rod_relat>
++------------+------------+------------+------------+------------+--------------+
+</rod_relat>
+<rod_pagina>
++------------+------------+------------+------------+------------+--------------+
+</rod_pagina></layout><layout dados="select &#10;(select sum(valor) from movto where data&lt;=$data and conta_creditar='1.5') as falta,&#10;(select sum(valor) from movto where data&lt;=$data and conta_debitar='1.5') as sobra&#10;" id="7ff34b384a037a47c0fddd5a19f2b19c" ordem="" titulo="Falta e Sobra Acumulado"><apelidos>1  rel_posto_nome  tam=60           
+2  rel_data_hora   tam=18           
+3  falta           tam=10  fmt=%.02f
+4  sobra           tam=10  fmt=%.02f
+5  saldo           tam=10  fmt=%.02f  expr=sobra-falta</apelidos><cab_pagina>
+
+                                   F A L T A   E   S O B R A   A C U M U L A D O                                    
+
++------------+------------+------------+
+| falta      | sobra      |      Saldo |
++------------+------------+------------+
+</cab_pagina>
+<detalhe>
+| #3         | #4         | #5         |
+</detalhe>
+<rod_relat>
++------------+------------+------------+
+</rod_relat>
+<rod_pagina>
++------------+------------+------------+
+</rod_pagina></layout><layout dados="select g.nome, sum(l.quantidade) as quantidade, sum(l.valor) as valor,&#10;sum(l.quantidade*p.preco_custo) as custo&#10;from lancto l join produto p on (p.grid=l.produto)&#10;join grupo_produto g on (p.grupo=g.grid)&#10;where l.data = $data&#10;group by g.nome" id="541f1c0fbaa053f23bacff3117f2a138" ordem="" titulo="Venda por Grupo"><apelidos>1  rel_posto_nome  tam=60           
+2  rel_data_hora   tam=18           
+3  nome            tam=20           
+4  quantidade      tam=10  fmt=%.02f
+5  valor           tam=12  fmt=%.02f
+6  custo           tam=12  fmt=%.02f
+7  lucro           tam=12  fmt=%.02f  expr=valor-custo</apelidos><cab_pagina>
+
+                                           V E N D A   P O R   G R U P O                                            
+
++----------------------+------------+--------------+--------------+---------------+
+| Grupo                | Quantidade | Valor Venda  | Valor Custo  |         Lucro |
++----------------------+------------+--------------+--------------+---------------+
+</cab_pagina>
+<detalhe>
+| #3                   | #4         | #5           | #6           | #7            |
+</detalhe>
+<rod_relat>
++----------------------+------------+--------------+--------------+---------------+
+</rod_relat>
+<rod_pagina>
++----------------------+------------+--------------+--------------+---------------+
+</rod_pagina></layout></layout></relatorio>

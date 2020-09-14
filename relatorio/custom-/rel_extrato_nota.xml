@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-07-09 15:12:41" versao="0.1"><tela titulo="Extrato de Notas a Prazo">
+  <quadro titulo="Parâmetros">
+    <campo id="data" modelo="periodo" />
+  </quadro>
+</tela><ajuda /><layout dados="select c1.data, coalesce(c1.entrada, 0) as entrada, coalesce(c2.saida, 0) as saida, conta_saldo('1.3.03'::text, $data_ini::date) as saldo_ini&#10;from (&#10;select data, sum(valor) as entrada from movto&#10;where data between $data_ini and $data_fim and&#10;conta_debitar='1.3.03'&#10;group by data) c1&#10;full join&#10;(select data, sum(valor) as saida from movto&#10;where data between $data_ini and $data_fim and&#10;conta_creditar='1.3.03'&#10;group by data) c2&#10;on (c1.data=c2.data)&#10;" id="cafee8ca43ad88701dc5c367a1a24cb0" ordem="data" titulo="Extrato de Notas"><apelidos>1  rel_posto_nome  tam=60           
+2  rel_data_hora   tam=18           
+3  data            tam=10  fmt=data 
+4  entrada         tam=10  fmt=%.02f
+5  saida           tam=10  fmt=%.02f
+6  saldo_ini       tam=10  fmt=%.02f
+7  total_entrada   tam=10  fmt=%.02f  func=soma   campo=entrada
+8  total_saida     tam=10  fmt=%.02f  func=soma   campo=saida
+9  saldo           tam=10  fmt=%.02f  expr=saldo_ini+total_entrada-total_saida</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                          E X T R A T O   D E   N O T A S                                           
+
++------------+------------+------------+------------+
+| Data       | Entrada    | Saida      | Saldo      |
++------------+------------+------------+------------+
+| Saldo Inicial                        | #6         |
+</cab_pagina>
+<detalhe>
+| #3         | #4         | #5         | #9         |
+</detalhe>
+<rod_relat>
++------------+------------+------------+------------+
+| Total      | #7         | #8         | #9         |
++------------+------------+------------+------------+
+</rod_relat>
+<rod_pagina>
++------------+------------+------------+------------+
+</rod_pagina></layout></relatorio>

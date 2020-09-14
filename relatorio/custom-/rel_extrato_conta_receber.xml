@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-10-31 10:45:07" versao_xml="0.1"><tela titulo="Extrato de contas a receber">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" valor_padrao="select empresa from empresa_local" />
+    <campo id="data" modelo="periodo" titulo="Período" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <procura id="conta" modelo="conta" requerido="sim" titulo="Conta" />
+    <procura id="cliente" modelo="cliente" titulo="Cliente" />
+    <selecao id="portador" origem="select codigo, nome, grid from portador" titulo="Portador" />
+    <selecao id="exibir" origem="values (1,&apos;Todas&apos;),(2,&apos;Quitadas&apos;),(3,&apos;Em aberto&apos;)" requerido="sim" titulo="Exibir" />
+  </quadro>
+</tela><ajuda /><layout dados="select 
+    m.*, 
+    p.nome as cliente_nome, 
+    p.codigo as cliente_codigo,
+    (select count(x.*) from movto x join pessoa p on (p.grid=x.pessoa) where x.conta_debitar=$conta and x.empresa=m.empresa and x.data between $data_ini and $data_fim and x.pessoa=m.pessoa) as qtd,
+    coalesce((select sum(x.valor) from movto x join pessoa p on (p.grid=x.pessoa) where x.conta_debitar=$conta and x.empresa=m.empresa and x.data between $data_ini and $data_fim and x.pessoa=m.pessoa),0) as valor_total,
+    coalesce((case when (select sum(valor) from movto where grid=(select child from movto_map where parent=m.grid limit 1)) &gt; m.valor then m.valor else (select sum(valor) from movto where grid=(select child from movto_map where parent=m.grid limit 1)) end),0) as valor_pago,
+    (select data from movto where grid=(select child from movto_map where parent=m.grid limit 1)) as pagto,
+    (case when $empresa is not null then &apos;Empresa: &apos;||e.nome_reduzido else &apos;TODOS OS POSTOS&apos; end) as empresa_nome
+from 
+    movto m
+       left join pessoa p on (p.grid=m.pessoa) 
+       join empresa e on (e.grid=m.empresa)
+where 
+    m.conta_debitar = $conta 
+and     (case when $cliente is null then true else m.pessoa = $cliente end)
+and     (case when $empresa is null then true else m.empresa = $empresa end)
+and     m.data between $data_ini and $data_fim 
+and     (case when $exibir = 2 then (select data from movto where grid=(select child from movto_map where parent=m.grid limit 1)) is not null when $exibir = 3 then (select data from movto where grid=(select child from movto_map where parent=m.grid limit 1)) is null else true end)
+order by 
+    p.nome, 
+    data, 
+    vencto" id="6f42d177f05347f0efdca912dd54c7d6" ordem="" titulo="Cliente"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora	tam=18
+3  data_ini		tam=10	fmt=data
+4  data_fim		tam=10	fmt=data
+5  cliente_codigo	tam=10 	fmt=%d
+6  cliente_nome		tam=48
+7  qtd			tam=4
+8  valor_total		tam=13	fmt=%.02f
+9  documento		tam=9
+10 motivo_nome		tam=23
+11 valor		tam=13	fmt=%.02f
+12 data			tam=10	fmt=data
+13 vencto		tam=10	fmt=data
+14 pagto		tam=10  fmt=data
+15 valor_pago		tam=13	fmt=%.02f
+16 total_nota		tam=18	fmt=%.02f	func=soma	campo=saldo_nota
+17 total_saldo_nota	tam=18	fmt=%.02f	func=soma	campo=saldo_nota
+18 pessoa_emitido	tam=18	fmt=%.02f	expr=valor-valor_pago
+19 saldo_nota		tam=18	fmt=%.02f	expr=valor_total-total_valor
+20 total_emitido	tam=18	fmt=%.02f	func=soma	campo=valor
+21 total_recebido	tam=18	fmt=%.02f	func=soma	campo=valor_pago
+22 total_receber	tam=18	fmt=%.02f	expr=total_emitido-total_recebido
+23 empresa_nome		tam=110	alinha=centro
+24 total_valor		tam=18	fmt=%.02f	func=soma	campo=valor	 grupo=1
+25 total_pago		tam=18	fmt=%.02f	func=soma	campo=valor_pago grupo=1</apelidos><cab_pagina>
+#1                                                                                            #2              
+--------------------------------------------------------------------------------------------------------------
+
+
+                            EXTRATO DE CONTAS A RECEBER ANALÍTICO - NOTAS A PRAZO
+                                       Período #3         a #4
+#23
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="cliente_nome">
+
+
+Cliente: #5         - #6                 
++------------------------------------------------------------------------------------------------------------+
+| #7   NOTAS A COBRAR emitidas no período                                         Valor total: #8            |
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+| Fat. Num. | Historico               |         Valor | Data Emiss | Vencimento |    Pagto   |    Valor Pago |
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+</cab_grupo>
+<detalhe>
+| #9        | #10                     | #11           | #12        | #13        | #14        | #15           |
+</detalhe>
+<rod_grupo nome="1">
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+| Saldo em NOTAS A COBRAR:         #19                |
+| Saldo em FATURAMENTO DE NOTAS:   #18                |
++-----------------------------------------------------+
+</rod_grupo>
+
+<rod_pagina>
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+</rod_pagina>
+
+<rod_relat>
+
++-----------------------------------------------------+
+| Total de NOTAS A COBRAR:         #16                |
+| Total de FATURAMENTO DE NOTAS:   #20                |
++-----------------------------------------------------+
+| Total recebido no periodo:       #21                |
+| Total a receber:                 #22                |
+| NOTAS A COBRAR em aberto:        #17                |
++-----------------------------------------------------+
+</rod_relat>
+</layout><layout dados="select 
+    m.*, 
+    p.nome as cliente_nome, 
+    p.codigo as cliente_codigo,
+    (select count(x.*) from movto x join pessoa p on (p.grid=x.pessoa) where x.conta_debitar=$conta and x.empresa=m.empresa and x.data between $data_ini and $data_fim and x.pessoa=m.pessoa) as qtd,
+    coalesce((select sum(x.valor) from movto x join pessoa p on (p.grid=x.pessoa) where x.conta_debitar=$conta and x.empresa=m.empresa and x.data between $data_ini and $data_fim and x.pessoa=m.pessoa),0)  as valor_total,
+    coalesce((case when (select sum(valor) from movto where grid=(select child from movto_map where parent=m.grid limit 1)) &gt; m.valor then m.valor else (select sum(valor) from movto where grid=(select child from movto_map where parent=m.grid limit 1)) end),0) as valor_pago,
+    (select data from movto where grid=(select child from movto_map where parent=m.grid limit 1)) as pagto,
+    (case when $empresa is not null then &apos;Empresa: &apos;||e.nome_reduzido else &apos;TODOS OS POSTOS&apos; end) as empresa_nome, 
+    pt.nome as portador_nome, 
+    pt.grid as portador 
+from 
+    movto m
+       left join pessoa p on (p.grid=m.pessoa) 
+       join empresa e on (e.grid=m.empresa)
+       left join pessoa_conta pc on (pc.pessoa=m.pessoa and pc.conta_fatura=$conta and pc.conta=m.conta_creditar) 
+       join portador pt on (pt.grid=pc.portador)
+where 
+    m.conta_debitar = $conta 
+and     (case when $cliente is null then true else m.pessoa = $cliente end)
+and     (case when $empresa is null then true else m.empresa = $empresa end)
+and     m.data between $data_ini and $data_fim 
+and     (case when $exibir = 2 then (select data from movto where grid=(select child from movto_map where parent=m.grid limit 1)) is not null when $exibir = 3 then (select data from movto where grid=(select child from movto_map where parent=m.grid limit 1)) is null else true end)
+order by 
+    pt.nome,
+    p.nome, 
+    data, 
+    vencto" id="a1148b51711fa151f07a2aa2cadbfe88" ordem="" titulo="Portador"><apelidos>1  rel_posto_nome		tam=60
+2  rel_data_hora		tam=18
+3  data_ini			tam=10	fmt=data
+4  data_fim			tam=10	fmt=data
+5  cliente_codigo		tam=10 	fmt=%d
+6  cliente_nome			tam=48
+7  portador_nome		tam=110	alinha=centro
+8  qtd				tam=4
+9  valor_total			tam=13	fmt=%.02f
+10 documento			tam=9
+11 motivo_nome			tam=23
+12 valor			tam=13	fmt=%.02f
+13 data				tam=10	fmt=data
+14 vencto			tam=10	fmt=data
+15 pagto			tam=10  fmt=data
+16 valor_pago			tam=13	fmt=%.02f
+17 saldo_nota			tam=18	fmt=%.02f	expr=valor_total-total_valor
+18 pessoa_emitido		tam=18	fmt=%.02f	expr=valor-valor_pago
+
+19 total_nota_portador		tam=18	fmt=%.02f	func=soma	campo=saldo_nota	grupo=2
+20 total_emitido_portador	tam=18	fmt=%.02f	func=soma	campo=valor		grupo=2
+21 total_recebido_portador	tam=18	fmt=%.02f	func=soma	campo=valor_pago	grupo=2
+22 total_receber_portador	tam=18	fmt=%.02f	expr=total_emitido_portador-total_recebido_portador
+23 saldo_nota_portador		tam=18	fmt=%.02f	func=soma	campo=saldo_nota	grupo=2
+
+24 total_nota			tam=18	fmt=%.02f	func=soma	campo=saldo_nota	
+25 total_saldo_nota		tam=18	fmt=%.02f	func=soma	campo=saldo_nota
+26 total_emitido		tam=18	fmt=%.02f	func=soma	campo=valor
+27 total_recebido		tam=18	fmt=%.02f	func=soma	campo=valor_pago
+28 total_receber		tam=18	fmt=%.02f	expr=total_emitido-total_recebido
+29 empresa_nome			tam=110	alinha=centro
+
+30 total_valor			tam=18	fmt=%.02f	func=soma	campo=valor	 grupo=1
+31 total_pago			tam=18	fmt=%.02f	func=soma	campo=valor_pago grupo=1</apelidos><cab_pagina>
+#1                                                                                            #2              
+--------------------------------------------------------------------------------------------------------------
+
+
+                            EXTRATO DE CONTAS A RECEBER ANALÍTICO - NOTAS A PRAZO
+                                       Período #3         a #4
+#29
+
+</cab_pagina>
+
+<cab_grupo nome="2" quebra="portador">
+==============================================================================================================
+#7                                                                                              
+
+<cab_grupo nome="1" quebra="portador, pessoa">
++------------------------------------------------------------------------------------------------------------+
+| Cliente: #5         - #6                                                                                   |
++------------------------------------------------------------------------------------------------------------+
+| #8   NOTAS A COBRAR emitidas no período                                         Valor total: #9            |
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+| Fat. Num. | Historico               |         Valor | Data Emiss | Vencimento |    Pagto   |    Valor Pago |
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+</cab_grupo>
+</cab_grupo>
+<detalhe>
+| #10       | #11                     | #12           | #13        | #14        | #15        | #16           |
+</detalhe>
+<rod_grupo nome="1">
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+| Saldo em NOTAS A COBRAR:         #17                |
+| Saldo em FATURAMENTO DE NOTAS:   #18                |
++-----------------------------------------------------+
+</rod_grupo>
+
+<rod_grupo nome="2">
+
+  Total do portador:
++-----------------------------------------------------+
+| Total de NOTAS A COBRAR:         #19                |
+| Total de FATURAMENTO DE NOTAS:   #20                |
++-----------------------------------------------------+
+| Total recebido no periodo:       #21                |
+| Total a receber:                 #22                |
+| NOTAS A COBRAR em aberto:        #23                |
++-----------------------------------------------------+
+
+
+</rod_grupo>
+
+<rod_pagina>
++-----------+-------------------------+---------------+------------+------------+------------+---------------+
+</rod_pagina>
+
+<rod_relat>
+
++-----------------------------------------------------+
+| Total de NOTAS A COBRAR:         #24                |
+| Total de FATURAMENTO DE NOTAS:   #26                |
++-----------------------------------------------------+
+| Total recebido no periodo:       #27                |
+| Total a receber:                 #28                |
+| NOTAS A COBRAR em aberto:        #25                |
++-----------------------------------------------------+
+</rod_relat>
+</layout></relatorio>

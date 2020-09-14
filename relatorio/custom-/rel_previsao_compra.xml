@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-29 17:29:13" versao_xml="0.1"><tela titulo="Previsão de Compra">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <procura id="fornecedor" modelo="fornecedor" titulo="Fornecedor" />
+    <procura id="grupo" modelo="grupo_produto" titulo="Grupo Produto" />
+    <procura id="subgrupo" modelo="subgrupo_produto" titulo="SubGrupo" />
+    <procura id="produto" modelo="produto" titulo="Produto" />
+  </quadro>
+  <quadro titulo="Opções">
+    <campo id="dias" requerido="sim" tipo="inteiro" titulo="Média de vendas dos ultimos dias" valor_padrao=" select 60" />
+    <check id="exibir" titulo="Exibir preço da última compra" valor_padrao="select true" />
+    <caixa>
+      <campo id="intervalo_1" requerido="sim" tipo="inteiro" titulo="Intervalo de previsão" />
+      <campo id="intervalo_2" requerido="sim" tipo="inteiro" titulo="" />
+      <campo id="intervalo_3" requerido="sim" tipo="inteiro" titulo="" />
+    </caixa>
+  </quadro>
+</tela><ajuda>&lt;big&gt;&lt;b&gt;Relatorio de Previsão de Compra&lt;/b&gt;&lt;/big&gt;
+
+Este relatório permite ver a Previsão de Compra</ajuda><layout dados="select 
+        p.grid, 
+        p.codigo as produto_codigo, 
+        p.nome as produto_nome, 
+        p.tipo, 
+        l.empresa, 
+        p.grupo, 
+        pe.codigo||&apos; - &apos;||pe.nome as empresa_cod_nome, 
+        gp.codigo||&apos; - &apos;||gp.nome as grupo_cod_nome, 
+        sum(l.quantidade) as venda, 
+        (((sum(l.quantidade) / $dias) * $intervalo_1) - produto_estoque_f(l.empresa,p.grid,now()::date)) as previsao_1, 
+        (((sum(l.quantidade) / $dias) * $intervalo_2) - produto_estoque_f(l.empresa,p.grid,now()::date)) as previsao_2, 
+        (((sum(l.quantidade) / $dias) * $intervalo_3) - produto_estoque_f(l.empresa,p.grid,now()::date)) as previsao_3 ,
+    produto_estoque_f(l.empresa,p.grid,now()::date) as estoque,
+    (case when $exibir = 1 then preco_custo_empresa_f(p.grid,l.empresa) end) as preco_custo
+from 
+        produto p 
+             join lancto l on (l.produto = p.grid) 
+             join pessoa pe on (pe.grid = l.empresa) 
+             left join grupo_produto gp on (gp.grid = p.grupo) 
+where 
+    (case when $empresa is null then true else l.empresa = $empresa end)  
+and     (case when $grupo is null then true else p.grupo = $grupo end)  
+and     (case when $subgrupo is null then true else p.subgrupo = $subgrupo end)  
+and     (case when $produto is null then true else p.grid = $produto end)  
+and     (case when $fornecedor is null then true else p.fornecedor = $fornecedor end)  
+and     l.data between date(now())-$dias and date(now())  
+and     operacao=&apos;V&apos; 
+group by 
+    p.grid, 
+    p.codigo, 
+    p.nome, 
+    p.tipo, 
+    l.empresa, 
+    p.grupo, 
+    pe.codigo, 
+    pe.nome, 
+    gp.codigo, 
+    gp.nome
+order by 
+    p.nome" id="4926af86b780ec1532e27002f617f068" ordem=" " titulo="Previsão de Compra"><apelidos>1  rel_posto_nome	tam=60
+2  rel_data_hora        tam=18
+3  dias			tam=4			alinha=centro
+4  titulo2		tam=114			alinha=centro
+5  empresa_cod_nome	tam=50
+6  grupo_cod_nome	tam=50
+7  produto_codigo	tam=13
+8  produto_nome		tam=30
+9  venda		tam=9  	fmt=%.01f
+10 preco_custo		tam=9  	fmt=%.03f
+11 estoque		tam=7  	fmt=%.01f
+12 previsao_1		tam=7  	fmt=%.01f
+13 previsao_2		tam=7  	fmt=%.01f
+14 previsao_3		tam=7  	fmt=%.01f
+15 intervalo_1		tam=3   		alinha=esquerda
+16 intervalo_2		tam=3			alinha=esquerda
+17 intervalo_3		tam=3			alinha=esquerda</apelidos><cab_pagina>
+#1                                                                                               #2
+-----------------------------------------------------------------------------------------------------------------
+
+                           PREVISÃO DE COMPRAS - Baseada em vendas dos últimos #3   dias
+#4
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="empresa_cod_nome" quebra_pagina="1" repeticao="0">
+EMPRESA: #5
+</cab_grupo>
+
+<cab_grupo nome="2" quebra="grupo_cod_nome">
++----------------------------------------------------------------------------------+--------------------------------+
+| GRUPO: #6                                                                        |         P R E V I S Ã O        |
++---------------+--------------------------------+-----------+-----------+---------+----------+----------+----------+
+| Código        | Produto                        |     Venda | Ult.Custo | Estoque | #15 dias | #16 dias | #17 dias |
++---------------+--------------------------------+-----------+-----------+---------+----------+----------+----------+
+</cab_grupo>
+
+<detalhe>
+| #7            | #8                             | #9        | #10       | #11     | #12      | #13      | #14      |
+</detalhe>
+
+<rod_grupo nome="2">
++---------------+--------------------------------+-----------+-----------+---------+----------+----------+----------+
+
+</rod_grupo>
+
+<rod_grupo nome="1">
+</rod_grupo>
+
+<rod_pagina>
++---------------+--------------------------------+-----------+-----------+---------+----------+----------+----------+
+</rod_pagina>
+</layout></relatorio>

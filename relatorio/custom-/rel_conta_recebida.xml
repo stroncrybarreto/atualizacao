@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-10-16 14:01:13" versao_xml="0.1"><tela titulo="Contas Recebidas">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" valor_padrao="select empresa from empresa_local" />
+    <caixa>
+      <campo id="data_pgto" modelo="periodo" titulo="Período pagto" valor_padrao="select to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+      <campo id="turno_pgto" tipo="inteiro" titulo="Turno" />
+    </caixa>
+    <caixa>
+      <campo id="data_emi" modelo="periodo" titulo="Período emissão" />
+      <campo id="turno_emi" tipo="inteiro" titulo="Turno" />
+    </caixa>
+    <procura condicao="codigo in (select codigo from conta where codigo like &apos;1.3%&apos;)" id="conta_ori" modelo="conta" titulo="Conta origem" />
+    <procura condicao="codigo in (select codigo from conta where (codigo like &apos;1.1.%&apos; or codigo like &apos;1.2.%&apos;))" id="conta_des" modelo="conta" titulo="Conta destino" />
+    <procura id="pessoa" modelo="pessoa" titulo="Pessoa" />
+  </quadro>
+  <quadro titulo="Opções">
+    <selecao id="filtro" origem="values (1,&apos;Empresa de recebimento&apos;), (2,&apos;Empresa do titular&apos;)" requerido="sim" titulo="Filtrar por" />
+    <selecao id="agrupar" origem="values (1,&apos;N\xe3o agrupar&apos;), (2,&apos;Pessoa&apos;), (3,&apos;Pessoa Sint\xe9tico&apos;), (4,&apos;Data de Emiss\xe3o&apos;), (5,&apos;Data de recebimento&apos;)" requerido="sim" titulo="Agrupamento" />
+  </quadro>
+</tela><ajuda /><layout dados="" id="c9fc37acaa74fb7d0f24c9709b022136" ordem="" titulo="Contas Recebidas"><apelidos>1  rel_posto_nome	tam=40
+2  rel_data_hora	tam=18
+3  data_pgto_ini	tam=10	fmt=data
+4  data_pgto_fim	tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                                                     #2
+------------------------------------------------------------------------------------------------------------------------
+
+                                                 C O N T A S   R E C E B I D A S
+                                           Periodo pagamento: #3         a #4
+
+</cab_pagina>
+
+<detalhe>
+</detalhe><layout dados="select      t.*,         mm.nome as motivo_nome,      m.documento as movto_documento,      m.valor as movto_valor,      to_char(m.data,&apos;dd/mm/yy&apos;) as movto_data,      p.nome as pessoa_nome,      m.pessoa  from      movto m         join movto_map mp on (m.grid=mp.parent)         join motivo_movto mm on (m.motivo=mm.grid)         join pessoa p on (p.grid=m.pessoa)         join (select              to_char(m.data,&apos;dd/mm/yy&apos;) as movto_data_pgto,              m.turno as movto_turno,              m.grid,              cdeb.nome as cdeb_nome,              p.nome as pessoa_nome,              m.pessoa         from              movto m                 join conta cdeb on (m.conta_debitar=cdeb.codigo)                 left join pessoa p on (m.pessoa=p.grid)          where              m.data between $data_pgto_ini and $data_pgto_fim         and     (case when $turno_pgto is null then true else m.turno = $turno_pgto end)         and     (case when $filtro = 1 then m.empresa = $empresa else m.empresa = (select empresa from empresa_local) end)         and     (case when $pessoa is null then true else m.pessoa = $pessoa end)          and     (case when $conta_ori is null then m.conta_creditar like (select conta from conta_config where chave = &apos;VALORES A RECEBER&apos;)||&apos;%&apos; else m.conta_creditar = $conta_ori end)         and     (case when $conta_des is null then ((m.conta_debitar like &apos;1.1%&apos;) or (m.conta_debitar like &apos;1.2%&apos;)) else m.conta_debitar = $conta_des end)) t on (t.grid=mp.child) where      (case when $data_emi_ini is null then true else m.data between $data_emi_ini and $data_emi_fim end) and     (case when $turno_emi is null then true else m.turno = $turno_emi end) and     $agrupar = 1" id="ea23a6e51e72f06c55c15dd756999443" ordem="" titulo="Não Agrupar"><apelidos>4  movto_data		tam=8
+5  movto_turno		tam=3	alinha=centro
+6  movto_documento	tam=10
+7  motivo_nome		tam=15
+8  pessoa_nome		tam=26
+9  movto_valor		tam=10	fmt=%.02f
+10 cdeb_nome		tam=15
+11 total		tam=10	fmt=%.02f	func=soma   campo=movto_valor
+12 movto_data_pgto	tam=8</apelidos><cab_relat>
++----------+----------+-----+-----------+------------------+----------------------------+-----------------+------------+
+| Dt Receb | Dt Emis. | Tur | Documento | Motivo           | Cliente                    | Conta Destino   | Valor      |
++----------+----------+-----+-----------+------------------+----------------------------+-----------------+------------+
+</cab_relat>
+
+<detalhe>
+| #12      | #4       | #5  | #6        | #7               | #8                         | #10             | #9         |
+</detalhe>
+
+<rod_relat>
++----------+----------+-----+-----------+------------------+----------------------------+-----------------+------------+
+| TOTAL                                                                                                     #11        |
++----------------------------------------------------------------------------------------------------------------------+
+</rod_relat></layout><layout dados="select      t.*,         mm.nome as motivo_nome,      m.documento as movto_documento,      m.valor as movto_valor,      m.data as movto_data,      p.nome as pessoa_nome,      m.pessoa,     &apos;&apos; as quebra from      movto m         join movto_map mp on (m.grid=mp.parent)         join motivo_movto mm on (m.motivo=mm.grid)         join pessoa p on (p.grid=m.pessoa)         join (select              m.data as movto_data_pgto,              m.turno as movto_turno,              m.grid,              cdeb.nome as cdeb_nome,              p.nome as pessoa_nome,              m.pessoa         from              movto m                 join conta cdeb on (m.conta_debitar=cdeb.codigo)                 left join pessoa p on (m.pessoa=p.grid)          where              m.data between $data_pgto_ini and $data_pgto_fim         and     (case when $turno_pgto is null then true else m.turno = $turno_pgto end)         and     (case when $filtro = 1 then m.empresa = $empresa else m.empresa = (select empresa from empresa_local) end)         and     (case when $pessoa is null then true else m.pessoa = $pessoa end)          and     (case when $conta_ori is null then m.conta_creditar like (select conta from conta_config where chave = &apos;VALORES A RECEBER&apos;)||&apos;%&apos; else m.conta_creditar = $conta_ori end)         and     (case when $conta_des is null then ((m.conta_debitar like &apos;1.1%&apos;) or (m.conta_debitar like &apos;1.2%&apos;)) else m.conta_debitar = $conta_des end)) t on (t.grid=mp.child) where      (case when $data_emi_ini is null then true else m.data between $data_emi_ini and $data_emi_fim end) and     (case when $turno_emi is null then true else m.turno = $turno_emi end) and     $agrupar = 2" id="6d28d4d0a804fe5c2d50f69e5a6cd89f" ordem="" titulo="Pessoa"><apelidos>4  movto_data		tam=10	fmt=data
+5  movto_turno		tam=3	alinha=centro
+6  movto_documento	tam=10
+7  motivo_nome		tam=34
+8  pessoa_nome		tam=40
+9  movto_valor		tam=12	fmt=%.02f
+10 cdeb_nome		tam=20
+11 total		tam=12	fmt=%.02f	func=soma   	campo=movto_valor
+12 total_grupo		tam=12  fmt=%.02f	func=soma	campo=movto_valor	grupo=2
+15 movto_data_pgto	tam=10	fmt=data</apelidos><cab_relat>
+</cab_relat>
+
+<cab_grupo nome="1" quebra="quebra">
+</cab_grupo>
+
+<cab_grupo nome="2" quebra="pessoa_nome">
++----------------------------------------------------------------------------------------------------------------------+
+| Pessoa: #8                                                                                                           |
++------------+------------+-----+-----------+------------------------------------+----------------------+--------------+
+| Dt Receb.  | Dt Emissão | Tur | Documento | Motivo                             | Conta Destino        |    Valor     |
++------------+------------+-----+-----------+------------------------------------+----------------------+--------------+
+</cab_grupo>
+
+<detalhe>
+| #15        | #4         | #5  | #6        | #7                                 | #10                  | #9           | 
+</detalhe>
+
+<rod_grupo nome="2">
++------------+------------+-----+-----------+------------------------------------+----------------------+--------------+
+| TOTAL #8                                                                                                #12          |
++----------------------------------------------------------------------------------------------------------------------+
+</rod_grupo>
+
+<rod_grupo nome="1">
++----------------------------------------------------------------------------------------------------------------------+
+| TOTAL                                                                                                   #11          |
++----------------------------------------------------------------------------------------------------------------------+
+</rod_grupo></layout><layout dados="select      p.nome as pessoa_nome,     sum(m.valor) as valor from      movto m         join movto_map mp on (m.grid=mp.parent)         join motivo_movto mm on (m.motivo=mm.grid)         join pessoa p on (p.grid=m.pessoa)         join (select              m.data as movto_data_pgto,              m.turno as movto_turno,              m.grid,              cdeb.nome as cdeb_nome,              p.nome as pessoa_nome,              m.pessoa         from              movto m                 join conta cdeb on (m.conta_debitar=cdeb.codigo)                 left join pessoa p on (m.pessoa=p.grid)          where              m.data between $data_pgto_ini and $data_pgto_fim         and     (case when $turno_pgto is null then true else m.turno = $turno_pgto end)         and     (case when $filtro = 1 then m.empresa = $empresa else m.empresa = (select empresa from empresa_local) end)         and     (case when $pessoa is null then true else m.pessoa = $pessoa end)          and     (case when $conta_ori is null then m.conta_creditar like (select conta from conta_config where chave = &apos;VALORES A RECEBER&apos;)||&apos;%&apos; else m.conta_creditar = $conta_ori end)         and     (case when $conta_des is null then ((m.conta_debitar like &apos;1.1%&apos;) or (m.conta_debitar like &apos;1.2%&apos;)) else m.conta_debitar = $conta_des end)) t on (t.grid=mp.child) where      (case when $data_emi_ini is null then true else m.data between $data_emi_ini and $data_emi_fim end) and     (case when $turno_emi is null then true else m.turno = $turno_emi end) and     $agrupar = 3 group by     p.nome order by         1" id="03a9b789f73a5c0d2df96e3edc235a25" ordem="" titulo="Pessoa Sintético"><apelidos>4  pessoa_nome	tam=40
+5  valor	tam=15	fmt=%.02f
+6  total	tam=15	fmt=%.02f	func=soma	campo=valor</apelidos><cab_relat>
++---------------------------------------------------------------------+-----------------+
+| Pessoa                                                              |           Valor |
++---------------------------------------------------------------------+-----------------+
+</cab_relat>
+
+<detalhe>
+| #4                                                                  | #5              | 
+</detalhe>
+
+<rod_relat>
++---------------------------------------------------------------------+-----------------+
+| TOTAL                                                               | #6              |
++---------------------------------------------------------------------+-----------------+
+</rod_relat>
+</layout><layout dados="select 
+    t.*,    
+    mm.nome as motivo_nome, 
+    m.documento as movto_documento, 
+    m.valor as movto_valor, 
+    m.data as movto_data, 
+    p.nome as pessoa_nome, 
+    m.pessoa,
+    &apos;&apos; as quebra,
+    (case when $agrupar = 4 then movto_data_pgto else m.data end) as data_coluna,
+    (case when $agrupar = 4 then &apos;Recebimento&apos; else &apos;Emissão&apos; end) as titulo_coluna,
+    (case when $agrupar = 4 then &apos;Data de emissão: &apos;||to_char(m.data,&apos;dd/mm/yyyy&apos;) else &apos;Data de recebimento: &apos;||to_char(movto_data_pgto,&apos;dd/mm/yyyy&apos;) end) as data
+from 
+    movto m 
+       join movto_map mp on (m.grid=mp.parent) 
+       join motivo_movto mm on (m.motivo=mm.grid) 
+       join pessoa p on (p.grid=m.pessoa) 
+       join (select 
+            m.data as movto_data_pgto, 
+            m.turno as movto_turno, 
+            m.grid, 
+            cdeb.nome as cdeb_nome, 
+            p.nome as pessoa_nome, 
+            m.pessoa
+        from 
+            movto m 
+               join conta cdeb on (m.conta_debitar=cdeb.codigo) 
+               left join pessoa p on (m.pessoa=p.grid) 
+        where 
+            m.data between $data_pgto_ini and $data_pgto_fim
+        and     (case when $turno_pgto is null then true else m.turno = $turno_pgto end)
+        and     (case when $filtro = 1 then m.empresa = $empresa else m.empresa = (select empresa from empresa_local) end)
+        and     (case when $pessoa is null then true else m.pessoa = $pessoa end) 
+        and     (case when $conta_ori is null then m.conta_creditar like (select conta from conta_config where chave = &apos;VALORES A RECEBER&apos;)||&apos;%&apos; else m.conta_creditar = $conta_ori end)
+        and     (case when $conta_des is null then ((m.conta_debitar like &apos;1.1%&apos;) or (m.conta_debitar like &apos;1.2%&apos;)) else m.conta_debitar = $conta_des end)) t on (t.grid=mp.child)
+where 
+    (case when $data_emi_ini is null then true else m.data between $data_emi_ini and $data_emi_fim end)
+and     (case when $turno_emi is null then true else m.turno = $turno_emi end)
+and     $agrupar in (4,5)" id="7831dd5762fd76c02519edadd5bd5727" ordem="" titulo="Data"><apelidos>4  data			tam=60
+5  movto_turno		tam=3	alinha=centro
+6  movto_documento	tam=10
+7  motivo_nome		tam=20
+8  pessoa_nome		tam=27
+9  movto_valor		tam=12	fmt=%.02f
+10 cdeb_nome		tam=16
+11 total		tam=12	fmt=%.02f	func=soma   campo=movto_valor
+12 total_grupo     	tam=12  fmt=%.02f	func=soma   campo=movto_valor	grupo=1		
+15 data_coluna		tam=10	fmt=data
+16 titulo_coluna	tam=11</apelidos><cab_relat>
+</cab_relat>
+
+<cab_grupo nome="1" quebra="quebra">
+</cab_grupo>
+
+<cab_grupo nome="2" quebra="data">
++----------------------------------------------------------------------------------------------------------------------+
+| #4                                                                                                                   |
++-------------+-----+-----------+----------------------+-----------------------------+------------------+--------------+
+| #16         | Tur | Documento | Motivo               | Cliente                     | Conta Destino    | Valor        | 
++-------------+-----+-----------+----------------------+-----------------------------+------------------+--------------+
+</cab_grupo>
+
+<detalhe>
+| #15         | #5  | #6        | #7                   | #8                          | #10              | #9           |
+</detalhe>
+
+<rod_grupo nome="2">
++-------------+-----+-----------+----------------------+-----------------------------+------------------+--------------+
+| TOTAL #8                                                                                                #12          |
++----------------------------------------------------------------------------------------------------------------------+
+</rod_grupo>
+
+<rod_grupo nome="1">
++----------------------------------------------------------------------------------------------------------------------+
+| TOTAL                                                                                                   #11          |
++----------------------------------------------------------------------------------------------------------------------+
+</rod_grupo></layout></layout></relatorio>

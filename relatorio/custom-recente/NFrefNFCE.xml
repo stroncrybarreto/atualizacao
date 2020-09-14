@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio saida="" ts="2017-01-25 14:36:27" versao_xml="0.1"><tela titulo="NF referente NFCe">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" requerido="sim" titulo="Empresa" valor_padrao="select grid from empresa_local" />
+    <caixa>
+      <campo id="numerocupom" requerido="sim" tipo="numero" titulo="Nr Cupom" />
+    </caixa>
+    <caixa>
+      <campo id="data_ini" tipo="data" titulo="Emissao Inicial" valor_padrao="select to_char(current_date, 'YYYY-mm-01')::date" />
+      <campo id="data_fin" tipo="data" titulo="Emissao Final" valor_padrao="select to_char(current_date + interval '1 month', 'YYYY-mm-01')::date - 1" />
+    </caixa>
+  </quadro>
+</tela><ajuda>Relatório para visualizar a nota fiscal de um determinado Cupom
+
+Caso clicar em visualizar e não listar nada, é porque não tem nota fiscal para o cupom selecionado,
+ou o filtro de empresa e data esta incorreto.</ajuda><layout columns="1" dados="select \n\nnf1.data_emissao as nota_emissao,\nnf1.numero_nota as nota_numero,\nnf1.nome as nota_cliente,\nnf1.serie as nota_serie,\nnf1.valor_nota as nota_valor,\n\nnf2.data_emissao as cupom_emissao,\nnf2.numero_nota as cupom_numero,\nnf2.nome as cupom_cliente,\nnf2.valor_nota as cupom_valor\n\nfrom\n\nnota_fiscal nf1 JOIN nota_fiscal_referenciada nfr1 ON (nf1.grid=nfr1.nota_fiscal),\nnota_fiscal nf2 JOIN nota_fiscal_referenciada nfr2 ON (nf2.grid=nfr2.nf_referenciada)\n\nwhere \n\nnfr1.grid=nfr2.grid\n\nand \n\nnf2.data_emissao between $data_ini and $data_fin\n\nand\n\nnf2.empresa = $empresa\n\nand\n\nnf2.numero_nota = $numerocupom;" font_size="medium" id="b9b82226642ed16ef564e43fdfab6945" ordem="" paper_orientation="1" titulo="Filtro por Nº Cupom"><apelidos>1  rel_posto_nome  tam=60          
+2  rel_data_hora   tam=18          
+3  nota_emissao    tam=10  fmt=data
+4  nota_numero     tam=8   fmt=%d  	alinha=centro
+5  cupom_emissao   tam=10  fmt=data
+6  cupom_numero    tam=9		alinha=esquerda
+7  nota_cliente    tam=46
+8  cupom_cliente   tam=40
+9  nota_serie	   tam=3		alinha=esquerda
+10 nota_valor	fmt=0.2f
+11 cupom_valor  fmt0.2f</apelidos><cab_pagina>
+#1			                                                                     #2
+------------------------------------------------------------------------------------------
+
++--------------------------------------------------------------------------+-------------+
+| Cupom Fiscal: #6                                                         |    Valor    |
++--------------------------------------------------------------------------+-------------+
+| Emissão: #5           Cliente: #8                                        | #11         |
++--------------------------------------------------------------------------+-------------+
+
++--------------------------------------------------------------------------+
+| Nota Fiscal                      		                Serie: #9  |
++------------+---------+---------------------------------------------------+-------------+
+|  Emissao   |  Numero |                   Destinatário                    |    Valor    |
++------------+---------+---------------------------------------------------+-------------+
+</cab_pagina>
+<detalhe>
+| #3         | #4      | #7                                                | #10         |
+</detalhe>
+<rod_relat>
++------------+---------+---------------------------------------------------+-------------+
+</rod_relat>
+<rod_pagina>
++------------+---------+---------------------------------------------------+-------------+
+</rod_pagina></layout></relatorio>

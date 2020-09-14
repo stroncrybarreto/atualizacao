@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio saida="" ts="2020-07-24 09:21:55" versao_xml="0.1"><tela titulo="Nota de Consumo agrupado Placa">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" requerido="nao" titulo="Empresa" />
+    <caixa>
+    
+  </caixa>
+    <caixa>
+      <campo id="data_ini" tipo="data" titulo="Emissao Inicial" valor_padrao="select to_char(current_date, 'YYYY-mm-01')::date" />
+      <campo id="data_fin" tipo="data" titulo="Emissao Final" valor_padrao="select to_char(current_date + interval '1 month', 'YYYY-mm-01')::date - 1" />
+    </caixa>
+  </quadro>
+</tela><ajuda /><layout columns="1" dados="select\n\tnf.nome,\n\tnf.cpf,\n\tnf.valor_nota,\n\tnf.data_emissao,\n\tnf.placa,\n\tnf.km,\n\tnf.numero_nota,\n\tnfp.descricao,\n\tnfp.quantidade,\n\tnfp.unid_med,\n\tnfp.preco_unit,\n\tnfp.valor_desconto,\n\tnfp.valor,\n\tnf.caixa_conta,\n\tnf.caixa_turno,\n\tnf.obs\nFROM nota_fiscal nf \n\tjoin nota_fiscal_produto nfp on (nf.grid=nfp.nota_fiscal and nf.tipo='S' and nf.modelo='55')\nWHERE nf.natureza_op='4295068918'\nAND nf.data_emissao between $data_ini and $data_fin\nAND nf.empresa=$empresa\n\nORDER BY nf.data_emissao\n\n" font_size="medium" id="18939ffda678b4c789aed3743cfa5c6f" ordem="" paper_orientation="1" titulo="Nota de Consumo agrupado Placa"><apelidos>1   rel_posto_nome  tam=60            
+2   rel_data_hora   tam=18           
+3   nome            tam=44           
+4   cpf             tam=18           
+5   data_emissao    tam=10  fmt=data 
+6   placa           tam=10           
+7   km              tam=10           
+8   numero_nota     tam=10  fmt=%d   
+9   descricao       tam=44           
+10  quantidade      tam=10  fmt=%.02f
+11  unid_med        tam=3            
+12  preco_unit      tam=10  fmt=%.02f
+13  valor_desconto  tam=10  fmt=%.02f
+14  valor           tam=12  fmt=%.02f
+16  caixa_turno     tam=3
+17  caixa_conta     tam=10
+
+18  total_quantidade tam=20 fmt=float2  func=soma campo=quantidade alinha=direita
+19  total_preco_unit tam=20 fmt=float2  func=soma campo=preco_unit alinha=direita
+20  total_valor tam=20 fmt=float2  func=soma campo=valor alinha=direita
+
+21 valor_nota	tam=11	fmt=%.02f func=soma campo=valor grupo=1
+
+22 obs		 alinha=esquerda</apelidos><cab_pagina>
+#1																								  #2
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                            N O T A   D E   C O N S U M O   A G R U P A D O   P L A C A                             
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="placa">
++------------------------------------------------------+-----------------------------+-----------------------+---------------------------------------+
+| Nome: #3                                             | CNPJ: #4                    |                       | Caixa: #17          Turno: #16        |
++-------------+------------+--------------+------------+-----------------------------+---------------+-------+----+------+------------+--------------+
+| Emissão     | Placa      | KM           | Número NF  | Descrição                                   | Quantidade | UN.  | Preço unit | Valor Final  |
++-------------+------------+--------------+------------+---------------------------------------------+------------+------+------------+--------------+
+</cab_grupo>
+<detalhe>
+| #5          | #6         | #7           | #8         | #9                                          | #10        | #11  | #12        | #14          |
+</detalhe>
+<rod_grupo nome="1">
++-------------+------------+--------------+------------+---------------------------------------------+------------+------+------------+--------------+
+| Sub Total   |                                                                                      |            |      |            | #21          |
++-------------+------------+--------------+------------+---------------------------------------------+------------+------+------------+--------------+
+</rod_grupo>
+<rod_relat nome="1" quebra="placa">
++-----------------------------------------+
+| Total Quantidade: #18                   |                                     
+| Total Preco Unit: #19                   |
+| Total Valor.....: #20                   |                                                 
++-----------------------------------------+
+</rod_relat>
+
+
+<rod_pagina>
++-------------+------------+--------------+------------+---------------------------------------------+------------+------+------------+--------------+
+</rod_pagina></layout></relatorio>

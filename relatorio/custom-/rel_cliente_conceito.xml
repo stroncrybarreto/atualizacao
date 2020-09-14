@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-07-29 17:29:53" versao_xml="0.1"><tela titulo="Cliente por Conceito">
+  <quadro titulo="Parâmetros">
+    <procura id="pessoa" modelo="pessoa" titulo="Pessoa" />
+    <procura id="grupo" modelo="grupo_pessoa" titulo="Grupo" />
+    <procura id="forma_pgto" modelo="motivo_movto" titulo="Forma Pgto" />
+    <campo expande="0" id="conceito" tipo="texto" titulo="Conceito" />
+    <caixa>
+      <campo expande="0" id="limite_min" tipo="valor" titulo="Limite Crédito" />
+      <campo expande="0" id="limite_max" tipo="valor" titulo="à" />
+    </caixa>
+    <selecao id="ordenar_por" origem=" VALUES (0, &apos;Cliente&apos;), (1, &apos;Conceito&apos;)" requerido="sim" titulo="Ordenar por" />
+    <selecao id="ordem" origem=" VALUES (0, &apos;Crescente&apos;), (1, &apos;Decrescente&apos;)" requerido="sim" titulo="Ordem" />
+  </quadro>
+</tela><ajuda /><layout dados="select       p.nome,       p.conceito,       p.codigo,       p.limite_credito,       p.grid as pessoa,       rp.codigo as regra_codigo,       rp.nome as regra_nome,       (case            when $ordenar_por = 0 then &apos;Cliente&apos; else &apos;Conceito&apos; end) as filtro_nome  from       (select            COALESCE(conceito, &apos;&apos;) as conceito,            nome,            codigo,            limite_credito,            grid,            grupo       from            pessoa       order by            (case             when $ordenar_por = 0 then nome else conceito end) asc,            (case             when $ordenar_por = 0 then conceito else nome end) asc) p            left join regra_preco rp on (p.grid = rp.pessoa             or p.grupo = rp.grupo_pessoa)  where       (case             when $pessoa is null then true else p.grid = $pessoa end)        and (case             when $grupo is null then true else p.grupo = $grupo end)        and (case             when $forma_pgto is null then true else rp.forma_pgto = $forma_pgto end)        and (case             when $conceito = &apos;&apos; then true else p.conceito = SUBSTRING($conceito                 FROM                      1                 for                      1) end)        and (case             when $limite_min is null then true else p.limite_credito &gt;= $limite_min end)        and (case             when $limite_max is null then true else p.limite_credito &lt;= $limite_max end)  order by       (case             when $ordenar_por = 1             and $ordem = 0 then p.conceito else null end) asc,       (case             when $ordenar_por = 1             and $ordem = 0 then p.nome else null end) asc,       (case             when $ordenar_por = 1             and $ordem = 1 then p.conceito else null end) desc,       (case             when $ordenar_por = 1             and $ordem = 1 then p.nome else null end) desc,       (case             when $ordenar_por = 0             and $ordem = 1 then p.nome else null end) desc,       (case             when $ordenar_por = 0             and $ordem = 1 then p.conceito else null end) desc" id="ec1f5c574c388a31a871a190a7c2a7bb" ordem="" titulo="Sintético"><apelidos>1  rel_posto_nome    tam=60 
+2  rel_data_hora     tam=18 
+3  codigo            tam=5	fmt=%d 
+4  nome              tam=35
+5  conceito          tam=8	alinha=centro 
+6  limite_credito    tam=14	fmt=%.02f 
+7  regra_nome        tam=26
+8  filtro_nome       tam=10</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                  C L I E N T E  P O R  C O N C E I T O                                             
+                                         Sintético - #
+
++---------+-------------------------------------+----------+----------------+-----------------------------+
+| Codigo  |  Nome                               | Conceito |    Limite      | Regra de preco              |
++---------+-------------------------------------+----------+----------------+-----------------------------+
+</cab_pagina>
+
+<detalhe>
+| #3      | #4                                  | #5       | #6             | #7                          |
+</detalhe>
+
+<rod_relat>
++---------+-------------------------------------+----------+----------------+-----------------------------+
+</rod_relat>
+
+<rod_pagina>
+</rod_pagina></layout><layout dados="select       p.nome,       p.conceito,       p.codigo,       p.limite_credito,       p.grid as pessoa,       rp.codigo as regra_codigo,       rp.nome as regra_nome,       (case             when $ordenar_por = 0 then &apos;Cliente&apos; else &apos;Conceito&apos; end) as filtro_nome  from       (select            COALESCE(conceito, &apos;&apos;) as conceito,            nome,            codigo,            limite_credito,            grid,            grupo       from            pessoa       order by            (case             when $ordenar_por = 0 then nome else conceito end) asc,            (case             when $ordenar_por = 0 then conceito else nome end) asc) p            left join regra_preco rp on (p.grid = rp.pessoa             or p.grupo = rp.grupo_pessoa)  where       (case             when $pessoa is null then true else p.grid = $pessoa end)        and (case             when $grupo is null then true else p.grupo = $grupo end)        and (case             when $forma_pgto is null then true else rp.forma_pgto = $forma_pgto end)        and (case             when $conceito = &apos;&apos; then true else p.conceito = SUBSTRING($conceito                 FROM                      1                 for                      1) end)        and (case             when $limite_min is null then true else p.limite_credito &gt;= $limite_min end)        and (case             when $limite_max is null then true else p.limite_credito &lt;= $limite_max end)  order by       (case             when $ordenar_por = 1             and $ordem = 0 then p.conceito else null end) asc,       (case             when $ordenar_por = 1             and $ordem = 0 then p.nome else null end) asc,       (case             when $ordenar_por = 1             and $ordem = 1 then p.conceito else null end) desc,       (case             when $ordenar_por = 1             and $ordem = 1 then p.nome else null end) desc,       (case             when $ordenar_por = 0             and $ordem = 1 then p.nome else null end) desc,       (case             when $ordenar_por = 0             and $ordem = 1 then p.conceito else null end) desc" id="2e994812204cb6dbda35fcb4fbe0e55d" ordem="" titulo="Analítico"><apelidos>1  rel_posto_nome  tam=60
+2  rel_data_hora   tam=18
+3  codigo          tam=5   alinha=esquerda	fmt=%d   
+4  nome            tam=40  alinha=esquerda 
+5  conceito        tam=8   alinha=esquerda
+6  limite_credito  tam=14  alinha=esquerda	fmt=%.02f
+7  regra_codigo    tam=12  alinha=esquerda	fmt=%d   
+8  regra_nome      tam=35  alinha=esquerda
+9  filtro_nome     tam=10</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                                  C L I E N T E  P O R  C O N C E I T O                                             
+                                         Analítico - Cliente                               
+
+</cab_pagina>
+<cab_grupo nome="1" quebra="pessoa">
++-----------------------------------------------------------------------+
+| Codigo..: #3         Nome..: #4                                       |
+| Conceito: #5         Limite: #6                                       | 
++-----------------------------------------------------------------------+
+| Regra de Preço                                                        |
++-----------------------------------------------------------------------+
+</cab_grupo>
+<detalhe>
+| #7           | #8                                                     |
+</detalhe>
+<rod_grupo nome="1">
++-----------------------------------------------------------------------+
+
+</rod_grupo>
+<rod_pagina>
++-----------------------------------------------------------------------+
+</rod_pagina></layout></relatorio>

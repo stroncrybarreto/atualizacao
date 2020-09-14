@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-12 17:24:23" versao_xml="0.1"><tela titulo="Venda de produtos por caixa">
+  <quadro titulo="Parâmetros">
+    <caixa>
+      <campo id="data" modelo="periodo" requerido="sim" tipo="data" />
+      <campo id="turno" tipo="inteiro" />
+    </caixa>
+    <procura id="funcionario" modelo="funcionario" titulo="Responsável" />
+    <procura id="grupo_produto" modelo="grupo_produto" />
+    <caixa>
+      <check id="combustivel" titulo="Combustível" valor_padrao="select true" />
+      <check id="mercadoria" titulo="Mercadoria" valor_padrao="select true" />
+      <check id="servico" titulo="Serviço" valor_padrao="select true" />
+    </caixa>
+  </quadro>
+</tela><ajuda /><layout dados="SELECT p.nome as produto_nome, upper(p.unid_med) as unid_med, gp.nome as grupo_produto_nome, sum(l.quantidade) as quantidade, round((sum(l.valor/l.quantidade))::numeric, 2) as preco_unitario, sum(l.valor) as valor, cx.data, cx.turno, c.codigo as conta_codigo, c.nome as conta_nome, ps.nome as responsavel, (SELECT $data_ini::date) as data_ini, (SELECT $data_fim::date) as data_fim FROM lancto l JOIN produto p on(l.produto = p.grid) JOIN grupo_produto gp on(p.grupo = gp.grid) JOIN caixa cx on(l.data = cx.data and l.turno = cx.turno) JOIN conta c on(cx.conta = c.codigo) JOIN pessoa ps on(cx.pessoa = ps.grid) WHERE (case when $grupo_produto is null then true else gp.grid = $grupo_produto end) and (case when $combustivel = 0 then p.tipo &lt;&gt; &apos;C&apos; else true end) and (case when $mercadoria = 0 then p.tipo &lt;&gt; &apos;M&apos; else true end) and (case when $servico = 0 then p.tipo &lt;&gt; &apos;S&apos; else true end) and (case when $turno is null then true else l.turno = $turno end) and (case when $funcionario is null then true else cx.pessoa = $funcionario end) and (l.data between $data_ini and $data_fim) and l.operacao = &apos;V&apos; GROUP BY p.nome, p.unid_med, gp.nome, cx.data, cx.turno, c.codigo, c.nome, ps.nome ORDER BY p.nome;" id="485340756c6db7627109b2cf862b6819" ordem="produto_nome" titulo="Venda de produtos por caixa"><apelidos>1   rel_posto_nome      tam=60
+2   rel_data_hora       tam=18
+3   produto_nome        tam=41
+4   unid_med            tam=2
+5   grupo_produto_nome  tam=20
+6   quantidade          tam=10  fmt=%.02f
+7   preco_unitario      tam=10
+8   valor               tam=10  fmt=%.02f
+9   data                tam=10  fmt=data
+10  turno               tam=3   fmt=%d      alinha=esquerda
+11  conta_codigo        tam=8
+12  conta_nome          tam=30
+13  responsavel         tam=30
+14  subtotal_qtde       tam=10  fmt=%.02f   func=soma   campo=quantidade   grupo=2
+15  subtotal_valor      tam=10  fmt=%.02f   func=soma   campo=valor        grupo=2
+16  total_qtde          tam=10  fmt=%.02f   func=soma   campo=quantidade   grupo=1
+17  total_valor         tam=10  fmt=%.02f   func=soma   campo=valor        grupo=1
+18  total_geral_qtde    tam=10  fmt=%.02f   func=soma   campo=quantidade
+19  total_geral_valor   tam=10  fmt=%.02f   func=soma   campo=valor
+20  data_ini            tam=10  fmt=data
+21  data_fim            tam=10  fmt=data
+22  subtitulo           tam=100</apelidos><cab_pagina>
+#1                                                                                                  #2
+--------------------------------------------------------------------------------------------------------------------
+
+                               V E N D A   D E   P R O D U T O S   P O R   C A I X A                                
+                                      Período: #20        até #21
+ #22
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="turno">
++-----------------------------------------------------------------------------------------+
+| Conta..........: #11      - #12                             Data: #9          Turno: #10|
+| Responsável....: #13                                                                    |
++---------------------------------------------+----+------------+------------+------------+
+| Produto                                     | Un | Quantidade | Preço unit |   Total    |
++---------------------------------------------+----+------------+------------+------------+
+</cab_grupo>
+
+<cab_grupo nome="2" quebra="grupo_produto_nome">
+| Grupo: #5                                   |    |            |            |            |
+</cab_grupo>
+
+<detalhe>
+|   #3                                        | #4 | #6         | #7         | #8         |
+</detalhe>
+
+<rod_grupo nome="2">
+| Subtotal                                    |    | #14        |            | #15        |
+|                                             |    |            |            |            |
+</rod_grupo>
+
+<rod_grupo nome="1">
++---------------------------------------------+----+------------+------------+------------+
+|                                             |    | #16        |            | #17        |
++---------------------------------------------+----+------------+------------+------------+
+
+</rod_grupo>
+
+<rod_relat>
++---------------------------------------------+----+------------+------------+------------+
+| Total geral                                 |    | #18        |            | #19        |
++---------------------------------------------+----+------------+------------+------------+
+</rod_relat>
+
+<rod_pagina>
++---------------------------------------------+----+------------+------------+------------+
+</rod_pagina></layout></relatorio>

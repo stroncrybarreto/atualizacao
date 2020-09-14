@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='iso8859-1'?>
+<relatorio ts="2008-08-19 14:08:27" versao_xml="0.1"><tela titulo="">
+  <quadro titulo="Parâmetros">
+    <procura id="empresa" modelo="empresa" titulo="Empresa" />
+    <campo id="dt_periodo" modelo="periodo" requerido="sim" tipo="data" titulo="Período" valor_padrao="SELECT to_char(current_date, &apos;YYYY-mm-01&apos;)::date, to_char(current_date + interval &apos;1 month&apos;, &apos;YYYY-mm-01&apos;)::date - 1" />
+    <procura id="fornecedor" modelo="fornecedor" titulo="Fornecedor" />
+    <procura id="deposito" modelo="deposito" titulo="Depósito" />
+    <procura id="grupo" modelo="grupo_produto" titulo="Grupo produto" />
+    <procura id="subgrupo" modelo="subgrupo_produto" titulo="Subgrupo" />
+    <procura id="produto" modelo="produto" titulo="Produto" />
+  </quadro>
+</tela><ajuda /><layout dados="select 
+         p.nome as produto_nome, 
+         (select codigo from deposito where grid=l.deposito) as deposito_codigo, 
+         p.grupo, 
+         l.data, 
+         l.pessoa, 
+         l.documento, 
+         l.quantidade, 
+         l.preco_unit, 
+         l.valor, 
+         l.deposito,
+    p.nome as produto_nome,
+    p.preco_custo as produto_custo_cadastro, 
+    g.codigo||&apos; - &apos;||g.nome as grupo_cod_nome,
+    pe.codigo||&apos; - &apos;||pe.nome as empresa_cod_nome,
+    pes.nome as pessoa_nome
+from 
+         lancto l       
+          join produto p on (l.produto=p.grid and p.tipo!=&apos;S&apos;)      
+          left join nota_fiscal_produto nfp on (nfp.lancto=l.grid) 
+      join grupo_produto g on (p.grupo=g.grid)
+      join pessoa pe on (pe.grid = l.empresa)
+      join pessoa pes on (pes.grid = l.pessoa)
+where 
+    l.operacao=&apos;E&apos;
+and        l.data between $dt_periodo_ini and $dt_periodo_fim  
+and     (case when $empresa is NULL then true else l.empresa = $empresa end)
+and     (case when $fornecedor is NULL then true else l.pessoa = $fornecedor end)
+and     (case when $deposito is NULL then true else l.deposito = $deposito end)  
+and     (case when $grupo is NULL then true else p.grupo = $grupo end)
+and     (case when $subgrupo is NULL then true else p.subgrupo = $subgrupo end)
+and     (case when $produto is NULL then true else p.grid = $produto end)
+order by 
+    pe.codigo,
+    g.codigo, 
+    l.data,
+    p.nome" id="88d5c6fc628f2093ed87e58bae26d38a" ordem="" titulo=""><apelidos>1  rel_posto_nome       tam=60
+2  rel_data_hora        tam=18
+3  titulo1              tam=123			alinha=centro
+4  titulo2              tam=123			alinha=centro
+5  empresa_cod_nome     tam=60
+6  grupo_cod_nome       tam=40
+7  produto_nome         tam=29
+8  data                 tam=10  fmt=data
+9  pessoa_nome          tam=19
+10 documento            tam=10
+11 quantidade           tam=6   fmt=float
+12 preco_unit           tam=8   fmt=%.03f
+13 valor                tam=11  fmt=%.02f
+14 grupo_total_qtde     tam=6   fmt=float	func=soma	campo=quantidade	grupo=2
+15 grupo_total_valor    tam=11  fmt=%.02f	func=soma	campo=valor		grupo=2
+16 empresa_total	tam=11  fmt=%.02f	func=soma	campo=valor		grupo=1
+17 geral_total          tam=11	fmt=%.02f	func=soma	campo=valor
+18 deposito_codigo      tam=8
+19 dt_periodo_ini	tam=10	fmt=data
+20 dt_periodo_fim	tam=10	fmt=data</apelidos><cab_pagina>
+#1                                                                                                         #2        
+---------------------------------------------------------------------------------------------------------------------------
+   
+                              ENTRADAS POR GRUPO DE PRODUTO - Período: #19        a #20       
+#4
+
+</cab_pagina>
+
+<cab_grupo nome="1" quebra="empresa_cod_nome">
+EMPRESA: #5
+</cab_grupo>
+
+<cab_grupo nome="2" quebra="empresa_cod_nome,grupo_cod_nome">
++--------------------------------------------------------------------------------------------------------------------------+
+| GRUPO: #6                                                                                                                |
++------------+------------------------------+---------------------+----------+-----------+--------+----------+-------------+
+|  Data      | Produto                      | Fornecedor          | Depósito | Documento |   Qtde | Pr.Custo | Custo Total |
++------------+------------------------------+---------------------+----------+-----------+--------+----------+-------------+
+</cab_grupo>
+
+<detalhe>
+| #8         | #7                           | #9                  | #18      | #10       | #11    | #12      | #13         |
+</detalhe>
+
+<rod_grupo nome="2">
++------------+------------------------------+---------------------+----------+-----------+--------+----------+-------------+
+| TOTAL DO GRUPO                                                                         | #14    |          | #15         |
++----------------------------------------------------------------------------------------+--------+----------+-------------+
+
+</rod_grupo>
+
+<rod_grupo nome="1">
++----------------------------------------------------------------------------------------+--------+----------+-------------+
+| TOTAL DA EMPRESA                                                                       |        |          | #16         |
++----------------------------------------------------------------------------------------+--------+----------+-------------+
+
+</rod_grupo>
+
+<rod_relat>
+
++----------------------------------------------------------------------------------------+--------+----------+-------------+
+| TOTAL GERAL                                                                            |        |          | #17         |
++----------------------------------------------------------------------------------------+--------+----------+-------------+
+</rod_relat>
+
+<rod_pagina>
++------------+------------------------------+---------------------+---------+------------+--------+----------+-------------+
+</rod_pagina>
+</layout></relatorio>
