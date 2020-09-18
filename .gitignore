@@ -13,6 +13,8 @@ config.db
 autosystem.key
 asupdchk.exe
 asupdhlp.exe
+EZClient.dll
+EZClient64.dll
 *.rar
 *.zip
 *.log
