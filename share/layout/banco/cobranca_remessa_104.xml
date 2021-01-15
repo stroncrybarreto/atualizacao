@@ -79,22 +79,14 @@
         </registro>
         <registro>
             <inicio>59</inicio>
-            <fim>64</fim>
+            <fim>65</fim>
             <chave>convenio</chave>
             <tipo>integer</tipo>
             <padrao></padrao>
             <descricao>Numero da Conta Corrente</descricao>
         </registro>
         <registro>
-            <inicio>65</inicio>
-            <fim>71</fim>
-            <chave></chave>
-            <tipo>integer</tipo>
-            <padrao>0</padrao>
-            <descricao>Uso exclusivo CAIXA</descricao>
-        </registro>
-        <registro>
-            <inicio>72</inicio>
+            <inicio>66</inicio>
             <fim>72</fim>
             <chave></chave>
             <tipo>integer</tipo>
@@ -162,7 +154,7 @@
             <fim>166</fim>
             <chave></chave>
             <tipo>integer</tipo>
-            <padrao>050</padrao>
+            <padrao>107</padrao>
             <descricao>Versao do layout do arquivo</descricao>
         </registro>
         <registro>
@@ -262,7 +254,7 @@
             <fim>16</fim>
             <chave></chave>
             <tipo>integer</tipo>
-            <padrao>030</padrao>
+            <padrao>067</padrao>
             <descricao>Versao do Layout do lote</descricao>
         </registro>
         <registro>
@@ -291,14 +283,14 @@
         </registro>
         <registro>
             <inicio>34</inicio>
-            <fim>39</fim>
+            <fim>40</fim>
             <chave>convenio</chave>
             <tipo>integer</tipo>
             <padrao></padrao>
             <descricao>Codigo do convenio</descricao>
         </registro>
         <registro>
-            <inicio>40</inicio>
+            <inicio>41</inicio>
             <fim>53</fim>
             <chave></chave>
             <tipo>integer</tipo>
@@ -324,10 +316,10 @@
         <registro>
             <inicio>60</inicio>
             <fim>65</fim>
-            <chave>convenio</chave>
+            <chave></chave>
             <tipo>integer</tipo>
-            <padrao></padrao>
-            <descricao>Codigo Convenio</descricao>
+            <padrao>0</padrao>
+            <descricao>Uso Exclusivo CAIXA</descricao>
         </registro>
         <registro>
             <inicio>66</inicio>
@@ -479,14 +471,14 @@
         </registro>
         <registro>
             <inicio>24</inicio>
-            <fim>29</fim>
+            <fim>30</fim>
             <chave>convenio</chave>
             <tipo>integer</tipo>
             <padrao></padrao>
             <descricao>Numero da Conta Corrente</descricao>
         </registro>
         <registro>
-            <inicio>30</inicio>
+            <inicio>31</inicio>
             <fim>40</fim>
             <chave></chave>
             <tipo>integer</tipo>
@@ -766,7 +758,7 @@
             <fim>7</fim>
             <chave></chave>
             <tipo>integer</tipo>
-            <padrao></padrao>
+            <padrao>0001</padrao>
             <descricao>Lote de Servico</descricao>
         </registro>
         <registro>
@@ -938,7 +930,7 @@
             <fim>7</fim>
             <chave></chave>
             <tipo>integer</tipo>
-            <padrao></padrao>
+            <padrao>0001</padrao>
             <descricao>Lote de Servico</descricao>
         </registro>
         <registro>

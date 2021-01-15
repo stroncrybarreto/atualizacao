@@ -206,13 +206,13 @@
       <registro>
          <id>34</id>
          <codigo>BD</codigo>
-		 <tipo>criticar</tipo>
+		 <tipo>agendar</tipo>
          <descricao>Inclusão Efetuada Com Sucesso</descricao>
       </registro>
       <registro>
          <id>35</id>
          <codigo>BE</codigo>
-		 <tipo>criticar</tipo>
+		 <tipo>agendar</tipo>
          <descricao>Alteração Efetuada Com Sucesso</descricao>
       </registro>
       <registro>

@@ -28,7 +28,7 @@
 28 total_entrada_g		tam=13	fmt=float3  func=soma campo=entrada
 29 total_saida_g		tam=13	fmt=float3  func=soma campo=saida
 30 total_diferenca_g	tam=13	fmt=float3  func=soma campo=diferenca
-31 produto_cod_nome     tam=35
+31 produto_cod_nome     tam=60
 </apelidos>
 <cab_pagina>
 #1                                             #2

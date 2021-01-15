@@ -7,6 +7,14 @@
 		<tipo>cadastro</tipo>
 		<padrao>----</padrao>
 	</topico>
+
+  <topico>
+		<id>anonimizacao_lgpd</id>
+		<nome>Permitir anonimizar dados de pessoa física</nome>
+		<descr>Permissão de acesso a rotina de anonimização dos dados referente a LGPD</descr>
+		<tipo>bool</tipo>
+		<padrao>1</padrao>
+	</topico>
 	
     <topico>
       <id>cad_bairro</id>
@@ -80,6 +88,14 @@
       <padrao>----</padrao>
     </topico>
   
+	<topico>
+		<id>cad_canal_vendas</id>
+		<nome>Canal de Vendas</nome>
+		<descr>Permissões de acesso ao cadastro de Canal de Vendas</descr>
+		<tipo>cadastro</tipo>
+		<padrao>IAEV</padrao>
+    </topico>
+
     <topico>
       <id>cad_cartao_ponto</id>
       <nome>Cartão Ponto</nome>
@@ -1433,7 +1449,15 @@
         <tipo>bool</tipo>
         <padrao>1</padrao>
       </topico>
-
+	
+	  <topico>
+        <id>conf_caixa_abrir_caixa_aberto</id>
+        <nome>Abrir a conferência de caixa ainda aberto</nome>
+        <descr>Permite que seja aberto na conferência de caixa os caixas ainda não fechados. Caso esta opção esteja desativada será necessário algum usuário com permissao liberar.</descr>
+        <tipo>bool</tipo>
+        <padrao>0</padrao>
+      </topico>	
+	
       <topico>
         <id>conf_novo_caixa_data_fechamento</id>
         <nome>Permite criar caixas pelo módulo gerencial sem data de fechamento </nome>
@@ -2045,6 +2069,14 @@
         <padrao>1</padrao>
       </topico>
 
+	  <topico>
+        <id>cx_recarga_tv</id>
+        <nome>Permite recarga de TV</nome>
+        <descr>Permite que o usuário realize recargas de TV.</descr>
+        <tipo>bool</tipo>
+        <padrao>0</padrao>
+      </topico>
+
       <topico>
         <id>cx_recebimento_boleto</id>
         <nome>Permite o recebimento de títulos que possuem boletos</nome>
@@ -2237,6 +2269,14 @@
         <padrao>0</padrao>
       </topico>
 
+      <topico>
+        <id>cx_rel_meios_pagto</id>
+        <nome>Relatório de meios de pagamento</nome>
+        <descr>Permite visualizar relatório de meios de pagamento no caixa</descr>
+        <tipo>bool</tipo>
+        <padrao>0</padrao>
+      </topico>
+
 	  <topico>
         <id>rel_venda_cruzada</id>
         <nome>Relatório de cruzamento de vendas</nome>
@@ -2398,6 +2438,13 @@
         <tipo>bool</tipo>
         <padrao>1</padrao>
 	  </topico>
+	  <topico>
+        <id>cx_cancelar_pre_venda_postef</id>
+        <nome>Cancelar pré-venda originada de dispositivo móvel</nome>
+        <descr>Permite o cancelamento de uma pré-venda no caixa que teve origem por um dispositivo móvel</descr>
+        <tipo>bool</tipo>
+        <padrao>0</padrao>
+    </topico>
     </grupo>
 	
 	<grupo nome="TEF">
@@ -3801,6 +3848,14 @@
     </grupo>
 
     <topico>
+      <id>permite_acessar_config_gerais</id>
+      <nome>Permitir acessar a rotina de Configurações Gerais</nome>
+      <descr>Permite que o usuário possa acessar o menu de Configurações -> Gerais</descr>
+      <tipo>bool</tipo>
+      <padrao>1</padrao>
+    </topico>
+
+    <topico>
       <id>baixa_preenche_empresa</id>
       <nome>Preencher campo empresa nas baixas</nome>
       <descr>Preenche automaticamente o campo empresa na tela de baixa</descr>
@@ -4417,6 +4472,13 @@
 		  <id>config_estacionamento</id>
 		  <nome>Configurações de Estacionamento</nome>
 		  <descr>Permitir que o usuário tenha acesso a tela de configurações do módulo estacionamento</descr>
+		  <tipo>bool</tipo>
+		  <padrao>0</padrao>
+		</topico>
+        <topico>
+		  <id>rel_ticket_estacionamento</id>
+		  <nome>Emitir Relatório de Movimentação de Tickets</nome>
+		  <descr>Permitir que o usuário tenha acesso a tela de emitissão de relatório de movimentação de tickets</descr>
 		  <tipo>bool</tipo>
 		  <padrao>0</padrao>
 		</topico>
@@ -6171,6 +6233,14 @@
       <tipo>bool</tipo>
       <padrao>1</padrao>
 	</topico>
+
+  <topico>
+      <id>rel_anonimizados</id>
+      <nome>Relatório de Clientes e Funcionários Anonimizados</nome>
+      <descr>Permite controlar acesso ao Relatório de Clientes e Funcionários Anonimizados</descr>	
+      <tipo>bool</tipo>
+      <padrao>1</padrao>
+	</topico>
 	
     <topico>
       <id>rel_abast_maior_tempo</id>
@@ -6331,6 +6401,14 @@
 	  <tipo>bool</tipo>
 	  <padrao>1</padrao>
 	</topico>
+
+  <topico>
+	  <id>rel_br_mania_produto_setor_historico</id>
+	  <nome>Relatório de alteração de setor dos produtos</nome>
+	  <descr>Permite controlar acesso ao relatório de alterações de setores dos produtos</descr>
+	  <tipo>bool</tipo>
+	  <padrao>1</padrao>
+  </topico>
 
     <topico>
       <id>rel_caixa</id>
@@ -8061,6 +8139,14 @@
 	  <padrao>1</padrao>
 	</topico>
 
+  <topico>
+    <id>rel_ipp_abasteceai_transacao</id>
+    <nome>Relatório de Transações Abasteceai</nome>
+    <descr>Permite gerar relatorio de transações Ipiranga Abasteceai</descr>
+    <tipo>bool</tipo>
+    <padrao>1</padrao>
+  </topico>
+
 	<topico>
 	  <id>rel_venda_combustivel</id>
 	  <nome>Relatório de vendas de combustíves por empresa</nome>
@@ -8294,6 +8380,23 @@
       <id>acesso_menu_adm_totem</id>
       <nome>Menu Administrativo Totem</nome>
       <descr>Permite que o usuário tenha acesso ao menu administrativo do totem</descr>
+      <tipo>bool</tipo>
+      <padrao>0</padrao>
+    </topico>
+    <topico>
+      <id>totem_rel_movto_caixa</id>
+      <nome>Relatório de movimento de caixa no Totem</nome>
+      <descr>Mostrar valores no relatório de fechamento de caixa</descr>
+      <tipo>bool</tipo>
+      <padrao>0</padrao>
+    </topico>
+  </grupo>
+
+  <grupo nome="Linx SmartPOS TEF">
+    <topico>
+      <id>config_smartpos_tef</id>
+      <nome>Alterar as configurações do aplicativo</nome>
+      <descr>Permite que o usuário tenha acesso a tela de configuração do aplicativo</descr>
       <tipo>bool</tipo>
       <padrao>0</padrao>
     </topico>

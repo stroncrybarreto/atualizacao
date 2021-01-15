@@ -89,7 +89,7 @@
 
     <registro>
       <inicio>59</inicio>
-      <fim>64</fim>
+      <fim>65</fim>
       <chave>portador_convenio</chave>
       <tipo>integer</tipo>
       <padrao></padrao>
@@ -97,7 +97,7 @@
     </registro>
 
     <registro>
-      <inicio>65</inicio>
+      <inicio>66</inicio>
       <fim>71</fim>
       <chave></chave>
       <tipo>integer</tipo>
@@ -182,7 +182,7 @@
       <fim>166</fim>
       <chave></chave>
       <tipo>integer</tipo>
-      <padrao>050</padrao>
+      <padrao>107</padrao>
 	  <descricao>Versao do layout do arquivo</descricao>
     </registro>
 
@@ -296,7 +296,7 @@
       <fim>16</fim>
       <chave></chave>
       <tipo>integer</tipo>
-      <padrao>030</padrao>
+      <padrao>037</padrao>
 	  <descricao>Versao do layout do lote</descricao>
     </registro>
 
@@ -329,7 +329,7 @@
 
     <registro>
       <inicio>34</inicio>
-      <fim>39</fim>
+      <fim>40</fim>
       <chave>portador_convenio</chave>
       <tipo>integer</tipo>
       <padrao></padrao>
@@ -337,7 +337,7 @@
     </registro>
 
     <registro>
-      <inicio>40</inicio>
+      <inicio>41</inicio>
       <fim>53</fim>
       <chave></chave>
       <tipo>integer</tipo>
@@ -541,7 +541,7 @@
 
     <registro>
       <inicio>24</inicio>
-      <fim>29</fim>
+      <fim>30</fim>
       <chave>portador_convenio</chave>
       <tipo>integer</tipo>
       <padrao></padrao>
@@ -549,7 +549,7 @@
     </registro>
 
     <registro>
-      <inicio>30</inicio>
+      <inicio>31</inicio>
       <fim>32</fim>
       <chave></chave>
       <tipo>integer</tipo>

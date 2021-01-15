@@ -22,7 +22,7 @@
 20 total_saida			tam=13	fmt=float3
 21 total_diferenca		tam=10	fmt=float3
 22 observacao			tam=50
-23 produto_cod_nome     tam=35
+23 produto_cod_nome     tam=80
 </apelidos>
 <cab_pagina>
 #1                                                                                                  #2

@@ -1,4 +1,4 @@
-<relatorio dados="nota_emitida" ordem="empresa_codigo, numero_nota">
+<relatorio dados="nota_emitida" ordem="empresa_codigo, placa, numero_nota">
 <apelidos>
 1  rel_posto_nome		tam=50
 2  rel_data_hora		tam=18
@@ -50,7 +50,7 @@
 #4
 
 </cab_pagina>
-<cab_grupo nome="1" quebra="emitente_codigo, placa">
+<cab_grupo nome="1" quebra="placa, emitente_nome">
 +--------------------------------------------------------------------------------------------------------------------------------+
 | Placa: #43                                                                                                                     |
 </cab_grupo>

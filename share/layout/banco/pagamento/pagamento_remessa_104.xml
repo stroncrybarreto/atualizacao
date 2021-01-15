@@ -67,7 +67,7 @@
          <fim>40</fim>
          <chave></chave>
          <tipo>integer</tipo>
-         <padrao>0</padrao>
+         <padrao>1</padrao>
          <descricao>Parâmetros de Transição</descricao>
       </registro>
 	  <registro>
@@ -121,7 +121,7 @@
       <registro>
          <inicio>59</inicio>
          <fim>70</fim>
-         <chave>nr_conta</chave>
+         <chave>nr_conta_corrente</chave>
          <tipo>integer</tipo>
          <padrao>0</padrao>
          <descricao>Número da Conta Corrente</descricao>
@@ -193,7 +193,7 @@
       <registro>
          <inicio>158</inicio>
          <fim>163</fim>
-         <chave></chave>
+         <chave>numero_remessa</chave>
          <tipo>integer</tipo>
          <padrao>0</padrao>
          <descricao>Número Seqüencial do Arquivo</descricao>
@@ -367,7 +367,7 @@
          <fim>40</fim>
          <chave></chave>
          <tipo>integer</tipo>
-         <padrao></padrao>
+         <padrao>1</padrao>
          <descricao>Tipo de Compromisso</descricao>
       </registro>
 	  <registro>
@@ -375,7 +375,7 @@
          <fim>44</fim>
          <chave></chave>
          <tipo>integer</tipo>
-         <padrao></padrao>
+         <padrao>1</padrao>
          <descricao>Código do Compromisso</descricao>
       </registro>
 	  <registro>
@@ -383,8 +383,8 @@
          <fim>46</fim>
          <chave></chave>
          <tipo>string</tipo>
-         <padrao></padrao>
-         <descricao>Parâmetro de Transição</descricao>
+         <padrao>01</padrao>
+         <descricao>Parâmetro de Transmissão</descricao>
       </registro>
 	  <registro>
          <inicio>47</inicio>
@@ -413,7 +413,7 @@
       <registro>
          <inicio>59</inicio>
          <fim>70</fim>
-         <chave>nr_conta</chave>
+         <chave>nr_conta_corrente</chave>
          <tipo>integer</tipo>
          <padrao>0</padrao>
          <descricao>Número da Conta Corrente</descricao>
@@ -584,49 +584,9 @@
       </registro>	  
       <registro>
          <inicio>18</inicio>
-         <fim>20</fim>
-         <chave>cod_barras_banco_favorecido</chave>
-         <tipo>integer</tipo>
-         <padrao>0</padrao>
-         <descricao>Código de Barras - Banco Favorecido</descricao>
-      </registro>
-      <registro>
-         <inicio>21</inicio>
-         <fim>21</fim>
-         <chave>codigo_moeda</chave>
-         <tipo>integer</tipo>
-         <padrao>0</padrao>
-         <descricao>Código de Barras - Moeda</descricao>
-      </registro>
-      <registro>
-         <inicio>22</inicio>
-         <fim>22</fim>
-         <chave>dv_geral</chave>
-         <tipo>integer</tipo>
-         <padrao>0</padrao>
-         <descricao>Código de Barras - Dígito Verificador do Código de Barras</descricao>
-      </registro>
-      <registro>
-         <inicio>23</inicio>
-         <fim>26</fim>
-         <chave>fator_vencimento</chave>
-         <tipo>integer</tipo>
-         <padrao>0</padrao>
-         <descricao>Código de Barras - Fator de Vencimento</descricao>
-      </registro>
-      <registro>
-         <inicio>27</inicio>
-         <fim>36</fim>
-         <chave>codigo_barra_valor</chave>
-         <tipo>float_2</tipo>
-         <padrao>0</padrao>
-         <descricao>Código de Barras - Valor</descricao>
-      </registro>
-      <registro>
-         <inicio>37</inicio>
          <fim>61</fim>
-         <chave>campo_livre</chave>
-         <tipo>integer</tipo>
+         <chave>codigo_barra</chave>
+         <tipo>string</tipo>
          <padrao>0</padrao>
          <descricao>Código de Barras - Campo Livre</descricao>
       </registro>

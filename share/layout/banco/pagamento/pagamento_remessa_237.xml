@@ -73,9 +73,9 @@
       <registro>
          <inicio>58</inicio>
          <fim>58</fim>
-         <chave></chave>
-         <tipo>string</tipo>
-         <padrao></padrao>
+         <chave>agencia_digito</chave>
+         <tipo>integer</tipo>
+         <padrao>0</padrao>
          <descricao>Dígito Verificador da Agência</descricao>
       </registro>
       <registro>
@@ -301,9 +301,9 @@
       <registro>
          <inicio>58</inicio>
          <fim>58</fim>
-         <chave></chave>
-         <tipo>string</tipo>
-         <padrao></padrao>
+         <chave>agencia_digito</chave>
+         <tipo>integer</tipo>
+         <padrao>0</padrao>
          <descricao>Dígito Verificador da Agência</descricao>
       </registro>
       <registro>
