@@ -379,14 +379,14 @@
 	  <descricao>Digito verificador da conta/agencia</descricao>
     </registro>
 	
-    <registro>
-      <inicio>38</inicio>
-      <fim>57</fim>
-      <chave>nosso_numero</chave>
-      <tipo>integer</tipo>
-      <padrao>00000000000000000000</padrao>
-	  <descricao>Identificacao do titulo no banco</descricao>
-    </registro>
+      <registro>
+         <inicio>38</inicio>
+         <fim>57</fim>
+         <chave>nosso_numero</chave>
+         <tipo>integer</tipo>
+         <padrao>0</padrao>
+         <descricao>Identificacao do titulo no banco</descricao>
+      </registro>
 	
     <registro>
       <inicio>58</inicio>
@@ -455,7 +455,7 @@
       <inicio>106</inicio>
       <fim>130</fim>
       <chave>boleto</chave>
-      <tipo>integer</tipo>
+      <tipo>string</tipo>
       <padrao></padrao>
 	  <descricao>Ident. do titulo na empresa</descricao>
     </registro>

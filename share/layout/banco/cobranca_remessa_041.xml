@@ -62,8 +62,26 @@
 
     <registro>
       <inicio>33</inicio>
+      <fim>36</fim>
+      <chave>agencia</chave>
+      <tipo>integer</tipo>
+      <padrao></padrao>
+	  <descricao>Codigo do convenio no Banco</descricao>
+    </registro>
+	
+	<registro>
+      <inicio>37</inicio>
+      <fim>37</fim>
+      <chave>dv_agencia</chave>
+      <tipo>integer</tipo>
+      <padrao>0</padrao>
+	  <descricao>Codigo do convenio no Banco</descricao>
+    </registro>
+	
+	<registro>
+      <inicio>38</inicio>
       <fim>52</fim>
-      <chave>x_convenio_cedente</chave>
+      <chave>convenio</chave>
       <tipo>string</tipo>
       <padrao></padrao>
 	  <descricao>Codigo do convenio no Banco</descricao>
@@ -100,7 +118,7 @@
       <inicio>71</inicio>
       <fim>71</fim>
       <chave>x_dv_conta_corrente</chave>
-      <tipo>string</tipo>
+      <tipo>integer</tipo>
       <padrao>0</padrao>
 	  <descricao>Digito da Conta Corrente</descricao>
     </registro>
@@ -275,7 +293,6 @@
       <padrao></padrao>
 	  <descricao>Codigos da Ocorrencia</descricao>
     </registro>
-
   </sessao>
 
   <sessao>
@@ -373,11 +390,29 @@
  
     <registro>
       <inicio>34</inicio>
+      <fim>37</fim>
+      <chave>agencia</chave>
+      <tipo>integer</tipo>
+      <padrao></padrao>
+	  <descricao>Codigo do convenio no Banco</descricao>
+    </registro>
+	
+	<registro>
+      <inicio>38</inicio>
+      <fim>38</fim>
+      <chave>dv_agencia</chave>
+      <tipo>integer</tipo>
+      <padrao>0</padrao>
+	  <descricao>Codigo do convenio no Banco</descricao>
+    </registro>
+	
+	<registro>
+      <inicio>39</inicio>
       <fim>53</fim>
-      <chave>x_convenio_cedente</chave>
+      <chave>convenio</chave>
       <tipo>string</tipo>
       <padrao></padrao>
-	  <descricao>Codigo do convenio do banco</descricao>
+	  <descricao>Codigo do convenio no Banco</descricao>
     </registro>
 
     <registro>
@@ -640,9 +675,9 @@
     <registro>
       <inicio>61</inicio>
       <fim>61</fim>
-      <chave>x_emite_boleto</chave>
+      <chave></chave>
       <tipo>integer</tipo>
-      <padrao>0</padrao>
+      <padrao>2</padrao>
 	  <descricao>Identificacao da emissao do boleto</descricao>
     </registro>
 	

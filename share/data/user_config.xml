@@ -3556,6 +3556,13 @@
 				<tipo>bool</tipo>
 				<padrao>0</padrao>
 			</topico>
+			<topico>
+				<id>permite_configurar_servicos_importacao_emsys_gestao</id>
+				<nome>Permite configurar os serviços da importação</nome>
+				<descr>Permite que o usuário configure os serviços da importação.</descr>
+				<tipo>bool</tipo>
+				<padrao>0</padrao>
+			</topico>
 			
 	    </grupo>
 	  </grupo>
