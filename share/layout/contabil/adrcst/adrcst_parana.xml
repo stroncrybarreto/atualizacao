@@ -25,11 +25,11 @@
     <registro><inicio>194</inicio><fim>194</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
 	<registro><inicio>195</inicio><fim>195</fim><chave>option_r1200</chave><tipo>integer</tipo><padrao>0</padrao><descricao></descricao></registro>
     <registro><inicio>196</inicio><fim>196</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-	<registro><inicio>197</inicio><fim>197</fim><chave>option_r1300</chave><tipo>integer</tipo><padrao>0</padrao><descricao></descricao></registro>
+	<registro><inicio>197</inicio><fim>197</fim><chave>option_r1300</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>198</inicio><fim>198</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-	<registro><inicio>199</inicio><fim>199</fim><chave>option_r1400</chave><tipo>integer</tipo><padrao>0</padrao><descricao></descricao></registro>
+	<registro><inicio>199</inicio><fim>199</fim><chave>option_r1400</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
 	<registro><inicio>200</inicio><fim>200</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-	<registro><inicio>201</inicio><fim>201</fim><chave>option_r1500</chave><tipo>integer</tipo><padrao>0</padrao><descricao></descricao></registro>
+	<registro><inicio>201</inicio><fim>201</fim><chave>option_r1500</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
   </sessao>
   <sessao>
     <nome>reg1000</nome>
@@ -99,29 +99,29 @@
     <registro><inicio>21</inicio><fim>21</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>22</inicio><fim>65</fim><chave>chave_nfe</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>66</inicio><fim>66</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>67</inicio><fim>72</fim><chave>numero_nota</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao>Numero do Documento Fiscal</descricao></registro>
-    <registro><inicio>73</inicio><fim>73</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>74</inicio><fim>87</fim><chave>cnpj_empresa</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>88</inicio><fim>88</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>89</inicio><fim>90</fim><chave>uf_empresa</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>91</inicio><fim>91</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>92</inicio><fim>105</fim><chave>cnpj_cpf</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>106</inicio><fim>106</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>107</inicio><fim>108</fim><chave>uf_empresa</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>109</inicio><fim>109</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>110</inicio><fim>113</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>114</inicio><fim>114</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>115</inicio><fim>117</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>118</inicio><fim>118</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>119</inicio><fim>124</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>125</inicio><fim>125</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>126</inicio><fim>145</fim><chave>quantidade</chave><tipo>float_nojust_nopoint_3</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>146</inicio><fim>146</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>147</inicio><fim>166</fim><chave>preco_unit</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>167</inicio><fim>167</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>168</inicio><fim>187</fim><chave>base_subst_old</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
-    <registro><inicio>188</inicio><fim>188</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>189</inicio><fim>208</fim><chave>vl_unit_med_icms_suport_entr</chave><tipo>float_truncate_2</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>67</inicio><fim>73</fim><chave>numero_nota</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao>Numero do Documento Fiscal</descricao></registro>
+    <registro><inicio>74</inicio><fim>74</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>75</inicio><fim>88</fim><chave>cnpj_cpf</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>89</inicio><fim>89</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>90</inicio><fim>91</fim><chave>uf_empresa</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>92</inicio><fim>92</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>93</inicio><fim>106</fim><chave>cnpj_empresa</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>107</inicio><fim>107</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>108</inicio><fim>109</fim><chave>uf_empresa</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>110</inicio><fim>110</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>111</inicio><fim>114</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>115</inicio><fim>115</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>116</inicio><fim>118</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>119</inicio><fim>119</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>120</inicio><fim>125</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>126</inicio><fim>126</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>127</inicio><fim>146</fim><chave>qtd_entrada</chave><tipo>float_nojust_nopoint_3</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>147</inicio><fim>147</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>148</inicio><fim>167</fim><chave>vl_unit_item</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>168</inicio><fim>168</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>169</inicio><fim>188</fim><chave>vl_bc_icms_st</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>189</inicio><fim>189</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
+    <registro><inicio>190</inicio><fim>209</fim><chave>vl_unit_med_icms_suport_entr</chave><tipo>float_truncate_2</tipo><padrao></padrao><descricao></descricao></registro>
   </sessao>
   <sessao>
     <nome>reg1120</nome>
@@ -145,7 +145,7 @@
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>123</inicio><fim>126</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>127</inicio><fim>127</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>128</inicio><fim>130</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>128</inicio><fim>130</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>131</inicio><fim>131</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>132</inicio><fim>141</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>142</inicio><fim>142</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -153,9 +153,9 @@
     <registro><inicio>158</inicio><fim>158</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>159</inicio><fim>169</fim><chave>preco_unit</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>170</inicio><fim>170</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>171</inicio><fim>181</fim><chave>base_subst_old</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>171</inicio><fim>181</fim><chave>vl_bc_icms_st</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>182</inicio><fim>182</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>183</inicio><fim>193</fim><chave>valor_subst_old</chave><tipo>float_truncate_2</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>183</inicio><fim>193</fim><chave>vl_icms_suport_entr</chave><tipo>float_truncate_2</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>194</inicio><fim>194</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>195</inicio><fim>238</fim><chave>chave_nfe_ref</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>239</inicio><fim>239</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -205,7 +205,7 @@
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>123</inicio><fim>126</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>127</inicio><fim>127</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>128</inicio><fim>130</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>128</inicio><fim>130</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>131</inicio><fim>131</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>132</inicio><fim>141</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>142</inicio><fim>142</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -213,7 +213,7 @@
     <registro><inicio>158</inicio><fim>158</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>159</inicio><fim>169</fim><chave>preco_unit</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>170</inicio><fim>170</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>171</inicio><fim>181</fim><chave>valor_icms_efetivo</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>171</inicio><fim>181</fim><chave>vl_icms_efet</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
   </sessao>
   <sessao>
     <nome>reg1220</nome>
@@ -237,7 +237,7 @@
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>123</inicio><fim>126</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>127</inicio><fim>127</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>128</inicio><fim>130</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>128</inicio><fim>130</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>131</inicio><fim>131</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>132</inicio><fim>141</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>142</inicio><fim>142</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -245,7 +245,7 @@
     <registro><inicio>158</inicio><fim>158</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>159</inicio><fim>169</fim><chave>preco_unit</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>170</inicio><fim>170</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>171</inicio><fim>181</fim><chave>valor_icms_efetivo</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>171</inicio><fim>181</fim><chave>vl_icms_efet</chave><tipo>float_nojust_nopoint_2</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>182</inicio><fim>182</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>183</inicio><fim>226</fim><chave>chave_nfe_ref</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>227</inicio><fim>227</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -289,7 +289,7 @@
     <registro><inicio>102</inicio><fim>102</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>103</inicio><fim>106</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>107</inicio><fim>107</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>108</inicio><fim>110</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>108</inicio><fim>110</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>111</inicio><fim>111</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>112</inicio><fim>121</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -321,7 +321,7 @@
     <registro><inicio>102</inicio><fim>102</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>103</inicio><fim>106</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>107</inicio><fim>107</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>108</inicio><fim>110</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>108</inicio><fim>110</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>111</inicio><fim>111</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>112</inicio><fim>121</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -369,7 +369,7 @@
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>123</inicio><fim>126</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>127</inicio><fim>127</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>128</inicio><fim>130</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>128</inicio><fim>130</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>131</inicio><fim>131</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>132</inicio><fim>141</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>142</inicio><fim>142</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -401,7 +401,7 @@
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>123</inicio><fim>126</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>127</inicio><fim>127</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>128</inicio><fim>130</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>128</inicio><fim>130</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>131</inicio><fim>131</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>132</inicio><fim>141</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>142</inicio><fim>142</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -449,7 +449,7 @@
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>123</inicio><fim>126</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>127</inicio><fim>127</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>128</inicio><fim>130</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>128</inicio><fim>130</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>131</inicio><fim>131</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>132</inicio><fim>141</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>142</inicio><fim>142</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
@@ -479,7 +479,7 @@
     <registro><inicio>102</inicio><fim>102</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>103</inicio><fim>106</fim><chave>cfop</chave><tipo>integer</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>107</inicio><fim>107</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
-    <registro><inicio>108</inicio><fim>110</fim><chave>numero_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
+    <registro><inicio>108</inicio><fim>110</fim><chave>nr_item</chave><tipo>integer_nojust</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>111</inicio><fim>111</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
     <registro><inicio>112</inicio><fim>121</fim><chave>unid_inv</chave><tipo>text</tipo><padrao></padrao><descricao></descricao></registro>
     <registro><inicio>122</inicio><fim>122</fim><chave></chave><tipo></tipo><padrao>|</padrao><descricao></descricao></registro>
